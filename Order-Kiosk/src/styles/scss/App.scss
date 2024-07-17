@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+// _colors.scss
+$primary-color: #8f5955;
+$secondary-color: #daadaa;
+$background-color: #d7d7d7;
+
+body {
+  font-family: "Inter";
+  background-color: $background-color;
+  font-size: 16px;
+}
+
+h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: black;
+  margin: 0px;
+
+  line-height: 40px;
+  letter-spacing: 0.5px;
+}
+
+h4 {
+  display: inline;
+  font-size: 26px;
+  margin-right: 4px;
+  font-weight: 500;
+}
+
+.default {
+  display: flex;
+  margin: -8px;
+}
+
+.menu-layout {
+  padding: 62px;
+  
+  display: flex;
+  // row-gap: 72px;
+  gap: 61px;
+  justify-content: space-between;
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-wrap: wrap;
+}
+

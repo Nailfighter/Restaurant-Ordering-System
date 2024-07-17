@@ -1,0 +1,64 @@
+@import "App.scss";
+
+.card-content-buttons {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+
+  button {
+    width: 136px;
+    height: 100%;
+    background-color: $primary-color;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.quantity {
+  display: flex;
+  flex-direction: row;
+
+  width: 136px;
+  height: 100%;
+
+  background-color: $secondary-color;
+  border-radius: 100px;
+
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+
+  Button {
+    height: 26px;
+    width: 26px;
+    background-color: white;
+
+    border: none;
+    border-radius: 50px;
+    margin: 0px 8px;
+
+    cursor: pointer;
+    padding: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    Img {
+      width: 65%;
+      height: 65%;
+    }
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+  }
+}
