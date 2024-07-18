@@ -7,6 +7,7 @@ if (typeof browser === "undefined") {
 }
 
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
