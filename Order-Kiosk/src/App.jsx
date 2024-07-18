@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="default">
       <Menu />
+      <div className="space"></div>
       <Order_Review />
     </div>
   );

@@ -15,9 +15,9 @@ const QuantitySelector = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Quantity has changed " + quantity);
-  }, [quantity]);
+  const handleAdd = () => {
+    console.log("Item added to cart)");
+  };
 
   return (
     <div className="card-content-buttons">
@@ -30,7 +30,7 @@ const QuantitySelector = () => {
           <img src="public/Plus.png" alt="minus" />
         </button>
       </div>
-      <button>Add</button>
+      <button onClick={handleAdd}>Add</button>
     </div>
   );
 };
