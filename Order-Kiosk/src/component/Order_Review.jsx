@@ -1,45 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { CartContext } from "../Cart.jsx"; // Ensure this path is correct
 import Order_Item from "./Order_Item.jsx";
 
 import "../styles/scss/Order_Review.scss";
 
-const cart = [];
-
-// Create an object representing the item
-const item1 = {
-  quantity: 1,
-  name: "Chickpea Curry with Rice + Naan Combo",
-  price: 20,
-};
-const item2 = {
-  quantity: 2,
-  name: "Samosa",
-  price: 12,
-};
-
-const item3 = {
-  quantity: 2,
-  name: "Tandoori Chicken",
-  price: 24,
-};
-
-cart.push(item1);
-cart.push(item2);
-cart.push(item3);
-
-const itemList = cart.map((item) => (
-  <Order_Item quantity={item.quantity} item={item.name} price={item.price} />
-));
-
-let total = 80;
-
 const OrderReview = () => {
+  const { cart, getTotal, clearCart } = useContext(CartContext);
+  const [total, setTotal] = useState(0);
+
+  const generateOrderItems = () => {
+    return cart.map((item, index) => {
+      return (
+        <Order_Item
+          key={index}
+          quantity={item.quantity}
+          name={item.name}
+          price={item.price * item.quantity}
+        />
+      );
+    });
+  };
+
+  const handleConfirm = () => {
+    alert("Order confirmed!");
+    clearCart();
+  };
+
+  const handleCancel = () => {
+    alert("Order cancelled!");
+    clearCart();
+  };
+
+  useEffect(() => {
+    setTotal(getTotal());
+  }, [cart]);
+
   return (
     <div className="review-layout">
       <div className="order">
         <h1>Order #047</h1>
         <h2>Your Final Order:</h2>
-        <div className="order-items">{itemList}</div>
+        <div className="order-items">{generateOrderItems()}</div>
         <div className="line"></div>
         <div className="order-total">
           <h5>Total:</h5>
@@ -48,14 +49,16 @@ const OrderReview = () => {
 
         <textarea
           className="order-note"
-          placeholder="Add a note to the order"
+          placeholder="Add a note for the order"
         />
         <div className="order-buttons">
-          <button className="order-buttons-confirm">
-            <img src="public/Star.png" alt="checkout" />
+          <button className="order-buttons-confirm" onClick={handleConfirm}>
+            <img src="/Star.png" alt="checkout" />
             Confirm
           </button>
-          <button className="order-buttons-cancel">Cancel</button>
+          <button className="order-buttons-cancel" onClick={handleCancel}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>

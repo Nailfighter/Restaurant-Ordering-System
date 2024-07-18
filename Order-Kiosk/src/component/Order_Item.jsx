@@ -6,7 +6,7 @@ const OrderItem = (props) => {
     <div className="order-item">
       <div className="order-label">
         <h6 className="order-quantity">{props.quantity}x</h6>
-        <h6 className="order-name">{props.item}</h6>
+        <h6 className="order-name">{props.name}</h6>
       </div>
       <h6 className="order-price">${props.price}</h6>
     </div>

@@ -13,15 +13,14 @@ const FoodCard = (props) => {
       <div className="card-content">
         <h3>{props.name}</h3>
         <div className="card-content-tags">
-          <Tag text="Spicy" />
-          <Tag text="Diary" />
+          <Tag tags={props.tags} />
         </div>
         <div className="card-content-price">
           <h4>$</h4>
           <h4>{props.price}</h4>
         </div>
         <p>{props.description}</p>
-        <QuantitySelector />
+        <QuantitySelector name={props.name} price={props.price} />
       </div>
     </div>
   );

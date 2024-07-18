@@ -1,33 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { CartContext } from "../Cart.jsx"; // Ensure this path is correct
 
 import "../styles/scss/Quantiy_Selector.scss";
 
-const QuantitySelector = () => {
-  const [quantity, setQuantity] = useState(0);
-
+const QuantitySelector = (props) => {
+  const [curQuantity, setQuantity] = useState(0);
   const handleIncrease = () => {
-    setQuantity(quantity + 1);
+    setQuantity(curQuantity + 1);
   };
 
   const handleDecrease = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
+    if (curQuantity > 0) {
+      setQuantity(curQuantity - 1);
     }
   };
 
+  const { cart, addToCart, clearCart } = useContext(CartContext);
+
+  useEffect(() => {
+    const cartLenth = cart.length;
+    if (cartLenth == 0) {
+      setQuantity(0);
+    }
+  }, [clearCart]);
+
   const handleAdd = () => {
-    console.log("Item added to cart)");
+    const itemWithQuantity = {
+      name: props.name,
+      price: props.price,
+      quantity: curQuantity,
+    };
+    addToCart(itemWithQuantity);
   };
 
   return (
     <div className="card-content-buttons">
       <div className="quantity">
         <button onClick={handleDecrease}>
-          <img src="public/Minus.png" alt="minus" />
+          <img src="/Minus.png" alt="minus" />
         </button>
-        <span>{quantity}</span>
+        <span>{curQuantity}</span>
         <button onClick={handleIncrease}>
-          <img src="public/Plus.png" alt="minus" />
+          <img src="/Plus.png" alt="plus" />
         </button>
       </div>
       <button onClick={handleAdd}>Add</button>
