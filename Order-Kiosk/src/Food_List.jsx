@@ -1,24 +1,25 @@
 // data.js
 const Food_List = [
   {
+    id : 1,
     image: "/Food Image/Chicken Tikka.jpg",
     name: "Chicken Curry with Rice + Naan",
     description:
       "Tender pieces of chicken marinated in a blend of yogurt and spices, then grilled to perfection and simmered in a rich, creamy tomato sauce. This dish is a harmonious fusion of aromatic spices, tangy flavors, and a hint of sweetness, making it a favorite among Indian cuisine lovers",
     price: 12,
-
     tags: ["Spicy"],
   },
   {
+    id : 2,
     image: "/Food Image/Paneer Tikka.jpg",
     name: "Panner Curry with Rice + Naan",
     description:
       "Enjoy a hearty and flavorful meal with our Paneer Curry served with steamed basmati rice and warm, fluffy naan. Soft cubes of paneer are simmered in a rich, spiced tomato gravy, creating a delightful blend of creamy and tangy flavors. This vegetarian dish is accompanied by perfectly cooked rice and freshly baked naan to provide a complete and satisfying dining experience.",
     price: 12,
-
     tags: ["Hot"],
   },
   {
+    id : 3,
     image: "/Food Image/Chole.jpg",
     name: "Chickpea Curry with Rice + Naan",
     description:
@@ -28,6 +29,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 4,
     image: "/Food Image/Tandoori.jpg",
     name: "Tandoori Chicken",
     description:
@@ -37,6 +39,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 5,
     image: "/Food Image/Kulfi.jpg",
     name: "Kulfi Ice-Cream",
     description:
@@ -46,6 +49,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 6,
     image: "/Food Image/Samosa.jpg",
     name: "Samosa",
     description:
@@ -55,6 +59,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 7,
     image: "/Food Image/Pani Puri.jpg",
     name: "Pani Puri",
     description:
@@ -64,6 +69,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 8,
     image: "/Food Image/Lassi.jpg",
     name: "Mango Drink",
     description:
@@ -73,6 +79,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 9,
     image: "/Food Image/Water.jpg",
     name: "Water",
     description:
@@ -82,6 +89,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
+    id : 10,
     image: "/Food Image/Chicken Tikka.jpg",
     name: "Chicken Curry with Rice + Naan with Mango Lassi",
     description:
@@ -90,6 +98,7 @@ const Food_List = [
     tags: ["Spicy"],
   },
   {
+    id : 11,
     image: "/Food Image/Paneer Tikka.jpg",
     name: "Panner Curry with Rice + Naan with Mango Lassi",
     description:
@@ -98,6 +107,7 @@ const Food_List = [
     tags: ["Hot", "DairyFree"],
   },
   {
+    id : 12,
     image: "/Food Image/Chole.jpg",
     name: "Chickpea Curry with Rice + Naan with Mango Lassi",
     description:
@@ -106,6 +116,7 @@ const Food_List = [
     tags: ["DairyFree"],
   },
   {
+    id : 13,
     image: "/Food Image/Tandoori.jpg",
     name: "Tandoori Chicken with Mango Lassi",
     description:

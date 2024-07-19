@@ -63,7 +63,7 @@ async function cleanUp() {
   await promisePool.query("TRUNCATE TABLE Order_Items");
 }
 
-//#region  API FUNCTIONS: /api/orders
+//#region  API FUNCTIONS: /api/kiosk/orders
 async function getLastOrderNum() {
   const query = "SELECT MAX(order_num) AS order_num FROM Orders";
   const [results] = await promisePool.query(query);
@@ -90,7 +90,7 @@ async function addOrder(order) {
 
 //#endregion
 
-//#region  API FUNCTIONS: /api/order-items
+//#region  API FUNCTIONS: /api/kiosk/order-items
 
 async function getAllOrderItems() {
   const query = "SELECT * FROM Order_Items";

@@ -36,14 +36,14 @@ app.delete("/api/clean-up", async (req, res) => {
 
 //endregion
 
-//#region API ROUTES: /api/orders
+//#region API ROUTES: /api/kiosk/orders
 
-app.get("/api/orders", async (req, res) => {
+app.get("/api/kiosk/orders", async (req, res) => {
   const tes = await getAllOrders();
   res.send(tes);
 });
 
-app.post("/api/orders", async (req, res) => {
+app.post("/api/kiosk/orders", async (req, res) => {
   const error = checkValidOrder(req.body);
 
   if (error != undefined) {
@@ -63,27 +63,27 @@ app.post("/api/orders", async (req, res) => {
   });
 });
 
-app.get("/api/orders/order/:num", async (req, res) => {
+app.get("/api/kiosk/orders/order/:num", async (req, res) => {
   const { num } = req.params;
   const order = await getOrderByNum(num);
   res.send(order);
 });
 
-app.get("/api/orders/last", async (req, res) => {
+app.get("/api/kiosk/orders/last", async (req, res) => {
   const orderNum = await getLastOrderNum();
-  res.send({ orderNum });
+  res.send({ order_num: orderNum });
 });
 
 //#endregion
 
-//#region API ROUTES: /api/order-items
+//#region API ROUTES: /api/kiosk/order-items
 
-app.get("/api/order-items", async (req, res) => {
+app.get("/api/kiosk/order-items", async (req, res) => {
   const orderItems = await getAllOrderItems();
   res.send(orderItems);
 });
 
-app.get("/api/order-items/order/:num", async (req, res) => {
+app.get("/api/kiosk/order-items/order/:num", async (req, res) => {
   const { num } = req.params;
   const orderItems = await getOrderItemsByNum(num);
   res.send(orderItems);

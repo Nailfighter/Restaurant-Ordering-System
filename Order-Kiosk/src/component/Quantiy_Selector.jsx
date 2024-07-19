@@ -26,6 +26,7 @@ const QuantitySelector = (props) => {
 
   const handleAdd = () => {
     const itemWithQuantity = {
+      id: props.id,
       name: props.name,
       price: props.price,
       quantity: curQuantity,

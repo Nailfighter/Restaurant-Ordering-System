@@ -3,7 +3,7 @@ const Joi = require("joi");
 const orderSchema = Joi.object({
   status: Joi.string().valid("Preparing", "Completed", "Delayed").required(),
   totalPrice: Joi.number().positive().required(),
-  note: Joi.string().optional(),
+  note: Joi.string().allow("").required(),
   cart: Joi.array()
     .items(
       Joi.object({

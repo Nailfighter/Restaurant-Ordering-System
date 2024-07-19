@@ -7,6 +7,7 @@ const Menu = () => {
   const Food_Items = Food_List.map((item, index) => (
     <Food_Card
       key={index}
+      id={item.id}
       image={item.image}
       name={item.name}
       description={item.description}

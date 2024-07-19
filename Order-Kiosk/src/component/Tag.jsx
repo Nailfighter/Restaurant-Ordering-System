@@ -16,6 +16,7 @@ const Tag = (props) => {
       <div
         className="tag-container"
         style={{ backgroundColor: tagDict[tag][3], color: tagDict[tag][2] }}
+        key={index}
       >
         <img src={tagDict[tag][1]} />
         <span>{tagDict[tag][0]}</span>

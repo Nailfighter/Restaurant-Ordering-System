@@ -20,7 +20,7 @@ const FoodCard = (props) => {
           <h4>{props.price}</h4>
         </div>
         <p>{props.description}</p>
-        <QuantitySelector name={props.name} price={props.price} />
+        <QuantitySelector id={props.id} name={props.name} price={props.price} />
       </div>
     </div>
   );
