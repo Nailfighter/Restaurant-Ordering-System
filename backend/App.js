@@ -1,9 +1,22 @@
-const { addOrder, getAllOrders } = require("./Database");
+const {
+  cleanUp,
+
+  addOrder,
+  getAllOrders,
+  getOrderByNum,
+  getLastOrderNum,
+
+  getAllOrderItems,
+  getOrderItemsByNum,
+  test,
+} = require("./Database");
+
+const { checkValidOrder } = require("./Payload_Validation");
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const port = process.env.PORT || 5000;
+const port = 5000 || process.env.PORT;
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,29 +26,72 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-app.get("/api", (req, res) => {
-  res.status(200);
-  res.send({
-    message: "Hello from the server!",
-    time: new Date().toISOString(),
-  });
+
+//region API ROUTES: /api/clean-up
+
+app.delete("/api/clean-up", async (req, res) => {
+  await cleanUp();
+  res.send({ message: "Database cleaned up!" });
 });
 
-app.post("/api", (req, res) => {
-  const { name } = req.body;
+//endregion
 
-  if (!name) {
+//#region API ROUTES: /api/orders
+
+app.get("/api/orders", async (req, res) => {
+  const tes = await getAllOrders();
+  res.send(tes);
+});
+
+app.post("/api/orders", async (req, res) => {
+  const error = checkValidOrder(req.body);
+
+  if (error != undefined) {
     res.status(400);
     res.send({
-      message: "Name is required",
-      time: new Date().toISOString(),
+      message: "Invalid order payload",
+      error: error.details,
     });
     return;
   }
 
-  res.status(200);
+  res.status(201);
+  const order = req.body;
+  await addOrder(order);
   res.send({
-    message: `Hello, ${name}!`,
-    time: new Date().toISOString(),
+    message: "Order created successfully!",
   });
+});
+
+app.get("/api/orders/order/:num", async (req, res) => {
+  const { num } = req.params;
+  const order = await getOrderByNum(num);
+  res.send(order);
+});
+
+app.get("/api/orders/last", async (req, res) => {
+  const orderNum = await getLastOrderNum();
+  res.send({ orderNum });
+});
+
+//#endregion
+
+//#region API ROUTES: /api/order-items
+
+app.get("/api/order-items", async (req, res) => {
+  const orderItems = await getAllOrderItems();
+  res.send(orderItems);
+});
+
+app.get("/api/order-items/order/:num", async (req, res) => {
+  const { num } = req.params;
+  const orderItems = await getOrderItemsByNum(num);
+  res.send(orderItems);
+});
+
+//#endregion
+
+app.get("/api/test", async (req, res) => {
+  const tes = await test();
+  res.send(tes);
 });

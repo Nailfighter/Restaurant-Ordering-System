@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mysql = require("mysql2"); // For MySQL database
 
-// Database connection configuration
+//#region Database connection configuration
 const dbConfig = {
   host: process.env.RDB_HOST,
   port: process.env.RDB_PORT,
@@ -22,19 +22,9 @@ pool.getConnection((err, connection) => {
   }
 });
 
-//Queries
+//#endregion
 
-async function getAllOrders() {
-  const query = "SELECT * FROM Orders";
-  const [results] = await promisePool.query(query); // Only destructure results
-  return results;
-}
-
-async function addOrder(order) {
-  const orderNum = await insertOrder(order);
-  await insertOrderItems(orderNum, order.cart);
-  return orderNum;
-}
+//#region  HELPER FUNCTIONS
 
 async function insertOrder(order) {
   const { status = "Pending", totalPrice, note = null } = order;
@@ -65,39 +55,75 @@ async function insertOrderItems(orderNum, cart) {
   }
 }
 
-const payLoad = {
-  status: "Preparing",
-  totalPrice: 42,
-  note: "This is a test order",
+//#endregion
 
-  cart: [
-    {
-      itemID: 1,
-      itemName: "Chicken Curry with Rice + Naan",
-      quantity: 2,
-      itemPrice: 24,
-    },
-    {
-      itemID: 2,
-      itemName: "Tandoori Chicken",
-      quantity: 3,
-      itemPrice: 18,
-    },
-  ],
-};
-
-async function test() {
-  return "Test";
+// Clean up the database
+async function cleanUp() {
+  await promisePool.query("TRUNCATE TABLE Orders");
+  await promisePool.query("TRUNCATE TABLE Order_Items");
 }
 
-(async () => {
-  const num = await getAllOrders();
-  console.log(num);
-  await pool.end();
-})();
+//#region  API FUNCTIONS: /api/orders
+async function getLastOrderNum() {
+  const query = "SELECT MAX(order_num) AS order_num FROM Orders";
+  const [results] = await promisePool.query(query);
+  return results[0].order_num;
+}
+
+async function getAllOrders() {
+  const query = "SELECT * FROM Orders";
+  const [results] = await promisePool.query(query); // Only destructure results
+  return results;
+}
+
+async function getOrderByNum(num) {
+  const query = "SELECT * FROM Orders WHERE order_num = ?";
+  const [results] = await promisePool.query(query, [num]);
+  return results;
+}
+
+async function addOrder(order) {
+  const orderNum = await insertOrder(order);
+  await insertOrderItems(orderNum, order.cart);
+  return orderNum;
+}
+
+//#endregion
+
+//#region  API FUNCTIONS: /api/order-items
+
+async function getAllOrderItems() {
+  const query = "SELECT * FROM Order_Items";
+  const [results] = await promisePool.query(query);
+  return results;
+}
+
+async function getOrderItemsByNum(num) {
+  const query = "SELECT * FROM Order_Items WHERE order_num = ?";
+  const [results] = await promisePool.query(query, [num]);
+  return results;
+}
+
+//#endregion
+
+async function test() {
+  return "API Test is Working!";
+}
+
+// (async () => {
+//   const num = await addOrder(payLoad);
+//   await pool.end();
+// })();
 
 module.exports = {
+  cleanUp,
+
+  getLastOrderNum,
   getAllOrders,
+  getOrderByNum,
   addOrder,
+
+  getAllOrderItems,
+  getOrderItemsByNum,
   test,
 };
