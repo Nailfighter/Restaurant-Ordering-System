@@ -1,7 +1,7 @@
 // data.js
 const Food_List = [
   {
-    id : 1,
+    id: 1,
     image: "/Food Image/Chicken Tikka.jpg",
     name: "Chicken Curry with Rice + Naan",
     description:
@@ -10,7 +10,7 @@ const Food_List = [
     tags: ["Spicy"],
   },
   {
-    id : 2,
+    id: 2,
     image: "/Food Image/Paneer Tikka.jpg",
     name: "Panner Curry with Rice + Naan",
     description:
@@ -19,7 +19,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 3,
+    id: 3,
     image: "/Food Image/Chole.jpg",
     name: "Chickpea Curry with Rice + Naan",
     description:
@@ -29,7 +29,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 4,
+    id: 4,
     image: "/Food Image/Tandoori.jpg",
     name: "Tandoori Chicken",
     description:
@@ -39,7 +39,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 5,
+    id: 5,
     image: "/Food Image/Kulfi.jpg",
     name: "Kulfi Ice-Cream",
     description:
@@ -49,7 +49,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 6,
+    id: 6,
     image: "/Food Image/Samosa.jpg",
     name: "Samosa",
     description:
@@ -59,7 +59,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 7,
+    id: 7,
     image: "/Food Image/Pani Puri.jpg",
     name: "Pani Puri",
     description:
@@ -69,7 +69,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 8,
+    id: 8,
     image: "/Food Image/Lassi.jpg",
     name: "Mango Drink",
     description:
@@ -79,7 +79,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 9,
+    id: 9,
     image: "/Food Image/Water.jpg",
     name: "Water",
     description:
@@ -89,7 +89,7 @@ const Food_List = [
     tags: ["Hot"],
   },
   {
-    id : 10,
+    id: 10,
     image: "/Food Image/Chicken Tikka.jpg",
     name: "Chicken Curry with Rice + Naan with Mango Lassi",
     description:
@@ -98,7 +98,7 @@ const Food_List = [
     tags: ["Spicy"],
   },
   {
-    id : 11,
+    id: 11,
     image: "/Food Image/Paneer Tikka.jpg",
     name: "Panner Curry with Rice + Naan with Mango Lassi",
     description:
@@ -107,7 +107,7 @@ const Food_List = [
     tags: ["Hot", "DairyFree"],
   },
   {
-    id : 12,
+    id: 12,
     image: "/Food Image/Chole.jpg",
     name: "Chickpea Curry with Rice + Naan with Mango Lassi",
     description:
@@ -116,7 +116,7 @@ const Food_List = [
     tags: ["DairyFree"],
   },
   {
-    id : 13,
+    id: 13,
     image: "/Food Image/Tandoori.jpg",
     name: "Tandoori Chicken with Mango Lassi",
     description:

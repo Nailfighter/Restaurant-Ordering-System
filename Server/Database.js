@@ -106,6 +106,43 @@ async function getOrderItemsByNum(num) {
 
 //#endregion
 
+//#region  API FUNCTIONS: /api/kitchen
+
+async function getPreparingOrders() {
+  const query = "SELECT * FROM Orders WHERE status = 'Preparing'";
+  const [results] = await promisePool.query(query);
+  return results;
+}
+
+async function getCompletedOrders() {
+  const query = "SELECT * FROM Orders WHERE status = 'Completed'";
+  const [results] = await promisePool.query(query);
+  return results;
+}
+
+async function getDelayedOrders() {
+  const query = "SELECT * FROM Orders WHERE status = 'Delayed'";
+  const [results] = await promisePool.query(query);
+  return results;
+}
+
+async function setPreparingOrder(orderNum) {
+  const query = "UPDATE Orders SET status = 'Preparing' WHERE order_num = ?";
+  await promisePool.query(query, [orderNum]);
+}
+
+async function setCompletedOrder(orderNum) {
+  const query = "UPDATE Orders SET status = 'Completed' WHERE order_num = ?";
+  await promisePool.query(query, [orderNum]);
+}
+
+async function setDelayedOrder(orderNum) {
+  const query = "UPDATE Orders SET status = 'Delayed' WHERE order_num = ?";
+  await promisePool.query(query, [orderNum]);
+}
+
+//#endregion
+
 async function test() {
   return "API Test is Working!";
 }
@@ -125,5 +162,13 @@ module.exports = {
 
   getAllOrderItems,
   getOrderItemsByNum,
+
+  getPreparingOrders,
+  getCompletedOrders,
+  getDelayedOrders,
+  setPreparingOrder,
+  setCompletedOrder,
+  setDelayedOrder,
+
   test,
 };

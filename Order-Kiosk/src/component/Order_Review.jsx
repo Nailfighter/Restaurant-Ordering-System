@@ -73,6 +73,7 @@ const OrderReview = () => {
     }
 
     addOrderToDB(cart, total, note);
+    setNote("");
     alert("Order confirmed!");
     updateOrderNumber();
     clearCart();
