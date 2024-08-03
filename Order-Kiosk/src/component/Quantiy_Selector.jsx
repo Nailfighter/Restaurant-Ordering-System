@@ -24,6 +24,10 @@ const QuantitySelector = (props) => {
     }
   }, [clearCart]);
 
+  useEffect(() => {
+    handleAdd();
+  }, [curQuantity]);
+
   const handleAdd = () => {
     const itemWithQuantity = {
       id: props.id,
@@ -35,17 +39,14 @@ const QuantitySelector = (props) => {
   };
 
   return (
-    <div className="card-content-buttons">
-      <div className="quantity">
-        <button onClick={handleDecrease}>
-          <img src="/Minus.png" alt="minus" />
-        </button>
-        <span>{curQuantity}</span>
-        <button onClick={handleIncrease}>
-          <img src="/Plus.png" alt="plus" />
-        </button>
-      </div>
-      <button onClick={handleAdd}>Add</button>
+    <div className="button">
+      <button className="button-less" onClick={handleDecrease}>
+        <img src="./Icon/Minus.png" alt="minus" />
+      </button>
+      <span>{curQuantity}</span>
+      <button className="button-more" onClick={handleIncrease}>
+        <img src="./Icon/Plus.png" alt="plus" />
+      </button>
     </div>
   );
 };

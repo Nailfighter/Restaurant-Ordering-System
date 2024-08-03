@@ -1,12 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { CartContext } from "../Cart.jsx"; // Ensure this path is correct
+import { CartContext } from "../Cart.jsx";
 import Order_Item from "./Order_Item.jsx";
+import { ConfirmationContext } from "../ConfirmationContext.jsx";
 
 import "../styles/scss/Order_Review.scss";
 
-function formatOrderNumber(orderNumber) {
-  return orderNumber.toString().padStart(3, "0");
-}
+const apiURL = import.meta.env.VITE_API_URL;
 
 function generateOrderPayload(cart, total, note) {
   const orderItems = cart.map((item) => {
@@ -27,14 +26,14 @@ function generateOrderPayload(cart, total, note) {
 }
 
 function addOrderToDB(cart, total, note) {
-  fetch("http://localhost:5000/api/kiosk/orders", {
+  fetch(apiURL + "/api/kiosk/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: generateOrderPayload(cart, total, note),
   })
-    .then((response) => response.json()) // Parse the JSON from the response
+    .then((response) => response.json())
     .then((data) => {
       console.log("Success:", data);
     })
@@ -45,11 +44,16 @@ function addOrderToDB(cart, total, note) {
 
 const OrderReview = () => {
   const { cart, getTotal, clearCart } = useContext(CartContext);
-  const [orderNumber, setOrderNumber] = useState(0);
   const [total, setTotal] = useState(0);
   const [note, setNote] = useState("");
 
+  const { setShowConfirmation } = useContext(ConfirmationContext);
+
   const generateOrderItems = () => {
+    if (cart.length === 0) {
+      return <span className="empty-cart">Cart is empty</span>;
+    }
+
     return cart.map((item, index) => {
       return (
         <Order_Item
@@ -74,59 +78,49 @@ const OrderReview = () => {
 
     addOrderToDB(cart, total, note);
     setNote("");
-    alert("Order confirmed!");
-    updateOrderNumber();
     clearCart();
+    handleScreen();
   };
 
   const handleCancel = () => {
-    alert("Order cancelled!");
     clearCart();
   };
 
-  function updateOrderNumber() {
-    fetch("http://localhost:5000/api/kiosk/orders/last").then((response) => {
-      if (response.ok) {
-        response.json().then((data) => {
-          setOrderNumber(data.order_num + 1);
-        });
-      }
-    });
-  }
-
-  useEffect(() => {
-    updateOrderNumber();
-  });
+  const handleScreen = () => {
+    setShowConfirmation(true);
+    setTimeout(() => {
+      setShowConfirmation(false);
+    }, 5000);
+  };
 
   useEffect(() => {
     setTotal(getTotal());
   }, [cart]);
 
   return (
-    <div className="review-layout">
-      <div className="order">
-        <h1>Order #{formatOrderNumber(orderNumber)}</h1>
-        <h2>Your Final Order:</h2>
-        <div className="order-items">{generateOrderItems()}</div>
-        <div className="line"></div>
-        <div className="order-total">
-          <h5>Total:</h5>
-          <h5>$ {total}</h5>
+    <div className="order">
+      <h1>Current Order</h1>
+      <div className="order-items">{generateOrderItems()}</div>
+      <div className="footer">
+        <div className="footer-top">
+          <img src="./Image/Dash.png" alt="Dash Line" />
+          <div className="total">
+            <span>Total</span>
+            <h5>$ {total}</h5>
+          </div>
         </div>
-
         <textarea
-          className="order-note"
+          className="note"
           value={note}
           onChange={handleNote}
-          placeholder="Add a note for the order"
-        />
-        <div className="order-buttons">
-          <button className="order-buttons-confirm" onClick={handleConfirm}>
-            <img src="/Star.png" alt="checkout" />
-            Confirm
+          placeholder="Add a note..."
+        ></textarea>
+        <div className="buttons">
+          <button className="buttons-cancel" onClick={handleCancel}>
+            <img src="./Icon/Undo.png" alt="Cancel" />
           </button>
-          <button className="order-buttons-cancel" onClick={handleCancel}>
-            Cancel
+          <button className="buttons-confirm" onClick={handleConfirm}>
+            Place Order
           </button>
         </div>
       </div>

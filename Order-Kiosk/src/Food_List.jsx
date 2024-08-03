@@ -2,127 +2,110 @@
 const Food_List = [
   {
     id: 1,
-    image: "/Food Image/Chicken Tikka.jpg",
-    name: "Chicken Curry with Rice + Naan",
-    description:
-      "Tender pieces of chicken marinated in a blend of yogurt and spices, then grilled to perfection and simmered in a rich, creamy tomato sauce. This dish is a harmonious fusion of aromatic spices, tangy flavors, and a hint of sweetness, making it a favorite among Indian cuisine lovers",
+    image: "./Image/Chicken Tikka.jpg",
+    name: "Chicken Box",
     price: 12,
-    tags: ["Spicy"],
+    tags: ["Diary", "Nuts", "Gluten", "Egg"],
   },
   {
     id: 2,
-    image: "/Food Image/Paneer Tikka.jpg",
-    name: "Panner Curry with Rice + Naan",
-    description:
-      "Enjoy a hearty and flavorful meal with our Paneer Curry served with steamed basmati rice and warm, fluffy naan. Soft cubes of paneer are simmered in a rich, spiced tomato gravy, creating a delightful blend of creamy and tangy flavors. This vegetarian dish is accompanied by perfectly cooked rice and freshly baked naan to provide a complete and satisfying dining experience.",
+    image: "./Image/Paneer Tikka.jpg",
+    name: "Panner Box",
     price: 12,
-    tags: ["Hot"],
+    tags: ["Diary", "Nuts", "Gluten", "Egg"],
   },
   {
     id: 3,
-    image: "/Food Image/Chole.jpg",
-    name: "Chickpea Curry with Rice + Naan",
-    description:
-      "Savor the rich and aromatic flavors of our Chickpea Curry, served with steamed basmati rice and warm, fluffy naan. This hearty vegetarian dish features tender chickpeas simmered in a spiced tomato gravy, delivering a deliciously comforting meal. Paired with perfectly cooked rice and freshly baked naan, this combo is a wholesome and satisfying choice.",
+    image: "./Image/Chole.jpg",
+    name: "Chickpea Box",
     price: 12,
-
-    tags: ["Hot"],
+    tags: ["Vegan", "Gluten", "Egg"],
   },
   {
     id: 4,
-    image: "/Food Image/Tandoori.jpg",
+    image: "./Image/Tandoori.jpg",
     name: "Tandoori Chicken",
-    description:
-      "Soft cubes of paneer marinated in a blend of yogurt and spices, then grilled to perfection and simmered in a rich, creamy tomato-based sauce. This vegetarian delight combines the robust flavors of Indian spices with the creamy texture of paneer",
     price: 6,
 
-    tags: ["Hot"],
+    tags: ["Diary"],
   },
   {
     id: 5,
-    image: "/Food Image/Kulfi.jpg",
-    name: "Kulfi Ice-Cream",
-    description:
-      "Tender pieces of chicken marinated in a blend of yogurt and spices, then grilled to perfection and simmered in a rich, creamy tomato sauce. This dish is a harmonious fusion of aromatic spices, tangy flavors, and a hint of sweetness, making it a favorite among Indian cuisine lovers",
-    price: 5,
-
-    tags: ["Hot"],
+    image: "./Image/Chicken Tikka.jpg",
+    name: "Chicken Combo",
+    price: 15,
+    tags: ["Diary", "Nuts", "Gluten", "Egg"],
   },
   {
     id: 6,
-    image: "/Food Image/Samosa.jpg",
-    name: "Samosa",
-    description:
-      "Crispy, golden pastry filled with a savory mixture of spiced potatoes, peas, and aromatic herbs. Our samosas are perfectly fried to achieve a crunchy exterior while maintaining a flavorful and moist filling inside. This popular snack is a delightful treat for any time of the day.",
-    price: 5,
-
-    tags: ["Hot"],
+    image: "./Image/Paneer Tikka.jpg",
+    name: "Panner Combo",
+    price: 15,
+    tags: ["Diary", "Nuts", "Gluten", "Egg"],
   },
   {
     id: 7,
-    image: "/Food Image/Pani Puri.jpg",
-    name: "Pani Puri",
-    description:
-      "Experience the burst of flavors with our Pani Poori, a beloved street food delicacy. Crispy, hollow puris are filled with a tangy, spicy tamarind water, a mixture of chickpeas and potatoes, and a medley of chutneys. This iconic snack is a perfect blend of crunch, spice, and refreshing tang, making it an irresistible treat.",
-    price: 10,
-
-    tags: ["Hot"],
+    image: "./Image/Chole.jpg",
+    name: "Chickpea Combo",
+    price: 15,
+    tags: ["Vegan", "Gluten", "Egg"],
   },
   {
     id: 8,
-    image: "/Food Image/Lassi.jpg",
-    name: "Mango Drink",
-    description:
-      "Cool off with our refreshing Mango Yogurt Drink, also known as Mango Lassi. This delightful beverage combines ripe, juicy mangoes with creamy yogurt and a hint of cardamom, blended to perfection. It's a perfect balance of sweetness and tanginess, providing a soothing and delicious treat.",
-    price: 5,
-    comboPrice: 3,
-    tags: ["Hot"],
+    image: "./Image/Tandoori.jpg",
+    name: "Tandoori Combo",
+    price: 9,
+    tags: ["Diary"],
   },
   {
     id: 9,
-    image: "/Food Image/Water.jpg",
-    name: "Water",
-    description:
-      "Stay hydrated with our refreshing and pure bottled water. Whether you're enjoying a meal or just need to quench your thirst, our bottled water is a perfect choice to keep you refreshed and revitalized.",
-    price: 2,
-
-    tags: ["Hot"],
+    image: "./Image/Samosa.jpg",
+    name: "Samosa",
+    price: 5,
+    tags: ["Vegan", "Gluten"],
   },
   {
     id: 10,
-    image: "/Food Image/Chicken Tikka.jpg",
-    name: "Chicken Curry with Rice + Naan with Mango Lassi",
-    description:
-      "Tender pieces of chicken marinated in a blend of yogurt and spices, then grilled to perfection and simmered in a rich, creamy tomato sauce. This dish is a harmonious fusion of aromatic spices, tangy flavors, and a hint of sweetness, making it a favorite among Indian cuisine lovers",
-    price: 15,
-    tags: ["Spicy"],
+    image: "./Image/Pani Puri.jpg",
+    name: "Pani Puri",
+    price: 10,
+    tags: ["Vegan", "Gluten"],
   },
   {
     id: 11,
-    image: "/Food Image/Paneer Tikka.jpg",
-    name: "Panner Curry with Rice + Naan with Mango Lassi",
-    description:
-      "Enjoy a hearty and flavorful meal with our Paneer Curry served with steamed basmati rice and warm, fluffy naan. Soft cubes of paneer are simmered in a rich, spiced tomato gravy, creating a delightful blend of creamy and tangy flavors. This vegetarian dish is accompanied by perfectly cooked rice and freshly baked naan to provide a complete and satisfying dining experience.",
-    price: 15,
-    tags: ["Hot", "DairyFree"],
+    image: "./Image/Kulfi.jpg",
+    name: "Kulfi",
+    price: 5,
+    tags: ["Diary","Cold"],
   },
   {
     id: 12,
-    image: "/Food Image/Chole.jpg",
-    name: "Chickpea Curry with Rice + Naan with Mango Lassi",
-    description:
-      "Savor the rich and aromatic flavors of our Chickpea Curry, served with steamed basmati rice and warm, fluffy naan. This hearty vegetarian dish features tender chickpeas simmered in a spiced tomato gravy, delivering a deliciously comforting meal. Paired with perfectly cooked rice and freshly baked naan, this combo is a wholesome and satisfying choice.",
-    price: 15,
-    tags: ["DairyFree"],
+    image: "./Image/Lassi.jpg",
+    name: "Mango Lassi",
+    price: 5,
+    comboPrice: 3,
+    tags: ["Diary","Cold"],
   },
   {
     id: 13,
-    image: "/Food Image/Tandoori.jpg",
-    name: "Tandoori Chicken with Mango Lassi",
-    description:
-      "Soft cubes of paneer marinated in a blend of yogurt and spices, then grilled to perfection and simmered in a rich, creamy tomato-based sauce. This vegetarian delight combines the robust flavors of Indian spices with the creamy texture of paneer",
-    price: 9,
-    tags: ["Mild"],
+    image: "./Image/Water.jpg",
+    name: "Water",
+    price: 2,
+    tags: ["Cold"],
+  },
+  {
+    id: 14,
+    image: "./Image/Soda.jpg",
+    name: "Soda",
+    price: 2,
+    tags: ["Cold"],
+  },
+  {
+    id: 15,
+    image: "./Image/Recycle.jpg",
+    name: "Reusable Bottle",
+    price: 1,
+    tags: ["Cold"],
   },
 ];
 

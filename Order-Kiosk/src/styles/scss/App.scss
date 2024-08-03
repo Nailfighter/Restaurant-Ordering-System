@@ -1,44 +1,53 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+@import "Custom_Fonts.scss";
 
-// _colors.scss
-$primary-color: #8f5955;
-$secondary-color: #daadaa;
-$background-color: #d7d7d7;
-$order-primary-color: #1e1e1e;
-$order-secondary-color: #757575;
+$primary-color: #faaf79;
+$secondary-color: #fb944a;
+$background-grad: linear-gradient(45deg, #ffe7c9, #fef0de);
+$box-radius: 15px;
+
+$order-primary-color: #282a33;
+$quantity-grad: linear-gradient(0deg, #f98e47 0%, #faaf79 100%);
+$order-width: 484px;
+$content-gap: 20px;
+
 body {
-  font-family: "Inter";
-  background-color: $background-color;
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  background: $background-grad;
+  color: $order-primary-color;
   font-size: 16px;
+  padding: 0px;
+  margin: 0px;
+
+  overflow-x: hidden;
 }
 
 h1 {
-  font-size: 70px;
-  font-weight: 900;
-  color: $order-primary-color;
+  font-size: 54px;
+  font-weight: 800;
+  color: #ffffff;
   margin: 0px;
-  line-height: 120%;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 h2 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 64px;
+  font-weight: 800;
+
+  font-family: "TT-Interfaces", "Jokerman", sans-serif;
   color: $order-primary-color;
   margin: 0px;
 
-  line-height: 40px;
-  letter-spacing: 0.5px;
+  letter-spacing: 3px;
 }
 
 h3 {
-  font-size: 2rem;
+  font-size: 34px;
   font-weight: 700;
-  color: black;
+  color: #ffffff;
   margin: 0px;
 
-  line-height: 40px;
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
 }
 
 h4 {
@@ -49,43 +58,122 @@ h4 {
 }
 
 h5 {
-  font-size: 45px;
+  font-size: 48px;
   margin: 0px;
   font-weight: 800;
-  letter-spacing: -1px;
+  background: $quantity-grad;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 h6 {
-  font-size: 26px;
-  color: $order-secondary-color;
+  white-space: nowrap;
+  font-size: 36px;
+  font-weight: 700;
   margin: 0px;
-  display: inline;
-  height: auto;
-  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .default {
   display: flex;
-  margin: -8px;
+  direction: row-reverse;
+  background-image: url("./Image/Wave.png");
+  background-repeat: no-repeat;
+}
+
+.main {
+  height: 100vh;
+  margin: 36px;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap;
 }
 
 .space {
-  height: auto;
-  width: 620px;
-
-  // background-color: $secondary-color;
+  height: 100vh;
+  width: $order-width + 20px;
 }
 
-.menu-layout {
-  padding: 62px;
+.search-box {
+  width: 560px;
+  height: 60px;
+
+  background-color: #f8f8f8;
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  outline: none;
+
+  padding: 0px 20px;
 
   display: flex;
-  // row-gap: 72px;
-  gap: 61px;
-  justify-content: space-between;
-  flex-basis: 0;
-  flex-grow: 1;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 4px;
+  }
+
+  input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+
+    color: #ababab;
+    font-size: 16px;
+    font-weight: 500;
+  }
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .ticket {
+    width: 820px;
+    height: 470px;
+    background-image: url("./Icon/Ticket.png");
+    background-repeat: no-repeat;
+    
+    padding: 40px 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
 
+    font-family: "TT-Interfaces", "Jokerman", sans-serif;
+
+    h1{
+      font-size: 72px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+
+    h3{
+      font-size: 200px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 15px;
+    }
+
+    h2{
+      font-size: 48px;
+      line-height: 48px;
+      margin-bottom: 10px;
+    }
+  }
+}

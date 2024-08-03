@@ -4,11 +4,13 @@ import "../styles/scss/Order_Review.scss";
 const OrderItem = (props) => {
   return (
     <div className="order-item">
-      <div className="order-label">
-        <h6 className="order-quantity">{props.quantity}x</h6>
-        <h6 className="order-name">{props.name}</h6>
+      <div className="order-item-header">
+        <h3>{props.name}</h3>
+        <span>$ {props.price}</span>
       </div>
-      <h6 className="order-price">${props.price}</h6>
+      <div className="order-item-quantity">
+        <h5>x {props.quantity}</h5>
+      </div>
     </div>
   );
 };

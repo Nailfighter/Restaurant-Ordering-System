@@ -1,0 +1,41 @@
+import React, { useState, useEffect } from "react";
+
+const apiURL = import.meta.env.VITE_API_URL;
+
+function formatOrderNumber(orderNumber) {
+  return orderNumber.toString().padStart(3, "0");
+}
+
+const ConfirmationScreen = () => {
+  const [orderNumber, setOrderNumber] = useState(0); 
+
+  useEffect(() => {
+    const fetchOrderNumber = async () => {
+      try {
+        const response = await fetch(apiURL + "/api/kiosk/orders/last");
+        if (response.ok) {
+          const data = await response.json();
+          setOrderNumber(data.order_num); // Update state with fetched order number
+        } else {
+          console.error("Failed to fetch order number");
+        }
+      } catch (error) {
+        console.error("Error fetching order number:", error);
+      }
+    };
+
+    fetchOrderNumber();
+  }, []);
+
+  return (
+    <div className="overlay">
+      <div className="ticket">
+        <h1>Your Order Number is</h1>
+        <h3>#{formatOrderNumber(orderNumber)}</h3>{" "}
+        <h2>Keep calm and wait while we make your order</h2>
+      </div>
+    </div>
+  );
+};
+
+export default ConfirmationScreen;

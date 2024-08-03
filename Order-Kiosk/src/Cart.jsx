@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
         updatedCart[itemIndex].quantity = item.quantity;
         return updatedCart;
       }
-
+      
       if (item.quantity === 0) {
         return prevCart;
       }
