@@ -12,7 +12,7 @@ const FoodCard = (props) => {
       let fontSize = 34;
       element.style.fontSize = fontSize + "px";
       element.style.whiteSpace = "nowrap"; // Prevent initial wrapping for measurement
-      while (element.scrollWidth > element.clientWidth && fontSize > 30) {
+      while (element.scrollWidth > element.clientWidth && fontSize > 20) {
         fontSize--;
         element.style.fontSize = fontSize + "px";
       }

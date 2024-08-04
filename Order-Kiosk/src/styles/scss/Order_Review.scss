@@ -1,6 +1,5 @@
 @import "App.scss";
 
-$background-grad: linear-gradient(0deg, #31343f 0%, #282a33 40%);
 $order-offset: 20px;
 $order-padding: 19px;
 $text-padding: 10px;
@@ -8,14 +7,14 @@ $text-padding: 10px;
 .order {
   height: calc(100vh - $order-offset);
   min-height: 520px;
-  min-width: 404px;
+  // min-width: 404px;
   max-width: $order-width;
 
   position: fixed;
   right: 0px;
   margin: 10px ($order-offset - 10px);
 
-  background: $background-grad;
+  background: $order-background-grad;
   border-radius: $box-radius;
 
   display: flex;
@@ -57,7 +56,7 @@ $text-padding: 10px;
     display: flex;
     justify-content: space-between;
 
-    &-header {
+    .order-header {
       span {
         font-size: 24px;
         color: #6f6f6f;
@@ -66,7 +65,7 @@ $text-padding: 10px;
       }
     }
 
-    &-quantity {
+    .order-quantity {
       display: flex;
       align-items: baseline;
     }
@@ -146,3 +145,5 @@ $text-padding: 10px;
     }
   }
 }
+
+

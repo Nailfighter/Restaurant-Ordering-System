@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
 import { CartContext } from "../Cart.jsx";
 import Order_Item from "./Order_Item.jsx";
 import { ConfirmationContext } from "../ConfirmationContext.jsx";
+import { useWidth } from "../WidthContext";
 
 import "../styles/scss/Order_Review.scss";
 
@@ -84,6 +85,7 @@ const OrderReview = () => {
 
   const handleCancel = () => {
     clearCart();
+    setNote("");
   };
 
   const handleScreen = () => {
@@ -97,9 +99,39 @@ const OrderReview = () => {
     setTotal(getTotal());
   }, [cart]);
 
+  const { width } = useWidth();
+  const orderRef = useRef(null);
+
+  useEffect(() => {
+    if (orderRef.current) {
+      orderRef.current.style.width = width;
+    }
+  }, [width]);
+
+  const h1Ref = useRef(null);
+
+  useEffect(() => {
+    const adjustFontSize = () => {
+      const element = h1Ref.current;
+      let fontSize = 54;
+      element.style.fontSize = fontSize + "px";
+      element.style.whiteSpace = "nowrap"; // Prevent initial wrapping for measurement
+      while (element.scrollWidth > element.clientWidth && fontSize > 20) {
+        fontSize--;
+        element.style.fontSize = fontSize + "px";
+      }
+      element.style.whiteSpace = "";
+    };
+    adjustFontSize();
+    window.addEventListener("resize", adjustFontSize);
+    return () => {
+      window.removeEventListener("resize", adjustFontSize);
+    };
+  });
+
   return (
-    <div className="order">
-      <h1>Current Order</h1>
+    <div className="order" ref={orderRef}>
+      <h1 ref={h1Ref}>Current Order</h1>
       <div className="order-items">{generateOrderItems()}</div>
       <div className="footer">
         <div className="footer-top">
