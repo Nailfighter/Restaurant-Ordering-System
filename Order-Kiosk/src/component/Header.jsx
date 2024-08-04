@@ -5,7 +5,7 @@ const apiURL = import.meta.env.VITE_API_URL;
 function convertDate(dateString) {
   const isoDateString = dateString.replace(" ", "T");
   let date = new Date(isoDateString);
-  date.setHours(date.getHours() - 4); // Adjust time as needed
+  date.setHours(date.getHours()); // Adjust time as needed
   return date;
 }
 
@@ -83,7 +83,7 @@ const Header = () => {
           <div className="order-info">
             <div className="close">
               <button onClick={handleClose}>
-                <img src="./Icon/cross.png" alt="Close" />
+                <img src="/Icon/cross.png" alt="Close" />
               </button>
             </div>
             {fetchedOrder && fetchedOrder.orderInfo.length > 0 ? (
@@ -105,7 +105,7 @@ const Header = () => {
                     ).toLocaleTimeString() || "N/A"}
                   </h3>
                 </div>
-                <img src="./Image/Dash.png" alt="Dash Line" />
+                <img src="/Image/Dash.png" alt="Dash Line" />
                 <div className="order-list">
                   {fetchedOrder.orderItems?.map((item, index) => (
                     <div className="order-list-item" key={index}>
@@ -114,7 +114,7 @@ const Header = () => {
                     </div>
                   ))}
                 </div>
-                <img src="./Image/Dash.png" alt="Dash Line" />
+                <img src="/Image/Dash.png" alt="Dash Line" />
                 <div className="order-datetime">
                   <h3>Last Updated:</h3>
                   <h3>
@@ -141,7 +141,7 @@ const Header = () => {
         </div>
       )}
       <div className="search-box">
-        <img src="./Icon/Search.png" alt="Search" />
+        <img src="/Icon/Search.png" alt="Search" />
         <input
           className="search-input"
           placeholder="Search for order number"

@@ -17,7 +17,11 @@ const ConfirmationScreen = () => {
         const response = await fetch(apiURL + "/api/kiosk/orders/last");
         if (response.ok) {
           const data = await response.json();
-          setOrderNumber(data.order_num);
+          if (data.order_num == null) {
+            setOrderNumber(0);
+          } else {
+            setOrderNumber(data.order_num);
+          }
         } else {
           console.error("Failed to fetch order number");
         }
@@ -37,7 +41,7 @@ const ConfirmationScreen = () => {
       <div className="ticket">
         <h1>Your Order Number is</h1>
         <h3>#{formatOrderNumber(orderNumber)}</h3>{" "}
-        <h2>Keep calm and wait while we make your order</h2>
+        <h2>Keep calm while we prepare your order</h2>
       </div>
     </div>
   );

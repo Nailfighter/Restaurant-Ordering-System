@@ -33,14 +33,7 @@ function addOrderToDB(cart, total, note) {
       "Content-Type": "application/json",
     },
     body: generateOrderPayload(cart, total, note),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  }).then((response) => response.json());
 }
 
 const OrderReview = () => {
@@ -89,10 +82,13 @@ const OrderReview = () => {
   };
 
   const handleScreen = () => {
-    setShowConfirmation(true);
+    setTimeout(() => {
+      setShowConfirmation(true);
+    }, 250); 
+
     setTimeout(() => {
       setShowConfirmation(false);
-    }, 5000);
+    }, 5000); 
   };
 
   useEffect(() => {
@@ -135,7 +131,7 @@ const OrderReview = () => {
       <div className="order-items">{generateOrderItems()}</div>
       <div className="footer">
         <div className="footer-top">
-          <img src="./Image/Dash.png" alt="Dash Line" />
+          <img src="/Image/Dash.png" alt="Dash Line" />
           <div className="total">
             <span>Total</span>
             <h5>$ {total}</h5>
@@ -149,7 +145,7 @@ const OrderReview = () => {
         ></textarea>
         <div className="buttons">
           <button className="buttons-cancel" onClick={handleCancel}>
-            <img src="./Icon/Undo.png" alt="Cancel" />
+            <img src="/Icon/Undo.png" alt="Cancel" />
           </button>
           <button className="buttons-confirm" onClick={handleConfirm}>
             Place Order

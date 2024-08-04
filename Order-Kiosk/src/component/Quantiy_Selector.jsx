@@ -41,11 +41,11 @@ const QuantitySelector = (props) => {
   return (
     <div className="button">
       <button className="button-less" onClick={handleDecrease}>
-        <img src="./Icon/Minus.png" alt="minus" />
+        <img src="/Icon/Minus.png" alt="minus" />
       </button>
       <span>{curQuantity}</span>
       <button className="button-more" onClick={handleIncrease}>
-        <img src="./Icon/Plus.png" alt="plus" />
+        <img src="/Icon/Plus.png" alt="plus" />
       </button>
     </div>
   );

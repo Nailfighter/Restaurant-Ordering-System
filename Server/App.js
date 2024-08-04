@@ -87,7 +87,9 @@ app.post("/api/kiosk/orders", async (req, res) => {
   const order = req.body;
   await addOrder(order);
 
-  broadcast({ type: "NEW_ORDER", order });
+  const orderNum = await getLastOrderNum();
+
+  broadcast({ type: "NEW_ORDER", orderNum, order });
 
   res.send({
     message: "Order created successfully!",
@@ -164,5 +166,5 @@ app.put("/api/kitchen/delayed/order/:num", async (req, res) => {
 
 app.get("/api/test", async (req, res) => {
   const tes = await test();
-  res.send(tes);
+  res.send({ message: tes });
 });
