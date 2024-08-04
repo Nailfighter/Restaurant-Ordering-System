@@ -1,26 +1,42 @@
+@import "./Order_Card.scss";
+
 .order-buttons {
-  width: 100%;
+  width: auto;
+  height: auto;
+
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
+  padding: 8px;
 
-  .order-button-primary {
-    flex-grow: 7;
+  button {
+    width: auto;
+    height: auto;
+    padding: 10px;
+
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+
+    background: $button-grad;
+
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+
+    img {
+      width: 21px;
+      height: 21px;
+    }
+
+    span {
+      font-size: 16px;
+      font-weight: 700;
+    }
   }
-
-  .order-button-secondary {
-    flex-grow: 2;
-    background-color: white;
-  }
-}
-
-button {
-  border-radius: 6px;
-  border: none;
-  height: 40px;
-  cursor: pointer;
-
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
 }

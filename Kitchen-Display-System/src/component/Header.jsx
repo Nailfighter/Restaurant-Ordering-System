@@ -2,11 +2,14 @@ import React, { useEffect, useContext } from "react";
 import "../styles/Header.scss";
 
 import { TabsContext } from "./Tabs";
+import { useMute } from "./Mute_Context";
 
 const Header = () => {
   const [curTime, setCurTime] = React.useState(new Date().toLocaleTimeString());
   const [curDate, setCurDate] = React.useState(new Date().toLocaleDateString());
   const { activeTab, setActiveTab } = useContext(TabsContext);
+
+  const { mute, toggleMute } = useMute();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,21 +29,39 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div className="header-clock">
-        <h2>{curTime}</h2>
-        <h6>{curDate}</h6>
+      <div className="header-buttons">
+        <button onClick={toggleMute()}>
+          <img src={mute ? "/Icon/Full-Volume.png" : "/Icon/Mute-Volume.png"} />
+        </button>
+        <button>
+          <img src="/Icon/Insight.png" />
+        </button>
       </div>
       <div className="header-center">
         <div className="header-tabs">
           <div
             className="header-tabs-rec"
-            style={{ marginLeft: activeTab == "Completed" ? "245px" : "0px" }}
+            style={{ marginLeft: activeTab == "History" ? "50%" : "0%" }}
           ></div>
           <div className="header-tabs-buttons">
-            <button onClick={() => setActiveTab("Active")}>Active</button>
-            <button onClick={() => setActiveTab("Completed")}>Completed</button>
+            <button
+              style={{ color: activeTab == "Active" ? "#EBAB5E" : "#E4E4E4" }}
+              onClick={() => setActiveTab("Active")}
+            >
+              Active
+            </button>
+            <button
+              style={{ color: activeTab == "History" ? "#EBAB5E" : "#E4E4E4" }}
+              onClick={() => setActiveTab("History")}
+            >
+              History
+            </button>
           </div>
         </div>
+      </div>
+      <div className="header-clock">
+        <img src="/Icon/clock.png" />
+        <span>{curTime}</span>
       </div>
     </div>
   );

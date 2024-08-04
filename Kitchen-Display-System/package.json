@@ -11,6 +11,8 @@
     "postbuild": "sudo rm -r -f /usr/share/caddy/kitchen && sudo mkdir /usr/share/caddy/kitchen && sudo cp -r dist/* /usr/share/caddy/kitchen"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
+    "howler": "^2.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "saas": "^1.0.0",

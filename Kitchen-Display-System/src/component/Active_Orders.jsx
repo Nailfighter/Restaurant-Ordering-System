@@ -1,29 +1,29 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Howl, Howler } from "howler";
 import OrderCard from "./Order_Card";
-
 import { TabsContext } from "./Tabs";
+import { useMute } from "./Mute_Context";
 
-// Fetch helper function
+const apiURL = import.meta.env.VITE_API_URL;
+
 const fetchJson = async (url) => {
   const response = await fetch(url);
   return response.json();
 };
 
-const getPendingOrders = () =>
-  fetchJson("http://localhost:5000/api/kitchen/preparing");
-
-const getDelayedOrders = () =>
-  fetchJson("http://localhost:5000/api/kitchen/delayed");
-
-const getCompletedOrders = () =>
-  fetchJson("http://localhost:5000/api/kitchen/completed");
-
+const getPendingOrders = () => fetchJson(`${apiURL}/api/kitchen/preparing`);
+const getDelayedOrders = () => fetchJson(`${apiURL}/api/kitchen/delayed`);
+const getCompletedOrders = () => fetchJson(`${apiURL}/api/kitchen/completed`);
 const getOrderItemsByNum = (num) =>
-  fetchJson(`http://localhost:5000/api/kiosk/order-items/order/${num}`);
+  fetchJson(`${apiURL}/api/kiosk/order-items/order/${num}`);
 
 const ActiveOrders = () => {
-  const { activeTab, setActiveTab } = useContext(TabsContext);
+  const { mute } = useMute();
+  const sound = new Howl({
+    src: ["/Notification.mp3"],
+  });
 
+  const { activeTab } = useContext(TabsContext);
   const [orders, setOrders] = useState({
     pending: [],
     delayed: [],
@@ -32,7 +32,6 @@ const ActiveOrders = () => {
   const [orderItems, setOrderItems] = useState({});
 
   const fetchOrdersAndItems = async () => {
-    // Fetch orders for each status
     const [pending, delayed, completed] = await Promise.all([
       getPendingOrders(),
       getDelayedOrders(),
@@ -41,7 +40,6 @@ const ActiveOrders = () => {
 
     const newOrders = { pending, delayed, completed };
 
-    // Fetch order items for each order
     const allOrders = [...pending, ...delayed, ...completed];
     const itemsPromises = allOrders.map((order) =>
       getOrderItemsByNum(order.order_num).then((items) => ({
@@ -63,15 +61,17 @@ const ActiveOrders = () => {
   useEffect(() => {
     fetchOrdersAndItems();
 
-    // WebSocket connection
     const ws = new WebSocket("ws://localhost:5000");
 
     ws.onopen = () => {
       console.log("WebSocket connection established");
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = async (event) => {
       const data = JSON.parse(event.data);
+      if (data.type === "NEW_ORDER") {
+        sound.play();
+      }
       if (data.type === "ORDER_STATUS_CHANGE" || data.type === "NEW_ORDER") {
         fetchOrdersAndItems();
       }
@@ -80,9 +80,13 @@ const ActiveOrders = () => {
     ws.onclose = () => {
       console.log("WebSocket connection closed");
     };
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
-  if (activeTab == "Completed") {
+  if (activeTab === "History") {
     if (orders.completed.length === 0) {
       return (
         <div className="no-active-order">
@@ -104,7 +108,7 @@ const ActiveOrders = () => {
   }
 
   if (
-    activeTab == "Active" &&
+    activeTab === "Active" &&
     orders.pending.length === 0 &&
     orders.delayed.length === 0
   ) {
@@ -117,7 +121,7 @@ const ActiveOrders = () => {
 
   return (
     <div className="active-orders">
-      {activeTab == "Active" &&
+      {activeTab === "Active" &&
         orders.pending.map((order) => (
           <OrderCard
             key={order.order_num}
@@ -125,7 +129,7 @@ const ActiveOrders = () => {
             items={orderItems[order.order_num] || []}
           />
         ))}
-      {activeTab == "Active" &&
+      {activeTab === "Active" &&
         orders.delayed.map((order) => (
           <OrderCard
             key={order.order_num}
