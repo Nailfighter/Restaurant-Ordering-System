@@ -48,7 +48,7 @@ function App() {
     <CartProvider>
       <div className="default">
         <div className="main">
-          <ResolutionChecker />
+          {/* <ResolutionChecker /> */}
           <Header />
           <h2>Categories</h2>
           <Menu />

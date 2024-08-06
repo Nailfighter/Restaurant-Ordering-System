@@ -5,10 +5,10 @@ import "../styles/scss/App.scss";
 
 const tabs = {
   All: [1, 15],
-  Box: [1, 4],
-  Combo: [5, 8],
-  Entree: [9, 11],
-  Drinks: [12, 15],
+  Box: [1, 5],
+  Combo: [6, 9],
+  Entree: [10, 12],
+  Drinks: [13, 15],
 };
 
 function isBetween(num, min, max) {
