@@ -1,0 +1,67 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body {
+  background-color: #172035;
+  overflow-x: hidden;
+}
+
+.default {
+  display: flex;
+  gap: 20px;
+  margin: 20px;
+
+  .overall {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+  }
+}
+
+.filter-plane {
+  height: auto;
+  width: 320px;
+}
+
+.time-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-picker {
+  display: flex;
+  gap: 10px;
+}
+
+.dashboard {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.containner {
+  display: flex;
+  gap: 20px;
+
+  .card {
+    height: 110px;
+  }
+}
+
+.pie-charts {
+  display: flex;
+  gap: 20px;
+
+  width: 100%;
+}
+
+.insights{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
