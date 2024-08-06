@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Howl, Howler } from "howler";
 import OrderCard from "./Order_Card";
 import { TabsContext } from "./Tabs";
-import { useMute } from "./Mute_Context";
 
 const apiURL = import.meta.env.VITE_API_URL;
 
@@ -18,7 +17,6 @@ const getOrderItemsByNum = (num) =>
   fetchJson(`${apiURL}/api/kiosk/order-items/order/${num}`);
 
 const ActiveOrders = () => {
-  const { mute } = useMute();
   const sound = new Howl({
     src: ["/Notification.mp3"],
   });
@@ -61,7 +59,7 @@ const ActiveOrders = () => {
   useEffect(() => {
     fetchOrdersAndItems();
 
-    const ws = new WebSocket("ws://localhost:5000");
+    const ws = new WebSocket("wss://api.osafood.online");
 
     ws.onopen = () => {
       console.log("WebSocket connection established");

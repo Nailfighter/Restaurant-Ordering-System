@@ -2,14 +2,11 @@ import React, { useEffect, useContext } from "react";
 import "../styles/Header.scss";
 
 import { TabsContext } from "./Tabs";
-import { useMute } from "./Mute_Context";
 
 const Header = () => {
   const [curTime, setCurTime] = React.useState(new Date().toLocaleTimeString());
   const [curDate, setCurDate] = React.useState(new Date().toLocaleDateString());
   const { activeTab, setActiveTab } = useContext(TabsContext);
-
-  const { mute, toggleMute } = useMute();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,8 +27,8 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-buttons">
-        <button onClick={toggleMute()}>
-          <img src={mute ? "/Icon/Full-Volume.png" : "/Icon/Mute-Volume.png"} />
+        <button>
+          <img src={"/Icon/Full-Volume.png"} />
         </button>
         <button>
           <img src="/Icon/Insight.png" />

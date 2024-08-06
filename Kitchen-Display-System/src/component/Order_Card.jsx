@@ -5,7 +5,7 @@ import Card_Buttons from "./Card_Buttons";
 function convertAndAdjustDate(dateString) {
   const isoDateString = dateString.replace(" ", "T");
   let date = new Date(isoDateString);
-  date.setHours(date.getHours() + -4);
+  date.setHours(date.getHours());
   return date;
 }
 
