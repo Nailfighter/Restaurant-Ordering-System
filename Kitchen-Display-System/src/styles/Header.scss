@@ -104,3 +104,21 @@
     }
   }
 }
+
+@media screen and (max-width: 1080px) {
+
+  .header-buttons{
+    display: none;
+  }
+  
+  .header-clock{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header
+  {
+    padding: 10px;
+  }
+}

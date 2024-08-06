@@ -7,7 +7,7 @@ $text-padding: 10px;
 .order {
   height: calc(100vh - $order-offset);
   min-height: 520px;
-  // min-width: 404px;
+  max-height: 1280px;
   max-width: $order-width;
 
   position: fixed;
@@ -145,5 +145,3 @@ $text-padding: 10px;
     }
   }
 }
-
-

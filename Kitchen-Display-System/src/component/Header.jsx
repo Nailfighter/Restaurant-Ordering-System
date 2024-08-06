@@ -28,9 +28,6 @@ const Header = () => {
     <div className="header">
       <div className="header-buttons">
         <button>
-          <img src={"/Icon/Full-Volume.png"} />
-        </button>
-        <button>
           <img src="/Icon/Insight.png" />
         </button>
       </div>

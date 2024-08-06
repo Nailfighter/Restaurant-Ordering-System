@@ -18,13 +18,15 @@ function formatTime(time) {
 }
 
 const OrderCard = ({ order, items }) => {
-  const createTime = convertAndAdjustDate(order.created_time);
+  const createdTime = convertAndAdjustDate(order.created_time);
+  const updatedTime = convertAndAdjustDate(order.updated_time);
   const [elapsedTime, setElapsedTime] = useState("0:00");
 
+  console.log(order);
   const returnHeader = (status) => {
     function underMinute() {
       const curTime = new Date();
-      const elapsed = Math.floor((curTime - createTime) / 1000);
+      const elapsed = Math.floor((curTime - updatedTime) / 1000);
       return elapsed < 60;
     }
 
@@ -41,14 +43,14 @@ const OrderCard = ({ order, items }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const curTime = new Date();
-      const elapsed = Math.floor((curTime - createTime) / 1000);
+      const elapsed = Math.floor((curTime - updatedTime) / 1000);
       const minutes = Math.floor(elapsed / 60);
       const seconds = elapsed % 60;
       setElapsedTime(`${minutes}:${seconds.toString().padStart(2, "0")}`);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [createTime]);
+  }, [updatedTime]);
 
   return (
     <div className="order">
@@ -56,7 +58,7 @@ const OrderCard = ({ order, items }) => {
         <div className="order-header-info">
           <h2># {formatOrderNumber(order.order_num)}</h2>
           <div className="order-header-time">
-            <h6>{formatTime(createTime.toLocaleTimeString())}</h6>
+            <h6>{formatTime(createdTime.toLocaleTimeString())}</h6>
           </div>
         </div>
         {/* <div className="line"></div> */}
@@ -67,7 +69,11 @@ const OrderCard = ({ order, items }) => {
           </div>
         )}
         <div className="order-row">
-          <div className="order-timer">{elapsedTime}</div>
+          <div className="order-timer">
+            {order.status != "Completed"
+              ? elapsedTime
+              : formatTime(updatedTime.toLocaleTimeString())}
+          </div>
         </div>
       </div>
 

@@ -3,13 +3,15 @@
 $start-grad: linear-gradient(0deg, #5bddab 0%, #5edd5e 100%);
 $prep-grad: linear-gradient(180deg, #ecd04a 0%, #fca53e 100%);
 $delay-grad: linear-gradient(0deg, #ef6b9f 0%, #f47171 100%);
-$completed-grad: linear-gradient(0deg, #3E71BD 0%, #5CB0BF 100%);
+$completed-grad: linear-gradient(0deg, #3e71bd 0%, #5cb0bf 100%);
 
 $button-grad: linear-gradient(180deg, #242424 0%, #101010 100%);
 
 .order {
-  width: 280px;
+  width: 100%;
   height: auto;
+
+
 
   @mixin header {
     position: relative;
