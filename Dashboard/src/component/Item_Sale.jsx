@@ -1,7 +1,9 @@
 // 'use client';
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
-import dummyData from "../Food_List";
 import { colors } from "../Food_List";
+import { getTotalSalesByItem, getSalesByItemByDay } from "../Fetch_Data";
+import { useContext, useEffect, useState } from "react";
+import { FilterContext } from "../FilterContext";
 
 const modColors = colors.map((color) => color.split("-")[1]);
 
@@ -9,13 +11,35 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const data = dummyData;
-
 const currencyFormatter = (number) => {
   return "$" + Intl.NumberFormat("us").format(number).toString();
 };
 
 export default function ItemSalePie() {
+  const { selectedDate } = useContext(FilterContext);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result =
+          selectedDate === "All"
+            ? await getTotalSalesByItem()
+            : await getSalesByItemByDay(selectedDate);
+
+        const updatedData = result.map((item, index) => ({
+          ...item,
+          color: colors[index % colors.length],
+        }));
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, [selectedDate]);
+
   return (
     <div className="flex-1 ">
       <Card className="h-[100%]">

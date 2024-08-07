@@ -1,25 +1,34 @@
-// 'use client';
+"use client";
 
-import { RiExternalLinkLine } from "@remixicon/react";
-import { Card, Tab, TabGroup, TabList } from "@tremor/react";
-import { info } from "autoprefixer";
-
-const usage = [
-  {
-    id: 1,
-    title: "Average Revenue per Order",
-    info: "$7.2",
-    sub: "‎ ",
-  },
-  {
-    id: 2,
-    title: "Average Order Size",
-    info: "1.2",
-    sub: "‎ items",
-  },
-];
+import React, { useState, useEffect } from "react";
+import { Card } from "@tremor/react";
+import { getInsight } from "../Fetch_Data";
 
 export default function Insights() {
+  const [usage, setUsage] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getInsight();
+      setUsage([
+        {
+          id: 1,
+          title: "Average Revenue per Order",
+          info: `$${data.ARO}`,
+          sub: "‎",
+        },
+        {
+          id: 2,
+          title: "Average Order Size",
+          info: data.AOS,
+          sub: "",
+        },
+      ]);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Card className="p-0 sm:mx-auto sm:max-w-lg">
       <div className="flex items-center justify-between border-b border-tremor-border p-6 dark:border-dark-tremor-border">

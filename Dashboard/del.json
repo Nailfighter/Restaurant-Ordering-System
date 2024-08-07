@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Chicken Butter Masala",
+    "value": 56
+  },
+  {
+    "name": "Panner Tikka Masala",
+    "value": 87
+  },
+  {
+    "name": "Chickpea Masala",
+    "value": 100
+  },
+  {
+    "name": "Tandoori Chicken",
+    "value": 50
+  },
+  {
+    "name": "Chicken Butter Masala Combo",
+    "value": 63
+  },
+  {
+    "name": "Panner Tikka Masala Combo",
+    "value": 51
+  },
+  {
+    "name": "Chickpea Masala Combo",
+    "value": 88
+  },
+  {
+    "name": "Tandoori Chicken Combo",
+    "value": 42
+  },
+  {
+    "name": "Samosa",
+    "value": 94
+  },
+  {
+    "name": "Pani Puri",
+    "value": 27
+  },
+  {
+    "name": "Kulfi",
+    "value": 86
+  },
+  {
+    "name": "Mango Lassi",
+    "value": 59
+  },
+  {
+    "name": "Water",
+    "value": 32
+  },
+  {
+    "name": "Soda",
+    "value": 8
+  },
+  {
+    "name": "Extra Rice/Naan",
+    "value": 52
+  }
+]

@@ -174,6 +174,6 @@ const generateDummyData = (foodList) => {
 };
 
 const dummyData = generateDummyData(Food_List);
-console.log(dummyData);
+
 
 export default dummyData;

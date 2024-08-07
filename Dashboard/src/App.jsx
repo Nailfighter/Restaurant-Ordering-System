@@ -10,6 +10,8 @@ import LineInfo from "./component/Line_Info";
 import { FilterProvider } from "./FilterContext";
 import Credentials from "./component/Credentials";
 
+import "./Fetch_Data";
+
 function App() {
   return (
     <FilterProvider>
@@ -25,7 +27,6 @@ function App() {
               <Insights />
             </div>
           </div>
-          <LineInfo />
         </div>
       </div>
     </FilterProvider>
