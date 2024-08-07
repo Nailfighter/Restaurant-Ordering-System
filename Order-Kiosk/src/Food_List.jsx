@@ -123,5 +123,4 @@ const Food_List = [
   },
 ];
 
-
 export default Food_List;
