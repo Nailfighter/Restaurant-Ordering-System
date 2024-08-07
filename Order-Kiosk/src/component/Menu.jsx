@@ -23,6 +23,7 @@ function filterFoodList(tab) {
       id={item.id}
       image={item.image}
       name={item.name}
+      alias={item.alias}
       price={item.price}
       tags={item.tags}
       show={isBetween(item.id, start, end) ? "flex" : "none"}

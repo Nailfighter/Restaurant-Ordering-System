@@ -27,9 +27,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-buttons">
-        <button>
-          <img src="/Icon/Insight.png" />
-        </button>
+        
       </div>
       <div className="header-center">
         <div className="header-tabs">

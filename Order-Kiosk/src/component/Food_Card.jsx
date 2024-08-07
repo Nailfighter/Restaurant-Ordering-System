@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import Tag from "./Tag.jsx";
 import QuantitySelector from "./Quantiy_Selector.jsx";
 import "../styles/scss/Food_Card.scss";
@@ -9,10 +10,10 @@ const FoodCard = (props) => {
   useEffect(() => {
     const adjustFontSize = () => {
       const element = h6Ref.current;
-      let fontSize = 34;
+      let fontSize = 30;
       element.style.fontSize = fontSize + "px";
       element.style.whiteSpace = "nowrap"; // Prevent initial wrapping for measurement
-      while (element.scrollWidth > element.clientWidth && fontSize > 16) {
+      while (element.scrollWidth > element.clientWidth && fontSize > 26) {
         fontSize--;
         element.style.fontSize = fontSize + "px";
       }
@@ -23,10 +24,15 @@ const FoodCard = (props) => {
     return () => {
       window.removeEventListener("resize", adjustFontSize);
     };
-  });
+  }, []);
 
   return (
-    <div className="card" style={{ display: props.show }}>
+    <motion.div
+      className="card"
+      style={{ display: props.show }}
+      whileHover={{ scale: 1.05 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="card-header">
         <img src={props.image} alt="food" />
         <h6 ref={h6Ref}>{props.name}</h6>
@@ -38,9 +44,9 @@ const FoodCard = (props) => {
         <div className="price-containner">
           <span>${props.price}</span>
         </div>
-        <QuantitySelector id={props.id} name={props.name} price={props.price} />
+        <QuantitySelector id={props.id} name={props.name} price={props.price} alias={props.alias} />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

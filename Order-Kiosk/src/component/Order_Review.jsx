@@ -69,7 +69,6 @@ const OrderReview = () => {
       alert("Cart is empty!");
       return;
     }
-
     addOrderToDB(cart, total, note);
     setNote("");
     clearCart();

@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Card } from "@tremor/react";
 import { getInsight } from "../Fetch_Data";
+import { FilterContext } from "../FilterContext";
 
 export default function Insights() {
+  const { selectedDate } = useContext(FilterContext);
   const [usage, setUsage] = useState([]);
 
   useEffect(() => {
@@ -28,6 +30,10 @@ export default function Insights() {
 
     fetchData();
   }, []);
+
+  if (selectedDate !== "All") {
+    return <></>;
+  }
 
   return (
     <Card className="p-0 sm:mx-auto sm:max-w-lg">

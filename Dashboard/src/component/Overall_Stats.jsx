@@ -71,15 +71,17 @@ const OverallStats = () => {
                 {item.stat}
               </dd>
             </Card>
-
-            <Bar_Graph type={categories[index]} />
+            {selectedDate === "All" && <Bar_Graph type={categories[index]} />}
           </div>
         ))}
       </dl>
-      <div className="flex gap-5 justify-between">
-        <LineInfo type={categories[0]} />
-        <LineInfo type={categories[1]} />
-      </div>
+
+      {selectedDate != "All" && (
+        <div className="flex gap-5 justify-between">
+          <LineInfo type={categories[0]} />
+          <LineInfo type={categories[1]} />
+        </div>
+      )}
     </>
   );
 };

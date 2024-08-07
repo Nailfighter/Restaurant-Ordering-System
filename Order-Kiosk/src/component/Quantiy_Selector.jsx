@@ -32,6 +32,7 @@ const QuantitySelector = (props) => {
     const itemWithQuantity = {
       id: props.id,
       name: props.name,
+      alias: props.alias,
       price: props.price,
       quantity: curQuantity,
     };

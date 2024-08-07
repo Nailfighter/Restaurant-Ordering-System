@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Order_Card.scss";
 import Card_Buttons from "./Card_Buttons";
+import "../Food_List.jsx";
+import Food_Name from "../Food_List.jsx";
+
+const apiURL = import.meta.env.VITE_API_URL;
 
 function convertAndAdjustDate(dateString) {
   const isoDateString = dateString.replace(" ", "T");
@@ -17,12 +21,21 @@ function formatTime(time) {
   return time.slice(0, -6) + time.slice(-3);
 }
 
+const orderNumNotGoingBack = [12, 13, 14, 15];
+const checkOnlyNotGoingBack = (items) => {
+  for (let i = 0; i < items.length; i++) {
+    if (!orderNumNotGoingBack.includes(items[i].item_id)) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const OrderCard = ({ order, items }) => {
   const createdTime = convertAndAdjustDate(order.created_time);
   const updatedTime = convertAndAdjustDate(order.updated_time);
   const [elapsedTime, setElapsedTime] = useState("0:00");
 
-  console.log(order);
   const returnHeader = (status) => {
     function underMinute() {
       const curTime = new Date();
@@ -32,7 +45,9 @@ const OrderCard = ({ order, items }) => {
 
     switch (status) {
       case "Preparing":
-        return underMinute() ? "order-header-Starting" : "order-header-Preparing";
+        return underMinute()
+          ? "order-header-Starting"
+          : "order-header-Preparing";
       case "Delayed":
         return "order-header-Delayed";
       case "Completed":
@@ -52,6 +67,21 @@ const OrderCard = ({ order, items }) => {
     return () => clearInterval(interval);
   }, [updatedTime]);
 
+  const autoComplete = () => {
+    fetch(`${apiURL}/api/kitchen/completed/order/${order.order_num}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: "completed" }),
+    });
+  };
+
+  if (checkOnlyNotGoingBack(items)) {
+    autoComplete();
+    return (<></>)
+  }
+
   return (
     <div className="order">
       <div className={returnHeader(order.status)}>
@@ -61,7 +91,6 @@ const OrderCard = ({ order, items }) => {
             <h6>{formatTime(createdTime.toLocaleTimeString())}</h6>
           </div>
         </div>
-        {/* <div className="line"></div> */}
         {order.note && (
           <div className="order-header-note">
             <h5>Note :</h5>
@@ -79,18 +108,21 @@ const OrderCard = ({ order, items }) => {
 
       <div className="order-body">
         <div className="order-body-items">
-          {items.map((item, index) => (
-            <div
-              className="order-body-item"
-              key={index}
-              style={{
-                backgroundColor: index % 2 === 0 ? "#ebebeb" : "#ffffff",
-              }}
-            >
-              <h3>{item.quantity}x</h3>
-              <h4>{item.item_name}</h4>
-            </div>
-          ))}
+          {items.map(
+            (item, index) =>
+              !orderNumNotGoingBack.includes(item.item_id) && (
+                <div
+                  className="order-body-item"
+                  key={index}
+                  style={{
+                    backgroundColor: index % 2 === 0 ? "#ebebeb" : "#ffffff",
+                  }}
+                >
+                  <h3>{item.quantity}x</h3>
+                  <h4>{Food_Name[item.item_id - 1]}</h4>
+                </div>
+              )
+          )}
         </div>
         <Card_Buttons
           key={order.order_num}

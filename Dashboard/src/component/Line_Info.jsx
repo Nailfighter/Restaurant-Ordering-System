@@ -35,8 +35,6 @@ export default function Line_Info({ type }) {
   const categories = type === "Sales" ? ["RevenuePerHour"] : ["OrderPerHour"];
   const colors = type === "Sales" ? ["purple"] : ["indigo"];
 
-  console.log(data);
-
   return (
     <Card>
       <h3 className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
