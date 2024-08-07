@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { motion } from "framer-motion";
 import { ConfirmationContext } from "../ConfirmationContext.jsx";
 
 const apiURL = import.meta.env.VITE_API_URL;
@@ -17,11 +18,7 @@ const ConfirmationScreen = () => {
         const response = await fetch(apiURL + "/api/kiosk/orders/last");
         if (response.ok) {
           const data = await response.json();
-          if (data.order_num == null) {
-            setOrderNumber(0);
-          } else {
-            setOrderNumber(data.order_num);
-          }
+          setOrderNumber(data.order_num ?? 0);
         } else {
           console.error("Failed to fetch order number");
         }
@@ -36,13 +33,28 @@ const ConfirmationScreen = () => {
   return (
     <div
       className="overlay"
-      style={showConfirmation ? { display: "flex" } : { display: "none" }}
+      style={{ display: showConfirmation ? "flex" : "none" }}
     >
-      <div className="ticket">
+      <motion.div
+        className="ticket"
+        initial={{ opacity: 0, scale: 0.5, y: 50 }} 
+        animate={{
+          opacity: showConfirmation ? 1 : 0,
+          scale: showConfirmation ? 1.1 : 0.5,
+          y: showConfirmation ? 0 : 50,
+        }} 
+        transition={{
+          duration: 0.6,
+          ease: "easeOut",
+          type: "spring",
+          stiffness: 300,
+          damping: 10,
+        }} 
+      >
         <h1>Your Order Number is</h1>
-        <h3>#{formatOrderNumber(orderNumber)}</h3>{" "}
+        <h3>#{formatOrderNumber(orderNumber)}</h3>
         <h2>Keep calm while we prepare your order</h2>
-      </div>
+      </motion.div>
     </div>
   );
 };

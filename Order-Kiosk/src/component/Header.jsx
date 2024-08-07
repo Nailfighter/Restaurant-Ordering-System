@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const apiURL = import.meta.env.VITE_API_URL;
 
@@ -12,6 +13,36 @@ function convertDate(dateString) {
 function formatOrderNumber(orderNumber) {
   return orderNumber.toString().padStart(3, "0");
 }
+
+const bounce = {
+  initial: { scale: 0.9, opacity: 0, y: 20 },
+  animate: {
+    scale: 1,
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 20 },
+  },
+  exit: { scale: 0.9, opacity: 0, y: 20, transition: { duration: 0.3 } },
+};
+
+const bounceButton = {
+  initial: { scale: 1 },
+  whileHover: { scale: 1.1 },
+  whileTap: { scale: 0.9 },
+};
+
+const searchBoxAnimation = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.3 } },
+};
+
+const searchIconAnimation = {
+  initial: { opacity: 0, scale: 0.8 },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  whileHover: { scale: 1.1 },
+  whileTap: { scale: 0.9 },
+};
 
 const Header = () => {
   const [inputValue, setInputValue] = useState("");
@@ -78,70 +109,111 @@ const Header = () => {
 
   return (
     <div className="header">
-      {showOrder && (
-        <div className="order-overlay">
-          <div className="order-info">
-            <div className="close">
-              <button onClick={handleClose}>
-                <img src="/Icon/cross.png" alt="Close" />
-              </button>
-            </div>
-            {fetchedOrder && fetchedOrder.orderInfo.length > 0 ? (
-              <>
-                <h1>
-                  Order #
-                  {formatOrderNumber(fetchedOrder.orderInfo[0]?.order_num) ||
-                    "N/A"}
-                </h1>
-                <div className="order-datetime">
-                  <h3>
-                    {convertDate(
-                      fetchedOrder.orderInfo[0]?.created_time
-                    ).toLocaleDateString() || "N/A"}
-                  </h3>
-                  <h3>
-                    {convertDate(
-                      fetchedOrder.orderInfo[0]?.created_time
-                    ).toLocaleTimeString() || "N/A"}
-                  </h3>
-                </div>
-                <img src="/Image/Dash.png" alt="Dash Line" />
-                <div className="order-list">
-                  {fetchedOrder.orderItems?.map((item, index) => (
-                    <div className="order-list-item" key={index}>
-                      <h3>{item.item_name}</h3>
-                      <h5>x {item.quantity}</h5>
-                    </div>
-                  ))}
-                </div>
-                <img src="/Image/Dash.png" alt="Dash Line" />
-                <div className="order-datetime">
-                  <h3>Last Updated:</h3>
-                  <h3>
-                    {convertDate(
-                      fetchedOrder.orderInfo[0]?.updated_time
-                    ).toLocaleTimeString() || "N/A"}
-                  </h3>
-                </div>
-                <h3>
-                  Order Status:
-                  <span>{fetchedOrder.orderInfo[0]?.status || "N/A"}</span>
-                </h3>
-              </>
-            ) : (
-              <div className="not-found">
-                <h1>Order #{formatOrderNumber(inputValue) || "N/A"}</h1>
-                <h3>
-                  Order Status:
-                  <span>Not Created</span>
-                </h3>
+      <AnimatePresence>
+        {showOrder && (
+          <motion.div
+            className="order-overlay"
+            initial={{ opacity: 1, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              className="order-info"
+              variants={bounce}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <div className="close">
+                <motion.button
+                  onClick={handleClose}
+                  variants={bounceButton}
+                  initial="initial"
+                  whileHover="whileHover"
+                  whileTap="whileTap"
+                >
+                  <img src="/Icon/cross.png" alt="Close" />
+                </motion.button>
               </div>
-            )}
-          </div>
-        </div>
-      )}
-      <div className="search-box">
-        <img src="/Icon/Search.png" alt="Search" />
+              {fetchedOrder && fetchedOrder.orderInfo.length > 0 ? (
+                <>
+                  <h1>
+                    Order #
+                    {formatOrderNumber(fetchedOrder.orderInfo[0]?.order_num) ||
+                      "N/A"}
+                  </h1>
+                  <div className="order-datetime">
+                    <h3>
+                      {convertDate(
+                        fetchedOrder.orderInfo[0]?.created_time
+                      ).toLocaleDateString() || "N/A"}
+                    </h3>
+                    <h3>
+                      {convertDate(
+                        fetchedOrder.orderInfo[0]?.created_time
+                      ).toLocaleTimeString() || "N/A"}
+                    </h3>
+                  </div>
+                  <img src="/Image/Dash.png" alt="Dash Line" />
+                  <div className="order-list">
+                    {fetchedOrder.orderItems?.map((item, index) => (
+                      <motion.div
+                        className="order-list-item"
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <h3>{item.item_name}</h3>
+                        <h5>x {item.quantity}</h5>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <img src="/Image/Dash.png" alt="Dash Line" />
+                  <div className="order-datetime">
+                    <h3>Last Updated:</h3>
+                    <h3>
+                      {convertDate(
+                        fetchedOrder.orderInfo[0]?.updated_time
+                      ).toLocaleTimeString() || "N/A"}
+                    </h3>
+                  </div>
+                  <h3>
+                    Order Status:
+                    <span>{fetchedOrder.orderInfo[0]?.status || "N/A"}</span>
+                  </h3>
+                </>
+              ) : (
+                <div className="not-found">
+                  <h1>Order #{formatOrderNumber(inputValue) || "N/A"}</h1>
+                  <h3>
+                    Order Status:
+                    <span>Not Created</span>
+                  </h3>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        className="search-box"
+        variants={searchBoxAnimation}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        <motion.img
+          src="/Icon/Search.png"
+          alt="Search"
+          variants={searchIconAnimation}
+          initial="initial"
+          animate="animate"
+          whileHover="whileHover"
+          whileTap="whileTap"
+        />
         <input
           className="search-input"
           placeholder="Search for order number"
@@ -150,7 +222,7 @@ const Header = () => {
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
         />
-      </div>
+      </motion.div>
     </div>
   );
 };

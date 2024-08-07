@@ -1,4 +1,5 @@
 import React, { useRef, useContext, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { CartContext } from "../Cart.jsx";
 import Order_Item from "./Order_Item.jsx";
 import { ConfirmationContext } from "../ConfirmationContext.jsx";
@@ -83,11 +84,11 @@ const OrderReview = () => {
   const handleScreen = () => {
     setTimeout(() => {
       setShowConfirmation(true);
-    }, 250); 
+    }, 250);
 
     setTimeout(() => {
       setShowConfirmation(false);
-    }, 5000); 
+    }, 5000);
   };
 
   useEffect(() => {
@@ -133,7 +134,15 @@ const OrderReview = () => {
           <img src="/Image/Dash.png" alt="Dash Line" />
           <div className="total">
             <span>Total</span>
-            <h5>$ {total}</h5>
+            <motion.h5
+              key={total}
+              initial={{ scale: 0.8, opacity: 0 }} // Start smaller and fade in
+              animate={{ scale: 1, opacity: 1 }} // Scale to normal size and full opacity
+              exit={{ scale: 0.8, opacity: 0 }} // Scale down and fade out
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            >
+              ${total}
+            </motion.h5>
           </div>
         </div>
         <textarea
@@ -143,12 +152,24 @@ const OrderReview = () => {
           placeholder="Add a note..."
         ></textarea>
         <div className="buttons">
-          <button className="buttons-cancel" onClick={handleCancel}>
+          <motion.button
+            className="buttons-cancel"
+            onClick={handleCancel}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <img src="/Icon/Undo.png" alt="Cancel" />
-          </button>
-          <button className="buttons-confirm" onClick={handleConfirm}>
+          </motion.button>
+          <motion.button
+            className="buttons-confirm"
+            onClick={handleConfirm}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             Place Order
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

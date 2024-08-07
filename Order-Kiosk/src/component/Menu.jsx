@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Food_Card from "./Food_Card.jsx";
 import Food_List from "../Food_List.jsx";
 import "../styles/scss/App.scss";
@@ -38,16 +39,28 @@ const Menu = () => {
     <div className="food-content">
       <div className="tabs">
         {Object.keys(tabs).map((tab) => (
-          <button
+          <motion.button
             key={tab}
             className={selectedTab === tab ? "tab-selected" : "tab-unselected"}
             onClick={() => setSelectedTab(tab)}
+            whileHover={{ scale: 1.1 }} 
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             {tab}
-          </button>
+          </motion.button>
         ))}
       </div>
-      <div className="containner">{filterFoodList(selectedTab)}</div>
+      <motion.div
+        className="containner"
+        key={selectedTab} 
+        initial={{ opacity: 0, x: -20 }} 
+        animate={{ opacity: 1, x: 0 }} 
+        exit={{ opacity: 0, x: 20 }} 
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        {filterFoodList(selectedTab)}
+      </motion.div>
     </div>
   );
 };

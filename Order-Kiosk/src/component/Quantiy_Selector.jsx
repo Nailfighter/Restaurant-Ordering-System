@@ -1,16 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../Cart.jsx"; // Ensure this path is correct
+import { motion } from "framer-motion";
 
 import "../styles/scss/Quantiy_Selector.scss";
 
 const QuantitySelector = (props) => {
   const [curQuantity, setQuantity] = useState(0);
+  const [prevQuantity, setPrevQuantity] = useState(0);
+
   const handleIncrease = () => {
+    setPrevQuantity(curQuantity);
     setQuantity(curQuantity + 1);
   };
 
   const handleDecrease = () => {
     if (curQuantity > 0) {
+      setPrevQuantity(curQuantity);
       setQuantity(curQuantity - 1);
     }
   };
@@ -18,8 +23,8 @@ const QuantitySelector = (props) => {
   const { cart, addToCart, clearCart } = useContext(CartContext);
 
   useEffect(() => {
-    const cartLenth = cart.length;
-    if (cartLenth == 0) {
+    const cartLength = cart.length;
+    if (cartLength === 0) {
       setQuantity(0);
     }
   }, [clearCart]);
@@ -41,13 +46,32 @@ const QuantitySelector = (props) => {
 
   return (
     <div className="button">
-      <button className="button-less" onClick={handleDecrease}>
+      <motion.button
+        className="button-less"
+        onClick={handleDecrease}
+        whileTap={{ scale: 0.8 }}
+      >
         <img src="/Icon/Minus.png" alt="minus" />
-      </button>
-      <span>{curQuantity}</span>
-      <button className="button-more" onClick={handleIncrease}>
+      </motion.button>
+      <motion.span
+        className="quantity-text"
+        key={curQuantity}
+        initial={{
+          y: curQuantity > prevQuantity ? 10 : -10,
+          opacity: 0,
+        }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {curQuantity}
+      </motion.span>
+      <motion.button
+        className="button-more"
+        onClick={handleIncrease}
+        whileTap={{ scale: 1.2 }}
+      >
         <img src="/Icon/Plus.png" alt="plus" />
-      </button>
+      </motion.button>
     </div>
   );
 };

@@ -82,9 +82,32 @@ h6 {
   direction: row-reverse;
   background-image: url("/Image/Wave.png");
   background-repeat: no-repeat;
-  // background-size: cover;
-  
+  animation: moveBackground 10s infinite ease-in-out;
 }
+
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 0 -50px; /* Adjust the value as needed */
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+// @keyframes moveUpDown {
+//   0% {
+//     transform: translateY(0);
+//   }
+//   50% {
+//     transform: translateY(-200px); /* Adjust the value as needed */
+//   }
+//   100% {
+//     transform: translateY(0);
+//   }
+// }
 
 .main {
   // background-color: blue;
