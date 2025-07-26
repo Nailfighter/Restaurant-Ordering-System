@@ -53,7 +53,6 @@ const ConfirmationScreen = () => {
       >
         <h1>Your Order Number is</h1>
         <h3>#{formatOrderNumber(orderNumber)}</h3>
-        <h2>Keep calm while we prepare your order</h2>
       </motion.div>
     </div>
   );

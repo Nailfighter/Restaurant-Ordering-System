@@ -6,7 +6,7 @@ const apiURL = import.meta.env.VITE_API_URL;
 function convertDate(dateString) {
   const isoDateString = dateString.replace(" ", "T");
   let date = new Date(isoDateString);
-  date.setHours(date.getHours()); // Adjust time as needed
+  date.setHours(date.getHours() - 4);
   return date;
 }
 

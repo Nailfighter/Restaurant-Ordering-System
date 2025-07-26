@@ -9,7 +9,7 @@ const apiURL = import.meta.env.VITE_API_URL;
 function convertAndAdjustDate(dateString) {
   const isoDateString = dateString.replace(" ", "T");
   let date = new Date(isoDateString);
-  date.setHours(date.getHours());
+  date.setHours(date.getHours() - 4);
   return date;
 }
 
@@ -79,7 +79,7 @@ const OrderCard = ({ order, items }) => {
 
   if (checkOnlyNotGoingBack(items)) {
     autoComplete();
-    return (<></>)
+    return <></>;
   }
 
   return (

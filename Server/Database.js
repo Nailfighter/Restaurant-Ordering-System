@@ -4,7 +4,7 @@ const mysql = require("mysql2"); // For MySQL database
 //#region Database connection configuration
 const dbConfig = {
   host: process.env.RDB_HOST,
-  port: process.env.RDB_PORT,
+  port: process.env.RDB_PORT || 3306,
   user: process.env.RDB_USER,
   password: process.env.RDB_PASSWORD,
   database: process.env.RDB_DATABASE,
@@ -13,18 +13,54 @@ const dbConfig = {
 const pool = mysql.createPool(dbConfig);
 const promisePool = pool.promise();
 
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error("Error connecting to database:", err);
-  } else {
-    console.log("Database connected!");
+// Enhanced connection handling for GCP Cloud SQL
+async function testConnection() {
+  try {
+    const connection = await promisePool.getConnection();
+    console.log("Database connected successfully to GCP Cloud SQL");
     connection.release();
+    return true;
+  } catch (err) {
+    console.error("Error connecting to GCP Cloud SQL database:", err.message);
+    if (err.code === "ECONNREFUSED") {
+      console.error(
+        "   Make sure your GCP Cloud SQL instance is running and accessible"
+      );
+    } else if (err.code === "ER_ACCESS_DENIED_ERROR") {
+      console.error("   Check your database credentials in .env file");
+    } else if (err.code === "ENOTFOUND") {
+      console.error("   Check your RDB_HOST environment variable");
+    }
+    return false;
   }
-});
+}
+
+// Test connection on startup
+testConnection();
 
 //#endregion
 
 //#region  HELPER FUNCTIONS
+
+// Retry mechanism for cloud database operations
+async function executeWithRetry(operation, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      if (attempt === maxRetries) {
+        throw error;
+      }
+
+      // Wait before retrying (exponential backoff)
+      const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+      console.log(
+        `Database operation failed, retrying in ${delay}ms... (attempt ${attempt}/${maxRetries})`
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+}
 
 async function insertOrder(order) {
   const { status = "Pending", totalPrice, note = null } = order;
@@ -230,7 +266,6 @@ async function getSalesByItemByDay(date) {
   return results;
 }
 
-
 async function getOrdersByItems() {
   const query = `SELECT item_name as name, SUM(quantity) as value FROM Order_Items GROUP BY item_id;`;
   const [results] = await promisePool.query(query);
@@ -248,8 +283,6 @@ async function getOrdersByItemsByDay(date) {
   const [results] = await promisePool.query(query, [date]);
   return results;
 }
-
-
 
 async function getAverageRevenuePerOrder() {
   const query = `SELECT ROUND(SUM(total_price) / COUNT(*),2) as ARO FROM Orders;`;
@@ -311,7 +344,7 @@ ORDER BY oc.order_date, hr.hour_start;`;
 }
 
 async function test() {
-  return "API Test is Working!";
+  return "Backend Connection is Working!";
 }
 
 // (async () => {
@@ -321,6 +354,8 @@ async function test() {
 
 module.exports = {
   cleanUp,
+  testConnection,
+  executeWithRetry,
 
   getLastOrderNum,
   getAllOrders,

@@ -21,6 +21,7 @@ const checkConnectionToAPI = async () => {
     console.log(data.message);
   } catch (error) {
     console.error("Fetch error:", error);
+    alert("Internet or API connection failed");
   }
 };
 
@@ -42,13 +43,17 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, [setWidth]);
 
-  checkConnectionToAPI();
+  useEffect(() => {
+    checkConnectionToAPI();
+    const interval = setInterval(checkConnectionToAPI, 10000);
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   return (
     <CartProvider>
       <div className="default">
         <div className="main">
-          {/* <ResolutionChecker /> */}
           <Header />
           <h2>Categories</h2>
           <Menu />
