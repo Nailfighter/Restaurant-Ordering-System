@@ -82,22 +82,6 @@ const Food_List = [
   },
   {
     id: 11,
-    image: "/Image/Pani Puri.jpg",
-    name: "Pani Puri",
-    alias: "Pani Puri",
-    price: 10,
-    tags: ["Vegan", "Gluten"],
-  },
-  {
-    id: 12,
-    image: "/Image/Kulfi.jpg",
-    name: "Kulfi",
-    alias: "Kulfi",
-    price: 5,
-    tags: ["Diary", "Cold"],
-  },
-  {
-    id: 13,
     image: "/Image/Lassi.jpg",
     name: "Mango Lassi",
     alias: "Mango Lassi",
@@ -106,7 +90,7 @@ const Food_List = [
     tags: ["Diary", "Cold"],
   },
   {
-    id: 14,
+    id: 12,
     image: "/Image/Water.jpg",
     name: "Water",
     alias: "Water",
@@ -114,7 +98,7 @@ const Food_List = [
     tags: ["Cold"],
   },
   {
-    id: 15,
+    id: 13,
     image: "/Image/Soda.jpg",
     name: "Soda",
     alias: "Soda",

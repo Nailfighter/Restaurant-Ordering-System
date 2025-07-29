@@ -9,8 +9,6 @@ const Food_Name = [
   "Chickpea Combo",
   "Tandoori Combo",
   "Samosa",
-  "Pani Puri",
-  "Kulfi",
   "Mango Lassi",
   "Water",
   "Soda",

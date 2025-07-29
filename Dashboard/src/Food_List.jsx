@@ -73,22 +73,6 @@ const Food_List = [
   },
   {
     id: 10,
-    image: "/Image/Pani Puri.jpg",
-    name: "Pani Puri",
-    alias: "Pani Puri",
-    price: 10,
-    tags: ["Vegan", "Gluten"],
-  },
-  {
-    id: 11,
-    image: "/Image/Kulfi.jpg",
-    name: "Kulfi",
-    alias: "Kulfi",
-    price: 5,
-    tags: ["Diary", "Cold"],
-  },
-  {
-    id: 12,
     image: "/Image/Lassi.jpg",
     name: "Mango Lassi",
     alias: "Mango Lassi",
@@ -97,7 +81,7 @@ const Food_List = [
     tags: ["Diary", "Cold"],
   },
   {
-    id: 13,
+    id: 11,
     image: "/Image/Water.jpg",
     name: "Water",
     alias: "Water",
@@ -105,7 +89,7 @@ const Food_List = [
     tags: ["Cold"],
   },
   {
-    id: 14,
+    id: 12,
     image: "/Image/Soda.jpg",
     name: "Soda",
     alias: "Soda",
@@ -113,7 +97,7 @@ const Food_List = [
     tags: ["Cold"],
   },
   {
-    id: 15,
+    id: 13,
     image: "/Image/Recycle.jpg",
     name: "Extra Rice/Naan",
     alias: "Extra Rice/Naan",
@@ -132,8 +116,6 @@ export const colors = [
   "bg-green-500",
   "bg-yellow-500",
   "bg-orange-500",
-  "bg-red-500",
-  "bg-pink-500",
   "bg-lime-500",
   "bg-emerald-500",
   "bg-sky-500",
@@ -174,6 +156,5 @@ const generateDummyData = (foodList) => {
 };
 
 const dummyData = generateDummyData(Food_List);
-
 
 export default dummyData;

@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - RDB_HOST=${RDB_HOST}
+      - RDB_PORT=${RDB_PORT}
+      - RDB_USER=${RDB_USER}
+      - RDB_PASSWORD=${RDB_PASSWORD}
+      - RDB_DATABASE=${RDB_DATABASE}
+    restart: unless-stopped
