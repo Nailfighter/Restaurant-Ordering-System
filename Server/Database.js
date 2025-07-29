@@ -196,7 +196,7 @@ async function getSalesByDate(date) {
 
 async function getNumOfOrdersByDate(date) {
   const query =
-    "SELECT COUNT(*) as total_orders FROM Orders WHERE DATE(CONVERT_TZ(created_time, '+00:00', '-04:00')) = ?";
+    "SELECT COUNT(*) as total_orders FROM Orders WHERE DATE(created_time) = ?";
   const [results] = await promisePool.query(query, [date]);
   return results;
 }
@@ -267,7 +267,7 @@ async function getSalesByItemByDay(date) {
 }
 
 async function getOrdersByItems() {
-  const query = `SELECT item_name as name, SUM(quantity) as value FROM Order_Items GROUP BY item_id;`;
+  const query = `SELECT item_name as name, SUM(quantity) as value FROM Order_Items GROUP BY item_id, item_name;`;
   const [results] = await promisePool.query(query);
   return results;
 }

@@ -75,16 +75,16 @@ const getDateByNum = (num) => {
 
   switch (num) {
     case "1":
-      date = "2024-08-07";
+      date = "2025-08-06";
       break;
     case "2":
-      date = "2024-08-08";
+      date = "2025-08-07";
       break;
     case "3":
-      date = "2024-08-09";
+      date = "2024-08-08";
       break;
     default:
-      date = "2024-08-07";
+      date = "2024-08-06";
       break;
   }
 
