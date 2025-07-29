@@ -3,16 +3,22 @@
 set -e  # Exit on error
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "🔧 Building Order-Kiosk..."
+echo "📦 Installing dependencies for Order-Kiosk..."
 cd "$BASE_DIR/Order-Kiosk"
+npm install
+echo "🔧 Building Order-Kiosk..."
 npm run build
 
-echo "🔧 Building Kitchen-Display-System..."
+echo "📦 Installing dependencies for Kitchen-Display-System..."
 cd "$BASE_DIR/Kitchen-Display-System"
+npm install
+echo "🔧 Building Kitchen-Display-System..."
 npm run build
 
-echo "🔧 Building Dashboard..."
+echo "📦 Installing dependencies for Dashboard..."
 cd "$BASE_DIR/Dashboard"
+npm install
+echo "🔧 Building Dashboard..."
 npm run build
 
 echo "📁 Creating Frontend folder..."
