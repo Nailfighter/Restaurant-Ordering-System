@@ -21,18 +21,24 @@ npm install
 echo "🔧 Building Dashboard..."
 npm run build
 
-echo "📁 Creating Frontend folder..."
-FRONTEND_DIR="$BASE_DIR/Frontend"
-mkdir -p "$FRONTEND_DIR"
+# Standard Nginx web root on Fedora
+NGINX_ROOT="/usr/share/nginx/html"
 
-echo "🚚 Moving and renaming dist folders..."
-rm -rf "$FRONTEND_DIR/Order-Kiosk" "$FRONTEND_DIR/Kitchen-Display-System" "$FRONTEND_DIR/Dashboard"
-mv "$BASE_DIR/Order-Kiosk/dist" "$FRONTEND_DIR/Order-Kiosk"
-mv "$BASE_DIR/Kitchen-Display-System/dist" "$FRONTEND_DIR/Kitchen-Display-System"
-mv "$BASE_DIR/Dashboard/dist" "$FRONTEND_DIR/Dashboard"
+echo "📁 Creating directories in $NGINX_ROOT..."
+sudo mkdir -p "$NGINX_ROOT/Order-Kiosk" "$NGINX_ROOT/Kitchen-Display-System" "$NGINX_ROOT/Dashboard"
 
-echo "🔒 Setting permissions for NGINX..."
-sudo chown -R www-data:www-data "$FRONTEND_DIR"
-sudo chmod -R 755 "$FRONTEND_DIR"
+echo "🚚 Moving and renaming dist folders to $NGINX_ROOT..."
+sudo rm -rf "$NGINX_ROOT/Order-Kiosk" "$NGINX_ROOT/Kitchen-Display-System" "$NGINX_ROOT/Dashboard"
+sudo mv "$BASE_DIR/Order-Kiosk/dist" "$NGINX_ROOT/Order-Kiosk"
+sudo mv "$BASE_DIR/Kitchen-Display-System/dist" "$NGINX_ROOT/Kitchen-Display-System"
+sudo mv "$BASE_DIR/Dashboard/dist" "$NGINX_ROOT/Dashboard"
 
-echo "✅ All builds complete and served files are ready in Frontend/"
+echo "🔒 Setting ownership and permissions for NGINX..."
+sudo chown -R nginx:nginx "$NGINX_ROOT/Order-Kiosk" "$NGINX_ROOT/Kitchen-Display-System" "$NGINX_ROOT/Dashboard"
+sudo chmod -R 755 "$NGINX_ROOT/Order-Kiosk" "$NGINX_ROOT/Kitchen-Display-System" "$NGINX_ROOT/Dashboard"
+
+echo "🔒 Setting SELinux permissions for NGINX..."
+sudo semanage fcontext -a -t httpd_sys_content_t "/usr/share/nginx/html(/.*)?"
+sudo restorecon -Rv /usr/share/nginx/html
+
+echo "✅ All builds complete and served files are ready in $NGINX_ROOT/"

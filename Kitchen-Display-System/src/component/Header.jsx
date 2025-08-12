@@ -52,7 +52,7 @@ const Header = () => {
         </div>
       </div>
       <div className="header-clock">
-        <img src="/Icon/clock.png" />
+        <img src="Icon/clock.png" />
         <span>{curTime}</span>
       </div>
     </div>

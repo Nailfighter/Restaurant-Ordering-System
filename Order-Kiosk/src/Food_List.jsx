@@ -2,7 +2,7 @@
 const Food_List = [
   {
     id: 1,
-    image: "/Image/Chicken Tikka.jpg",
+    image: "Image/Chicken Tikka.jpg",
     name: "Chicken Butter Masala",
     alias: "Chicken Box",
     price: 12,
@@ -10,7 +10,7 @@ const Food_List = [
   },
   {
     id: 2,
-    image: "/Image/Paneer Tikka.jpg",
+    image: "Image/Paneer Tikka.jpg",
     name: "Panner Tikka Masala",
     alias: "Panner Box",
     price: 12,
@@ -18,7 +18,7 @@ const Food_List = [
   },
   {
     id: 3,
-    image: "/Image/Chole.jpg",
+    image: "Image/Chole.jpg",
     name: "Chickpea Masala",
     alias: "Chickpea Box",
     price: 12,
@@ -26,7 +26,7 @@ const Food_List = [
   },
   {
     id: 4,
-    image: "/Image/Tandoori.jpg",
+    image: "Image/Tandoori.jpg",
     name: "Tandoori Chicken",
     alias: "Tandoori Chicken",
     price: 6,
@@ -34,7 +34,7 @@ const Food_List = [
   },
   {
     id: 5,
-    image: "/Image/Extra.jpg",
+    image: "Image/Extra.jpg",
     name: "Extra Rice/Naan",
     alias: "Extra Rice/Naan",
     price: 1,
@@ -42,7 +42,7 @@ const Food_List = [
   },
   {
     id: 6,
-    image: "/Image/Chicken Tikka.jpg",
+    image: "Image/Chicken Tikka.jpg",
     name: "Chicken Butter Masala Combo",
     alias: "Chicken Combo",
     price: 15,
@@ -50,7 +50,7 @@ const Food_List = [
   },
   {
     id: 7,
-    image: "/Image/Paneer Tikka.jpg",
+    image: "Image/Paneer Tikka.jpg",
     name: "Panner Tikka Masala Combo",
     alias: "Panner Combo",
     price: 15,
@@ -58,7 +58,7 @@ const Food_List = [
   },
   {
     id: 8,
-    image: "/Image/Chole.jpg",
+    image: "Image/Chole.jpg",
     name: "Chickpea Masala Combo",
     alias: "Chickpea Combo",
     price: 15,
@@ -66,7 +66,7 @@ const Food_List = [
   },
   {
     id: 9,
-    image: "/Image/Tandoori.jpg",
+    image: "Image/Tandoori.jpg",
     name: "Tandoori Chicken Combo",
     alias: "Tandoori Combo",
     price: 9,
@@ -74,7 +74,7 @@ const Food_List = [
   },
   {
     id: 10,
-    image: "/Image/Samosa.jpg",
+    image: "Image/Samosa.jpg",
     name: "Samosa",
     alias: "Samosa",
     price: 5,
@@ -82,7 +82,7 @@ const Food_List = [
   },
   {
     id: 11,
-    image: "/Image/Lassi.jpg",
+    image: "Image/Lassi.jpg",
     name: "Mango Lassi",
     alias: "Mango Lassi",
     price: 5,
@@ -91,7 +91,7 @@ const Food_List = [
   },
   {
     id: 12,
-    image: "/Image/Water.jpg",
+    image: "Image/Water.jpg",
     name: "Water",
     alias: "Water",
     price: 2,
@@ -99,7 +99,7 @@ const Food_List = [
   },
   {
     id: 13,
-    image: "/Image/Soda.jpg",
+    image: "Image/Soda.jpg",
     name: "Soda",
     alias: "Soda",
     price: 2,

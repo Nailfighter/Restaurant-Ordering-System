@@ -4,6 +4,8 @@ import OrderCard from "./Order_Card";
 import { TabsContext } from "./Tabs";
 
 const apiURL = import.meta.env.VITE_API_URL;
+const wssURL = import.meta.env.VITE_WSS_URL;
+
 
 const fetchJson = async (url) => {
   const response = await fetch(url);

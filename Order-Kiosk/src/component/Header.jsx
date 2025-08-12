@@ -133,7 +133,7 @@ const Header = () => {
                   whileHover="whileHover"
                   whileTap="whileTap"
                 >
-                  <img src="/Icon/cross.png" alt="Close" />
+                  <img src="Icon/cross.png" alt="Close" />
                 </motion.button>
               </div>
               {fetchedOrder && fetchedOrder.orderInfo.length > 0 ? (
@@ -155,7 +155,7 @@ const Header = () => {
                       ).toLocaleTimeString() || "N/A"}
                     </h3>
                   </div>
-                  <img src="/Image/Dash.png" alt="Dash Line" />
+                  <img src="Image/Dash.png" alt="Dash Line" />
                   <div className="order-list">
                     {fetchedOrder.orderItems?.map((item, index) => (
                       <motion.div
@@ -171,7 +171,7 @@ const Header = () => {
                       </motion.div>
                     ))}
                   </div>
-                  <img src="/Image/Dash.png" alt="Dash Line" />
+                  <img src="Image/Dash.png" alt="Dash Line" />
                   <div className="order-datetime">
                     <h3>Last Updated:</h3>
                     <h3>
@@ -206,7 +206,7 @@ const Header = () => {
         exit="exit"
       >
         <motion.img
-          src="/Icon/Search.png"
+          src="Icon/Search.png"
           alt="Search"
           variants={searchIconAnimation}
           initial="initial"

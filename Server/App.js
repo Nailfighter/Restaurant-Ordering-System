@@ -81,10 +81,10 @@ const getDateByNum = (num) => {
       date = "2025-08-07";
       break;
     case "3":
-      date = "2024-08-08";
+      date = "2025-08-08";
       break;
     default:
-      date = "2024-08-06";
+      date = "2025-08-06";
       break;
   }
 
@@ -93,7 +93,7 @@ const getDateByNum = (num) => {
 
 //region API ROUTES: /api/clean-up
 
-app.delete("/api/clean-up", async (req, res) => {
+app.delete("/api/clean", async (req, res) => {
   await cleanUp();
   res.send({ message: "Database cleaned up!" });
 });

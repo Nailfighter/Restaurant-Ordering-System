@@ -51,7 +51,7 @@ const QuantitySelector = (props) => {
         onClick={handleDecrease}
         whileTap={{ scale: 0.8 }}
       >
-        <img src="/Icon/Minus.png" alt="minus" />
+        <img src="Icon/Minus.png" alt="minus" />
       </motion.button>
       <motion.span
         className="quantity-text"
@@ -70,7 +70,7 @@ const QuantitySelector = (props) => {
         onClick={handleIncrease}
         whileTap={{ scale: 1.2 }}
       >
-        <img src="/Icon/Plus.png" alt="plus" />
+        <img src="Icon/Plus.png" alt="plus" />
       </motion.button>
     </div>
   );

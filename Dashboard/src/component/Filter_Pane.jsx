@@ -11,9 +11,9 @@ const DayFilter = ({ value, setValue }) => (
     className="mt-2"
   >
     <SelectItem value="All">All Days</SelectItem>
-    <SelectItem value="1">Aug 7, 2024</SelectItem>
-    <SelectItem value="2">Aug 8, 2024</SelectItem>
-    <SelectItem value="3">Aug 9, 2024</SelectItem>
+    <SelectItem value="1">Aug 6, 2025</SelectItem>
+    <SelectItem value="2">Aug 7, 2025</SelectItem>
+    <SelectItem value="3">Aug 8, 2025</SelectItem>
   </Select>
 );
 

@@ -38,12 +38,12 @@ const CardButtons = ({ orderNum, status }) => {
   return (
     <div className="order-buttons">
       <button onClick={() => handleAction(template.primaryAction)}>
-        <img src={`/Icon/${template.primaryAction}.png`} alt="done" />
+        <img src={`Icon/${template.primaryAction}.png`} alt="done" />
         <span>{template.primaryText}</span>
       </button>
       {template.secondaryText && (
         <button onClick={() => handleAction(template.secondaryAction)}>
-          <img src={`/Icon/${template.secondaryAction}.png`} alt="done" />
+          <img src={`Icon/${template.secondaryAction}.png`} alt="done" />
           <span>{template.secondaryText}</span>
         </button>
       )}

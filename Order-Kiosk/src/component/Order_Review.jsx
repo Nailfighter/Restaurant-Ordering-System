@@ -131,7 +131,7 @@ const OrderReview = () => {
       <div className="order-items">{generateOrderItems()}</div>
       <div className="footer">
         <div className="footer-top">
-          <img src="/Image/Dash.png" alt="Dash Line" />
+          <img src="Image/Dash.png" alt="Dash Line" />
           <div className="total">
             <span>Total</span>
             <motion.h5
@@ -159,7 +159,7 @@ const OrderReview = () => {
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <img src="/Icon/Undo.png" alt="Cancel" />
+            <img src="Icon/Undo.png" alt="Cancel" />
           </motion.button>
           <motion.button
             className="buttons-confirm"
