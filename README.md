@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Design/Screenshots/Kiosk.png" width="1200px" alt="Kiosk Screenshot">
+  <img src="Design/Screenshots/Kiosk.png" width="750px" alt="Kiosk Screenshot">
 </p>
 
 <h1 align="center">
