@@ -348,7 +348,7 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    uri = "wss://api.osafood.shop/"
+    uri = "wss://api-ros.shreyansh-dev.app/"
     app = QApplication(sys.argv)
     window = MainWindow(uri)
     window.show()

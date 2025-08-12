@@ -20,7 +20,7 @@ const getOrderItemsByNum = (num) =>
 
 const ActiveOrders = () => {
   const sound = new Howl({
-    src: ["/Notification.mp3"],
+    src: ["Notification.mp3"],
   });
 
   const { activeTab } = useContext(TabsContext);
@@ -61,7 +61,7 @@ const ActiveOrders = () => {
   useEffect(() => {
     fetchOrdersAndItems();
 
-    const ws = new WebSocket("wss://api.osafood.online");
+    const ws = new WebSocket(wssURL);
 
     ws.onopen = () => {
       console.log("WebSocket connection established");

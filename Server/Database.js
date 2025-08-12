@@ -13,18 +13,18 @@ const dbConfig = {
 const pool = mysql.createPool(dbConfig);
 const promisePool = pool.promise();
 
-// Enhanced connection handling for GCP Cloud SQL
+// Enhanced connection handling for SQL
 async function testConnection() {
   try {
     const connection = await promisePool.getConnection();
-    console.log("Database connected successfully to GCP Cloud SQL");
+    console.log("Database connected successfully to SQL Server");
     connection.release();
     return true;
   } catch (err) {
-    console.error("Error connecting to GCP Cloud SQL database:", err.message);
+    console.error("Error connecting to SQL Server:", err.message);
     if (err.code === "ECONNREFUSED") {
       console.error(
-        "   Make sure your GCP Cloud SQL instance is running and accessible"
+        "   Make sure your SQL instance is running and accessible"
       );
     } else if (err.code === "ER_ACCESS_DENIED_ERROR") {
       console.error("   Check your database credentials in .env file");
