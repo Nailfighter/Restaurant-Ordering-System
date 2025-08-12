@@ -71,7 +71,7 @@ const OverallStats = () => {
                 {item.stat}
               </dd>
             </Card>
-            {selectedDate === "All" && <Bar_Graph type={categories[index]} />}
+            {/* {selectedDate === "All" && <Bar_Graph type={categories[index]} />} */}
           </div>
         ))}
       </dl>

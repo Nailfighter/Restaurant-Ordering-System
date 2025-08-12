@@ -17,7 +17,7 @@ function App() {
     <FilterProvider>
       {/* <Credentials /> */}
       <div className="default">
-        <FilterPane />
+        {/* <FilterPane /> */}
         <div className="dashboard">
           <OverallStats />
           <div className="pie-charts">
