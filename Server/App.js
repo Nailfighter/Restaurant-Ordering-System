@@ -1,5 +1,6 @@
 const {
   cleanUp,
+  testConnection,
 
   addOrder,
   getAllOrders,
@@ -30,8 +31,6 @@ const {
   getSalesByItemByDay,
 
   getOrdersByItemsByDay,
-
-  test,
 } = require("./Database");
 
 const { checkValidOrder } = require("./Payload_Validation");
@@ -65,7 +64,7 @@ const broadcast = (data) => {
   });
 };
 
-const port = 5000 || process.env.PORT;
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
@@ -276,12 +275,12 @@ app.get("/api/dashboard/orders/date/:num", async (req, res) => {
   const date = getDateByNum(num);
   const orders = await getAllOrders();
   const filteredOrders = orders.filter(
-    (order) => order.created_time.toISOString().split("T")[0] === date
+    (order) => new Date(order.created_time).toISOString().split("T")[0] === date
   );
   res.send(filteredOrders);
 });
 
 app.get("/api/test", async (req, res) => {
-  const tes = await test();
-  res.send({ message: tes });
+  const isConnected = await testConnection();
+  res.send({ status: "active", supabase: isConnected ? "connected" : "disconnected" });
 });

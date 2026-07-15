@@ -18,8 +18,8 @@
   <a href="https://expressjs.com/" target="_blank" rel="noopener noreferrer">
     <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
   </a>
-  <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <a href="https://supabase.com/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
   </a>
   <a href="https://vitejs.dev/" target="_blank" rel="noopener noreferrer">
     <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
@@ -29,6 +29,9 @@
   </a>
   <a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">
     <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  </a>
+  <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
   </a>
 </p>
 
@@ -75,14 +78,14 @@ The project follows a architecture with four main components:
 - **Kitchen-Display-System**: React app for kitchen staff (KDS)
 - **Order-Kiosk**: React app for customer self-ordering
 - **Dashboard**: React app for analytics and management
-- **Server**: Node.js/Express backend with MySQL database
+- **Server**: Node.js/Express backend with a Supabase (Postgres) database
 
 ## Quick Start
 
 ### Prerequisites
 
 - Node.js (v18+ recommended)
-- MySQL server
+- A [Supabase](https://supabase.com/) project
 - Git
 
 ### Environment Setup
@@ -94,36 +97,26 @@ The project follows a architecture with four main components:
    cd Restaurant-Ordering-System
    ```
 
-2. **Set up environment variables**
+2. **Create the database schema**
 
-   Create `.env` files in each subproject:
+   Run [`schema.sql`](schema.sql) against your Supabase project (via the SQL editor in the dashboard, or the Supabase MCP/CLI). It creates the `orders`/`order_items` tables, the dashboard RPC functions, and the grants the app needs.
 
-   **Server/.env**
+3. **Set up environment variables**
+
+   All apps share a single `.env` file at the **repo root** (Vite is configured with `envDir: '../'`, and the server loads `dotenv` from `../.env`):
+
    ```env
-   RDB_HOST=localhost
-   RDB_PORT=3306
-   RDB_USER=your_mysql_user
-   RDB_PASSWORD=your_mysql_password
-   RDB_DATABASE=your_database_name
+   # Server
+   SUPABASE_URL=https://your-project-ref.supabase.co
+   SUPABASE_KEY=your-anon-or-service-role-key
+   PORT=3000
+
+   # Frontends
+   VITE_API_URL=http://localhost:3000
+   VITE_WSS_URL=ws://localhost:3000
    ```
 
-   **Kitchen-Display-System/.env**
-   ```env
-   VITE_API_URL=http://localhost:5000
-   VITE_WSS_URL=ws://localhost:5000
-   ```
-
-   **Order-Kiosk/.env**
-   ```env
-   VITE_API_URL=http://localhost:5000
-   ```
-
-   **Dashboard/.env**
-   ```env
-   VITE_API_URL=http://localhost:5000
-   ```
-
-3. **Install dependencies**
+4. **Install dependencies**
 
    ```bash
    # Backend dependencies
@@ -139,14 +132,16 @@ The project follows a architecture with four main components:
    npm install
    ```
 
-4. **Start the backend**
+5. **Start the backend**
 
    ```bash
    cd Server
    npm start
    ```
 
-5. **Start the frontends** (in separate terminals)
+   Runs on `http://localhost:3000` by default.
+
+6. **Start the frontends** (in separate terminals)
 
    ```bash
    # Kitchen Display
@@ -161,6 +156,18 @@ The project follows a architecture with four main components:
    cd ../Dashboard
    npm run dev
    ```
+
+   Each runs on Vite's default port `5173` — if you run more than one at a time, Vite automatically shifts the rest to `5174`, `5175`, etc.
+
+### Running with Docker
+
+A full Docker Compose setup lives in [`docker/`](docker), building each React app with a multi-stage Node → Nginx image and the backend as a plain Node image. All four services join an external `traefik_net` network for reverse-proxy routing.
+
+```bash
+docker compose --env-file .env -f docker/docker-compose.yml up --build
+```
+
+This must be run from the repo root so Compose can find the shared `.env` (the compose file itself lives in `docker/`).
 
 ## Project Structure
 
@@ -189,9 +196,11 @@ Restaurant-Ordering-System/
 │   └── package.json
 ├── Server/                  # Node.js/Express backend
 │   ├── App.js               # Main application file
-│   ├── Database.js          # Database connection
-│   ├── routes/              # API endpoints
+│   ├── Database.js          # Supabase client & queries
 │   └── package.json
+├── docker/                  # Docker Compose + per-service Dockerfiles/nginx configs
+├── schema.sql                # Supabase/Postgres schema (tables, RPC functions, grants)
+├── .env                      # Shared environment variables for all apps (gitignored)
 └── Design/                  # Design assets and mockups
 ```
 
@@ -210,8 +219,16 @@ Restaurant-Ordering-System/
 
 - **Node.js** - JavaScript runtime environment
 - **Express** - Web application framework
-- **MySQL** - Relational database management system
+- **Supabase** - Postgres database, accessed via `@supabase/supabase-js`
 - **RESTful API** - Standard API design patterns
+- **WebSockets (ws)** - Real-time order/status broadcasts to connected clients
+
+### Infrastructure
+
+- **Docker / Docker Compose** - Containerized builds for all four services
+- **Nginx** - Serves the built frontend static assets
+- **Traefik** - Reverse proxy (services join an external `traefik_net` network)
+- **GitHub Actions** - Self-hosted deploy workflow on push to `main`
 
 ### Development Tools
 

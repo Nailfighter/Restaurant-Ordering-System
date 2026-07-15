@@ -1,36 +1,21 @@
-require("dotenv").config();
-const mysql = require("mysql2"); // For MySQL database
+require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") });
+const { createClient } = require("@supabase/supabase-js");
 
 //#region Database connection configuration
-const dbConfig = {
-  host: process.env.RDB_HOST,
-  port: process.env.RDB_PORT || 3306,
-  user: process.env.RDB_USER,
-  password: process.env.RDB_PASSWORD,
-  database: process.env.RDB_DATABASE,
-};
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 
-const pool = mysql.createPool(dbConfig);
-const promisePool = pool.promise();
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Enhanced connection handling for SQL
 async function testConnection() {
   try {
-    const connection = await promisePool.getConnection();
-    console.log("Database connected successfully to SQL Server");
-    connection.release();
+    const { error } = await supabase.from("orders").select("order_num").limit(1);
+    if (error) throw error;
+    console.log("Database connected successfully to Supabase");
     return true;
   } catch (err) {
-    console.error("Error connecting to SQL Server:", err.message);
-    if (err.code === "ECONNREFUSED") {
-      console.error(
-        "   Make sure your SQL instance is running and accessible"
-      );
-    } else if (err.code === "ER_ACCESS_DENIED_ERROR") {
-      console.error("   Check your database credentials in .env file");
-    } else if (err.code === "ENOTFOUND") {
-      console.error("   Check your RDB_HOST environment variable");
-    }
+    console.error("Error connecting to Supabase:", err.message);
+    console.error("   Check SUPABASE_URL and SUPABASE_KEY in your .env file");
     return false;
   }
 }
@@ -65,57 +50,63 @@ async function executeWithRetry(operation, maxRetries = 3) {
 async function insertOrder(order) {
   const { status = "Pending", totalPrice, note = null } = order;
 
-  const query = `
-    INSERT INTO Orders (status, total_price, note)
-    VALUES (?, ?, ?);
-  `;
-  const [results] = await promisePool.query(query, [status, totalPrice, note]);
-  return results.insertId;
+  const { data, error } = await supabase
+    .from("orders")
+    .insert({ status, total_price: totalPrice, note })
+    .select("order_num")
+    .single();
+
+  if (error) throw error;
+  return data.order_num;
 }
 
 async function insertOrderItems(orderNum, cart) {
-  const query = `
-    INSERT INTO Order_Items (order_num, item_id, item_name, quantity, price) 
-    VALUES (?, ?, ?, ?, ?);
-  `;
+  const rows = cart.map(({ itemID, itemName, quantity, itemPrice }) => ({
+    order_num: orderNum,
+    item_id: itemID,
+    item_name: itemName,
+    quantity,
+    price: itemPrice,
+  }));
 
-  for (const item of cart) {
-    const { itemID, itemName, quantity, itemPrice } = item;
-    await promisePool.query(query, [
-      orderNum,
-      itemID,
-      itemName,
-      quantity,
-      itemPrice,
-    ]);
-  }
+  const { error } = await supabase.from("order_items").insert(rows);
+  if (error) throw error;
 }
 
 //#endregion
 
 // Clean up the database
 async function cleanUp() {
-  await promisePool.query("TRUNCATE TABLE Orders");
-  await promisePool.query("TRUNCATE TABLE Order_Items");
+  const { error } = await supabase.rpc("clean_up_orders");
+  if (error) throw error;
 }
 
 //#region  API FUNCTIONS: /api/kiosk/orders
 async function getLastOrderNum() {
-  const query = "SELECT MAX(order_num) AS order_num FROM Orders";
-  const [results] = await promisePool.query(query);
-  return results[0].order_num;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("order_num")
+    .order("order_num", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data ? data.order_num : null;
 }
 
 async function getAllOrders() {
-  const query = "SELECT * FROM Orders";
-  const [results] = await promisePool.query(query); // Only destructure results
-  return results;
+  const { data, error } = await supabase.from("orders").select("*");
+  if (error) throw error;
+  return data;
 }
 
 async function getOrderByNum(num) {
-  const query = "SELECT * FROM Orders WHERE order_num = ?";
-  const [results] = await promisePool.query(query, [num]);
-  return results;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("order_num", num);
+  if (error) throw error;
+  return data;
 }
 
 async function addOrder(order) {
@@ -129,15 +120,18 @@ async function addOrder(order) {
 //#region  API FUNCTIONS: /api/kiosk/order-items
 
 async function getAllOrderItems() {
-  const query = "SELECT * FROM Order_Items";
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.from("order_items").select("*");
+  if (error) throw error;
+  return data;
 }
 
 async function getOrderItemsByNum(num) {
-  const query = "SELECT * FROM Order_Items WHERE order_num = ?";
-  const [results] = await promisePool.query(query, [num]);
-  return results;
+  const { data, error } = await supabase
+    .from("order_items")
+    .select("*")
+    .eq("order_num", num);
+  if (error) throw error;
+  return data;
 }
 
 //#endregion
@@ -145,36 +139,54 @@ async function getOrderItemsByNum(num) {
 //#region  API FUNCTIONS: /api/kitchen
 
 async function getPreparingOrders() {
-  const query = "SELECT * FROM Orders WHERE status = 'Preparing'";
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("status", "Preparing");
+  if (error) throw error;
+  return data;
 }
 
 async function getCompletedOrders() {
-  const query = "SELECT * FROM Orders WHERE status = 'Completed'";
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("status", "Completed");
+  if (error) throw error;
+  return data;
 }
 
 async function getDelayedOrders() {
-  const query = "SELECT * FROM Orders WHERE status = 'Delayed'";
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("status", "Delayed");
+  if (error) throw error;
+  return data;
 }
 
 async function setPreparingOrder(orderNum) {
-  const query = "UPDATE Orders SET status = 'Preparing' WHERE order_num = ?";
-  await promisePool.query(query, [orderNum]);
+  const { error } = await supabase
+    .from("orders")
+    .update({ status: "Preparing" })
+    .eq("order_num", orderNum);
+  if (error) throw error;
 }
 
 async function setCompletedOrder(orderNum) {
-  const query = "UPDATE Orders SET status = 'Completed' WHERE order_num = ?";
-  await promisePool.query(query, [orderNum]);
+  const { error } = await supabase
+    .from("orders")
+    .update({ status: "Completed" })
+    .eq("order_num", orderNum);
+  if (error) throw error;
 }
 
 async function setDelayedOrder(orderNum) {
-  const query = "UPDATE Orders SET status = 'Delayed' WHERE order_num = ?";
-  await promisePool.query(query, [orderNum]);
+  const { error } = await supabase
+    .from("orders")
+    .update({ status: "Delayed" })
+    .eq("order_num", orderNum);
+  if (error) throw error;
 }
 
 //#endregion
@@ -182,175 +194,78 @@ async function setDelayedOrder(orderNum) {
 //#region  API FUNCTIONS: /api/dashboard
 
 async function getTotalSales() {
-  const query = "SELECT SUM(total_price) as total_sales FROM Orders";
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.rpc("get_total_sales");
+  if (error) throw error;
+  return [{ total_sales: data }];
 }
 
 async function getSalesByDate(date) {
-  const query =
-    "SELECT SUM(total_price) as total_sales FROM Orders WHERE DATE(CONVERT_TZ(created_time, '+00:00', '-04:00')) = ?";
-  const [results] = await promisePool.query(query, [date]);
-  return results;
+  const { data, error } = await supabase.rpc("get_sales_by_date", {
+    p_date: date,
+  });
+  if (error) throw error;
+  return [{ total_sales: data }];
 }
 
 async function getNumOfOrdersByDate(date) {
-  const query =
-    "SELECT COUNT(*) as total_orders FROM Orders WHERE DATE(created_time) = ?";
-  const [results] = await promisePool.query(query, [date]);
-  return results;
+  const { data, error } = await supabase.rpc("get_num_of_orders_by_date", {
+    p_date: date,
+  });
+  if (error) throw error;
+  return [{ total_orders: data }];
 }
 
 async function getTotalSalesByItem() {
-  const query = `WITH Totals AS (
-    SELECT 
-        SUM(price) AS total_amount,
-        SUM(quantity) AS total_quantity
-    FROM Order_Items
-),
-ItemShares AS (
-    SELECT 
-        item_id,
-        item_name AS name,
-        SUM(price) AS amount,
-        SUM(quantity) AS quantity
-    FROM Order_Items
-    GROUP BY item_id, item_name
-)
-SELECT 
-    item_id,
-    name,
-    amount,
-    quantity,
-    CONCAT(ROUND((amount / total_amount) * 100, 2), "%") AS amountShare,
-    ROUND((quantity / total_quantity) * 100, 2) AS quantityShare
-FROM ItemShares, Totals
-ORDER BY item_id;`;
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.rpc("get_total_sales_by_item");
+  if (error) throw error;
+  return data;
 }
 
 async function getSalesByItemByDay(date) {
-  const query = `
-    WITH Totals AS (
-      SELECT 
-          SUM(oi.price) AS total_amount,
-          SUM(oi.quantity) AS total_quantity
-      FROM Order_Items oi
-      JOIN Orders o ON oi.order_num = o.order_num
-      WHERE DATE(CONVERT_TZ(o.created_time, '+00:00', '-04:00')) = ?
-    ),
-    ItemShares AS (
-      SELECT 
-          oi.item_id,
-          oi.item_name AS name,
-          SUM(oi.price) AS amount,
-          SUM(oi.quantity) AS quantity
-      FROM Order_Items oi
-      JOIN Orders o ON oi.order_num = o.order_num
-      WHERE DATE(CONVERT_TZ(o.created_time, '+00:00', '-04:00')) = ?
-      GROUP BY oi.item_id, oi.item_name
-    )
-    SELECT 
-        item_id,
-        name,
-        amount,
-        quantity,
-        CONCAT(ROUND((amount / total_amount) * 100, 2), "%") AS amountShare,
-        ROUND((quantity / total_quantity) * 100, 2) AS quantityShare
-    FROM ItemShares, Totals;
-  `;
-
-  // Use date twice, once for filtering totals and once for filtering item shares
-  const [results] = await promisePool.query(query, [date, date]);
-  return results;
+  const { data, error } = await supabase.rpc("get_sales_by_item_by_day", {
+    p_date: date,
+  });
+  if (error) throw error;
+  return data;
 }
 
 async function getOrdersByItems() {
-  const query = `SELECT item_name as name, SUM(quantity) as value FROM Order_Items GROUP BY item_id, item_name;`;
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.rpc("get_orders_by_items");
+  if (error) throw error;
+  return data;
 }
 
 async function getOrdersByItemsByDay(date) {
-  const query = `
-    SELECT item_name AS name, SUM(quantity) AS value
-    FROM Order_Items oi
-    JOIN Orders o ON oi.order_num = o.order_num
-    WHERE DATE(CONVERT_TZ(o.created_time, '+00:00', '-04:00')) = ?
-    GROUP BY item_name;
-  `;
-  const [results] = await promisePool.query(query, [date]);
-  return results;
+  const { data, error } = await supabase.rpc("get_orders_by_items_by_day", {
+    p_date: date,
+  });
+  if (error) throw error;
+  return data;
 }
 
 async function getAverageRevenuePerOrder() {
-  const query = `SELECT ROUND(SUM(total_price) / COUNT(*),2) as ARO FROM Orders;`;
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.rpc("get_average_revenue_per_order");
+  if (error) throw error;
+  return [{ ARO: data }];
 }
 
 async function getAverageOrderSize() {
-  const query = `SELECT 
-    ROUND(AVG(order_size),1) AS AOS
-FROM (
-    SELECT 
-        order_num, 
-        SUM(quantity) AS order_size
-    FROM Order_Items
-    GROUP BY order_num
-) AS order_sizes;`;
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.rpc("get_average_order_size");
+  if (error) throw error;
+  return [{ AOS: data }];
 }
 
 async function getHourlyInfo() {
-  const query = `WITH HourRange AS (
-    SELECT '08:00:00' AS hour_start
-    UNION ALL SELECT '09:00:00'
-    UNION ALL SELECT '10:00:00'
-    UNION ALL SELECT '11:00:00'
-    UNION ALL SELECT '12:00:00'
-    UNION ALL SELECT '13:00:00'
-    UNION ALL SELECT '14:00:00'
-    UNION ALL SELECT '15:00:00'
-    UNION ALL SELECT '16:00:00'
-    UNION ALL SELECT '17:00:00'
-    UNION ALL SELECT '18:00:00'
-    UNION ALL SELECT '19:00:00'
-    UNION ALL SELECT '20:00:00'
-    UNION ALL SELECT '21:00:00'
-    UNION ALL SELECT '22:00:00'
-    UNION ALL SELECT '23:00:00'
-),
-OrderCounts AS (
-    SELECT
-        DATE(CONVERT_TZ(created_time, '+00:00', '-04:00')) AS order_date, -- Convert UTC to EDT
-        DATE_FORMAT(CONVERT_TZ(created_time, '+00:00', '-04:00'), '%H:00:00') AS order_hour,
-        COUNT(*) AS number_of_orders
-    FROM Orders
-    WHERE TIME(CONVERT_TZ(created_time, '+00:00', '-04:00')) >= '08:00:00'
-      AND TIME(CONVERT_TZ(created_time, '+00:00', '-04:00')) <= '23:00:00'
-    GROUP BY DATE(CONVERT_TZ(created_time, '+00:00', '-04:00')), DATE_FORMAT(CONVERT_TZ(created_time, '+00:00', '-04:00'), '%H:00:00')
-)
-SELECT
-    CONCAT(oc.order_date, ' ', hr.hour_start) AS hour_range,
-    COALESCE(oc.number_of_orders, 0) AS number_of_orders
-FROM HourRange hr
-LEFT JOIN OrderCounts oc ON oc.order_hour = hr.hour_start
-ORDER BY oc.order_date, hr.hour_start;`;
-  const [results] = await promisePool.query(query);
-  return results;
+  const { data, error } = await supabase.rpc("get_hourly_info");
+  if (error) throw error;
+  return data;
 }
+
+//#endregion
 
 async function test() {
   return "Backend Connection is Working!";
 }
-
-// (async () => {
-//   const num = await addOrder(payLoad);
-//   await pool.end();
-// })();
 
 module.exports = {
   cleanUp,

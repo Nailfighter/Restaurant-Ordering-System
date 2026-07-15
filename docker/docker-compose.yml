@@ -1,0 +1,55 @@
+# Run from the repo root so the shared .env is picked up:
+#   docker compose --env-file .env -f docker/docker-compose.yml up --build
+
+services:
+  server:
+    container_name: restaurant-server
+    build:
+      context: ..
+      dockerfile: docker/server/Dockerfile
+    restart: always
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - PORT=${PORT:-3000}
+    networks:
+      - traefik_net
+
+  order-kiosk:
+    container_name: order-kiosk
+    build:
+      context: ..
+      dockerfile: docker/order-kiosk/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_WSS_URL: ${VITE_WSS_URL}
+    restart: always
+    networks:
+      - traefik_net
+
+  kitchen-display-system:
+    container_name: kitchen-display-system
+    build:
+      context: ..
+      dockerfile: docker/kitchen-display-system/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_WSS_URL: ${VITE_WSS_URL}
+    restart: always
+    networks:
+      - traefik_net
+
+  dashboard:
+    container_name: dashboard
+    build:
+      context: ..
+      dockerfile: docker/dashboard/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    restart: always
+    networks:
+      - traefik_net
+
+networks:
+  traefik_net:
+    external: true
