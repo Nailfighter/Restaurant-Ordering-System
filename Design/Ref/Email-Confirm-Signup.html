@@ -1,0 +1,73 @@
+<!-- Supabase Auth email template: "Confirm signup"
+     Paste into: Supabase Dashboard -> Authentication -> Emails -> Confirm signup
+     Suggested subject line: Confirm your email - Restaurant Ordering
+     Variables used: {{ .ConfirmationURL }}, {{ .Email }} -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#fef0de;background-image:linear-gradient(45deg,#ffe7c9,#fef0de);padding:40px 16px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;">
+  <tr>
+    <td align="center">
+      <table width="480" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;width:100%;">
+
+        <!-- Header band -->
+        <tr>
+          <td align="center" style="background-color:#fb944a;background-image:linear-gradient(0deg,#f98e47,#faaf79);border-radius:15px 15px 0 0;padding:36px 30px;">
+            <span style="display:inline-block;font-size:44px;line-height:1;">&#127860;</span>
+            <h1 style="margin:14px 0 0 0;color:#ffffff;font-size:30px;font-weight:800;letter-spacing:2px;">
+              Confirm Your Email
+            </h1>
+          </td>
+        </tr>
+
+        <!-- Body card -->
+        <tr>
+          <td style="background-color:#ffffff;padding:36px 34px;border-left:6px solid #faaf79;border-right:6px solid #faaf79;">
+            <p style="margin:0 0 14px 0;color:#282a33;font-size:17px;font-weight:600;">
+              Welcome to the team! &#128075;
+            </p>
+            <p style="margin:0 0 26px 0;color:#282a33;font-size:15px;line-height:1.6;">
+              An <strong>Order Kiosk</strong> operator account was registered with
+              <span style="color:#f98e47;font-weight:700;">{{ .Email }}</span>.
+              Tap the button below to activate it &mdash; then you can sign in
+              and open the kiosk for customers.
+            </p>
+
+            <!-- CTA button -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" style="padding:4px 0 26px 0;">
+                  <a href="{{ .ConfirmationURL }}"
+                     style="display:inline-block;background-color:#fb944a;background-image:linear-gradient(0deg,#f98e47,#faaf79);color:#ffffff;font-size:18px;font-weight:700;letter-spacing:1px;text-decoration:none;padding:16px 46px;border-radius:15px;">
+                    Confirm My Email
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Divider (dashed, like the cart ticket) -->
+            <p style="margin:0 0 18px 0;border-top:2px dashed #e0e0e0;font-size:0;line-height:0;">&nbsp;</p>
+
+            <p style="margin:0 0 8px 0;color:#ababab;font-size:13px;line-height:1.6;">
+              Button not working? Copy and paste this link into your browser:
+            </p>
+            <p style="margin:0;word-break:break-all;">
+              <a href="{{ .ConfirmationURL }}" style="color:#f98e47;font-size:13px;">{{ .ConfirmationURL }}</a>
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer band (dark, like the cart panel) -->
+        <tr>
+          <td align="center" style="background-color:#282a33;border-radius:0 0 15px 15px;padding:24px 30px;">
+            <p style="margin:0 0 6px 0;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:1px;">
+              Restaurant Ordering System
+            </p>
+            <p style="margin:0;color:#b8b8b8;font-size:12px;line-height:1.6;">
+              This link expires in 24 hours. If you didn't create an account,
+              you can safely ignore this email.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>

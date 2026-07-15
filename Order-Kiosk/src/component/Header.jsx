@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 const apiURL = import.meta.env.VITE_API_URL;
 
@@ -45,6 +47,9 @@ const searchIconAnimation = {
 };
 
 const Header = () => {
+  const { signOut, profile, approved } = useAuth();
+  const navigate = useNavigate();
+  const isAdmin = approved && profile?.role === "admin";
   const [inputValue, setInputValue] = useState("");
   const [showOrder, setShowOrder] = useState(false);
   const [fetchedOrder, setFetchedOrder] = useState(null);
@@ -223,6 +228,58 @@ const Header = () => {
           onKeyDown={handleKeyDown}
         />
       </motion.div>
+      {isAdmin && (
+        <motion.button
+          className="signout-button"
+          onClick={() => navigate("/admin")}
+          variants={searchBoxAnimation}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>Admin</span>
+        </motion.button>
+      )}
+      <motion.button
+        className="signout-button"
+        onClick={signOut}
+        variants={searchBoxAnimation}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        <span>Sign Out</span>
+      </motion.button>
     </div>
   );
 };

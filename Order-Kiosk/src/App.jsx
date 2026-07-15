@@ -1,11 +1,20 @@
 import React, { useRef, useEffect, useContext } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./Cart.jsx";
 import Header from "./component/Header.jsx";
 import Menu from "./component/Menu.jsx";
 import Order_Review from "./component/Order_Review.jsx";
 import Confirmation_Screen from "./component/Confirmation_Screen.jsx";
 import ResolutionChecker from "./component/Resolution_Checker.jsx";
+import Auth from "./component/Auth.jsx";
+import AuthTicket from "./component/Auth_Ticket.jsx";
+import ApprovalPending from "./component/Approval_Pending.jsx";
+import Admin from "./component/Admin.jsx";
 import { useWidth } from "./WidthContext";
+import { useAuth } from "./AuthContext";
+
+// Auth screen design: "split" = brand panel + card fan, "ticket" = printed receipt
+const AUTH_DESIGN = "ticket";
 
 import "./styles/scss/App.scss";
 
@@ -25,7 +34,7 @@ const checkConnectionToAPI = async () => {
   }
 };
 
-function App() {
+function Kiosk() {
   const spaceRef = useRef(null);
   const { setWidth } = useWidth();
 
@@ -63,6 +72,58 @@ function App() {
         <Confirmation_Screen />
       </div>
     </CartProvider>
+  );
+}
+
+function App() {
+  const { session, loading, approved, profile } = useAuth();
+  const isAdmin = approved && profile?.role === "admin";
+
+  if (loading) return null;
+
+  const authScreen = AUTH_DESIGN === "ticket" ? <AuthTicket /> : <Auth />;
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          !session ? (
+            authScreen
+          ) : approved ? (
+            <Navigate to="/app" replace />
+          ) : (
+            <ApprovalPending />
+          )
+        }
+      />
+      <Route
+        path="/app"
+        element={
+          !session ? (
+            <Navigate to="/login" replace />
+          ) : approved ? (
+            <Kiosk />
+          ) : (
+            <ApprovalPending />
+          )
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          isAdmin ? (
+            <Admin />
+          ) : (
+            <Navigate to={session ? "/app" : "/login"} replace />
+          )
+        }
+      />
+      <Route
+        path="*"
+        element={<Navigate to={session ? "/app" : "/login"} replace />}
+      />
+    </Routes>
   );
 }
 

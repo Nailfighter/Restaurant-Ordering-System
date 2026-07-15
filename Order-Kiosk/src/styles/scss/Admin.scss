@@ -1,0 +1,216 @@
+@import "App.scss";
+
+.admin-screen {
+  min-height: 100vh;
+  padding: 36px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.admin-bar {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+}
+
+.admin-back {
+  height: 60px;
+  padding: 0px 26px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: $order-background-grad;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+
+  svg {
+    color: $secondary-color;
+  }
+
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 0 15px 3px rgba(249, 142, 71, 0.5);
+  }
+}
+
+.admin-panel {
+  width: 100%;
+  max-width: 920px;
+
+  background: $order-background-grad;
+  border-radius: $box-radius;
+  padding: 30px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    h1 {
+      text-align: left;
+      margin: 0px;
+    }
+  }
+}
+
+.admin-pending-count {
+  font-size: 18px;
+  font-weight: 600;
+  color: #b8b8b8;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-row {
+  padding: 18px 22px;
+  background-color: #25262b;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  &-who {
+    flex: 1;
+    min-width: 0px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    h5 {
+      font-size: 22px;
+      color: #ffffff;
+    }
+  }
+
+  &-email {
+    font-size: 15px;
+    font-weight: 500;
+    color: #6f6f6f;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-date {
+    font-size: 15px;
+    font-weight: 600;
+    color: #6f6f6f;
+    white-space: nowrap;
+  }
+}
+
+.admin-status {
+  padding: 6px 16px;
+  border-radius: 25px;
+
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &-admin {
+    background: $quantity-grad;
+    color: #ffffff;
+  }
+
+  &-approved {
+    background-color: #c9f79a;
+    color: #363944;
+  }
+
+  &-pending {
+    background-color: #ffdc7d;
+    color: #363944;
+  }
+}
+
+.admin-action {
+  height: 46px;
+  padding: 0px 22px;
+
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  &-approve {
+    background: $quantity-grad;
+
+    transition: box-shadow 0.2s ease;
+    &:hover {
+      box-shadow: 0 0 12px 3px rgba(249, 142, 71, 0.5);
+    }
+  }
+
+  &-revoke {
+    background-color: #363944;
+    color: #b8b8b8;
+
+    transition: color 0.2s ease;
+    &:hover {
+      color: #ff4141;
+    }
+  }
+}
+
+.admin-action-spacer {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6f6f6f;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .admin-screen {
+    padding: 16px;
+  }
+
+  .admin-panel {
+    padding: 20px;
+  }
+
+  .admin-row {
+    flex-wrap: wrap;
+    gap: 12px;
+
+    &-date {
+      display: none;
+    }
+  }
+}
