@@ -47,9 +47,8 @@ const searchIconAnimation = {
 };
 
 const Header = () => {
-  const { signOut, profile, approved } = useAuth();
+  const { signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const isAdmin = approved && profile?.role === "admin";
   const [inputValue, setInputValue] = useState("");
   const [showOrder, setShowOrder] = useState(false);
   const [fetchedOrder, setFetchedOrder] = useState(null);

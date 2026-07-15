@@ -132,7 +132,7 @@ const AuthTicket = () => {
               exit="exit"
             >
               <div className="ticket-stub">
-                <span className="ticket-stub-eyebrow">Order Kiosk &middot; Staff</span>
+                <span className="ticket-stub-eyebrow">Order Kiosk</span>
                 <h2>
                   {mode === "signin" ? "Start of Shift" : "New Operator"}
                 </h2>

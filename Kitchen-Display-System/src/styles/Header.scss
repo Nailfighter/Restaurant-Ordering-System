@@ -9,22 +9,27 @@
 
   display: flex;
 
-  &-buttons {
-    width: 230px;
+  &-signout {
+    height: auto;
+    padding: 14px 24px;
+
+    background-color: #292929;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+
     display: flex;
-    gap: 32px;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
 
-    button {
-      padding: 21px;
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
 
-      border: none;
-      border-radius: 15px;
-      background-color: #1b1b1b;
-    }
-
-    img {
-      width: 36px;
-      height: 36px;
+    svg {
+      color: #ebab5e;
     }
   }
 
@@ -107,11 +112,11 @@
 
 @media screen and (max-width: 1080px) {
 
-  .header-buttons{
+  .header-clock{
     display: none;
   }
-  
-  .header-clock{
+
+  .header-signout span{
     display: none;
   }
 }

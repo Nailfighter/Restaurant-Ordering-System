@@ -1,0 +1,375 @@
+// Ticket-auth styles, Kitchen-Display-System skin.
+// Same structure as the kiosk ticket, re-skinned as a KDS order card
+// (see Design/Ref/Kitchen-Display-System.md): dark board, "Starting" green
+// gradient header, light body, dark gradient buttons, amber accent.
+
+@import "Custom_Fonts.scss";
+
+$start-grad: linear-gradient(0deg, #5bddab 0%, #5edd5e 100%);
+$button-grad: linear-gradient(180deg, #242424 0%, #101010 100%);
+
+$board: #191919; // app background
+$paper: #ebebeb; // order card body
+$ink: #191919;
+$muted: #676767;
+$amber: #ebab5e; // clock/active-tab accent
+$radius: 15px;
+
+.ticket-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  // the kitchen board, warmed by a faint amber glow from above
+  background: radial-gradient(
+      circle at 50% -10%,
+      rgba(235, 171, 94, 0.14) 0%,
+      rgba(235, 171, 94, 0) 55%
+    ),
+    $board;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 7vh;
+
+  overflow-y: auto;
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+}
+
+.ticket {
+  width: 420px;
+  max-width: calc(100% - 60px);
+
+  background-color: $paper;
+  border-radius: $radius;
+  box-shadow: 0px 24px 50px rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  flex-direction: column;
+
+  // ---------------------------- Stub (order-card header) ----------------------------
+
+  &-stub {
+    padding: 32px 34px 22px 34px;
+    background: $start-grad;
+    border-radius: $radius $radius 0px 0px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.55);
+    }
+
+    h2 {
+      margin: 0px;
+      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+  }
+
+  &-perforation {
+    position: relative;
+    height: 24px;
+    background: $start-grad;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 26px;
+      right: 26px;
+      border-top: 3px dashed rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  // ---------------------------- Body (order-card body) ----------------------------
+
+  &-body {
+    padding: 26px 34px 30px 34px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  // The KDS header's tab block: dark container, sliding pill, amber active text
+  &-tabs {
+    display: flex;
+    padding: 5px;
+    background-color: #292929;
+    border-radius: 10px;
+
+    button {
+      position: relative;
+      flex: 1;
+      padding: 10px 0px;
+
+      background: none;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #e4e4e4;
+
+      transition: color 0.2s ease;
+
+      span {
+        position: relative;
+        z-index: 1;
+      }
+
+      &.active {
+        color: $amber;
+      }
+    }
+
+    &-pill {
+      position: absolute;
+      inset: 0px;
+      background-color: #141414;
+      border-radius: 5px;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  &-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+
+    span {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: $muted;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 2px;
+
+      background: none;
+      border: none;
+      border-bottom: 3px dashed #c9c9c9;
+      outline: none;
+
+      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: $ink;
+
+      transition: border-color 0.2s ease;
+
+      &::placeholder {
+        color: #ababab;
+        font-weight: 300;
+      }
+
+      &:focus {
+        border-bottom-color: $amber;
+      }
+    }
+  }
+
+  &-line {
+    margin: 0px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+
+    font-size: 18px;
+    font-weight: 600;
+    color: $ink;
+
+    strong {
+      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #d99a4e;
+    }
+
+    &-dots {
+      flex: 1;
+      border-bottom: 3px dotted #c9c9c9;
+    }
+  }
+
+  &-hint {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: $muted;
+  }
+
+  &-error {
+    margin: 0px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f47171;
+  }
+
+  // Dark gradient action button, like the order-card timer pill / card buttons
+  &-submit {
+    height: 60px;
+
+    background: $button-grad;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+
+    transition: box-shadow 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      color: $amber;
+      box-shadow: 0 0 15px 3px rgba(235, 171, 94, 0.35);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+  }
+
+  &-signout {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: $muted;
+    text-decoration: underline;
+
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #d99a4e;
+    }
+  }
+
+  // ---------------------------- Barcode ----------------------------
+
+  &-barcode {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    &-bars {
+      width: 220px;
+      height: 44px;
+      background: repeating-linear-gradient(
+        90deg,
+        $ink 0px,
+        $ink 3px,
+        transparent 3px,
+        transparent 5px,
+        $ink 5px,
+        $ink 6px,
+        transparent 6px,
+        transparent 11px
+      );
+    }
+
+    span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: $muted;
+    }
+  }
+
+  &-tear {
+    height: 14px;
+    background: linear-gradient(-135deg, $paper 7px, transparent 0px),
+      linear-gradient(135deg, $paper 7px, transparent 0px);
+    background-size: 14px 14px;
+    background-repeat: repeat-x;
+  }
+}
+
+// Floating sign-out for the app itself (matches KDS header buttons)
+.app-signout {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+
+  height: 52px;
+  padding: 0px 22px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background-color: #292929;
+  border: none;
+  border-radius: $radius;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+
+  svg {
+    color: $amber;
+  }
+
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 0 15px 3px rgba(235, 171, 94, 0.4);
+  }
+}
+
+// ---------------------------- Quality floor ----------------------------
+
+@media screen and (max-width: 520px) {
+  .ticket-stub {
+    padding: 26px 22px 18px 22px;
+
+    h2 {
+      font-size: 32px;
+    }
+  }
+
+  .ticket-body {
+    padding: 22px 22px 26px 22px;
+  }
+}

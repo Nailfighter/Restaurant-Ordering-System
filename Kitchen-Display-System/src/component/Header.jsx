@@ -2,8 +2,10 @@ import React, { useEffect, useContext } from "react";
 import "../styles/Header.scss";
 
 import { TabsContext } from "./Tabs";
+import { useAuth } from "../AuthContext";
 
 const Header = () => {
+  const { signOut } = useAuth();
   const [curTime, setCurTime] = React.useState(new Date().toLocaleTimeString());
   const [curDate, setCurDate] = React.useState(new Date().toLocaleDateString());
   const { activeTab, setActiveTab } = useContext(TabsContext);
@@ -26,8 +28,9 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div className="header-buttons">
-        
+      <div className="header-clock">
+        <img src="Icon/clock.png" />
+        <span>{curTime}</span>
       </div>
       <div className="header-center">
         <div className="header-tabs">
@@ -51,10 +54,23 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="header-clock">
-        <img src="Icon/clock.png" />
-        <span>{curTime}</span>
-      </div>
+      <button className="header-signout" onClick={signOut}>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        <span>Sign Out</span>
+      </button>
     </div>
   );
 };

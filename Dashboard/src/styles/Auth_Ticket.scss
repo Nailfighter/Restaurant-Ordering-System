@@ -1,0 +1,396 @@
+// Ticket-auth styles, Dashboard skin.
+// Same structure as the kiosk ticket, re-skinned to the Dashboard's design
+// language (see Design/Ref/Dashboard.md): dark navy canvas, Tremor grays,
+// blue/indigo brand accent, system font stack.
+
+$brand: #3b82f6; // blue-500
+$brand-deep: #1d4ed8; // blue-700
+$brand-grad: linear-gradient(0deg, #1d4ed8 0%, #3b82f6 100%);
+
+$canvas: #172035; // app body navy
+$paper: #111827; // gray-900 card
+$panel: #1f2937; // gray-800
+$border: #374151; // gray-700
+$ink: #f9fafb; // gray-50
+$muted: #6b7280; // gray-500
+$faint: #4b5563; // gray-600
+
+$radius: 8px;
+$font-stack: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+.ticket-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  // navy canvas with faint chart gridlines and indigo glows
+  background: radial-gradient(
+      circle at 82% 10%,
+      rgba(99, 102, 241, 0.18) 0%,
+      rgba(99, 102, 241, 0) 45%
+    ),
+    radial-gradient(
+      circle at 10% 88%,
+      rgba(59, 130, 246, 0.12) 0%,
+      rgba(59, 130, 246, 0) 50%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 44px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 44px
+    ),
+    $canvas;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 7vh;
+
+  overflow-y: auto;
+
+  font-family: $font-stack;
+}
+
+.ticket {
+  width: 420px;
+  max-width: calc(100% - 60px);
+
+  background-color: $paper;
+  border: 1px solid $panel;
+  border-radius: $radius;
+  box-shadow: 0px 24px 50px rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  flex-direction: column;
+
+  // ---------------------------- Stub ----------------------------
+
+  &-stub {
+    padding: 32px 34px 22px 34px;
+    background: $brand-grad;
+    border-radius: $radius $radius 0px 0px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    h2 {
+      margin: 0px;
+      font-family: $font-stack;
+      font-size: 30px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &-perforation {
+    position: relative;
+    height: 22px;
+    background: $brand-grad;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 26px;
+      right: 26px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.45);
+    }
+  }
+
+  // ---------------------------- Body ----------------------------
+
+  &-body {
+    padding: 26px 34px 30px 34px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  &-tabs {
+    display: flex;
+    padding: 4px;
+    background-color: $panel;
+    border-radius: $radius;
+
+    button {
+      position: relative;
+      flex: 1;
+      padding: 10px 0px;
+
+      background: none;
+      border: none;
+      border-radius: $radius - 2px;
+      cursor: pointer;
+
+      font-family: $font-stack;
+      font-size: 14px;
+      font-weight: 600;
+      color: #9ca3af;
+
+      transition: color 0.2s ease;
+
+      span {
+        position: relative;
+        z-index: 1;
+      }
+
+      &.active {
+        color: #ffffff;
+      }
+    }
+
+    &-pill {
+      position: absolute;
+      inset: 0px;
+      background: $brand-grad;
+      border-radius: $radius - 2px;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  &-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+
+    span {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: $muted;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 2px;
+
+      background: none;
+      border: none;
+      border-bottom: 2px dashed $border;
+      outline: none;
+
+      font-family: $font-stack;
+      font-size: 16px;
+      font-weight: 500;
+      color: $ink;
+
+      transition: border-color 0.2s ease;
+
+      &::placeholder {
+        color: $faint;
+        font-weight: 400;
+      }
+
+      &:focus {
+        border-bottom-color: $brand;
+      }
+    }
+  }
+
+  &-line {
+    margin: 0px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+
+    font-size: 15px;
+    font-weight: 500;
+    color: $ink;
+
+    strong {
+      font-family: $font-stack;
+      font-weight: 700;
+      font-size: 16px;
+      color: #60a5fa;
+    }
+
+    &-dots {
+      flex: 1;
+      border-bottom: 2px dotted $border;
+    }
+  }
+
+  &-hint {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: $muted;
+  }
+
+  &-error {
+    margin: 0px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #f87171;
+  }
+
+  &-submit {
+    height: 52px;
+
+    background: $brand-grad;
+    border: none;
+    border-radius: $radius;
+    cursor: pointer;
+
+    font-family: $font-stack;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 0 18px 4px rgba(59, 130, 246, 0.35);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+  }
+
+  &-signout {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-family: $font-stack;
+    font-size: 13px;
+    font-weight: 500;
+    color: $muted;
+    text-decoration: underline;
+
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #60a5fa;
+    }
+  }
+
+  // ---------------------------- Barcode ----------------------------
+
+  &-barcode {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    &-bars {
+      width: 220px;
+      height: 40px;
+      background: repeating-linear-gradient(
+        90deg,
+        #e5e7eb 0px,
+        #e5e7eb 3px,
+        transparent 3px,
+        transparent 5px,
+        #e5e7eb 5px,
+        #e5e7eb 6px,
+        transparent 6px,
+        transparent 11px
+      );
+      opacity: 0.85;
+    }
+
+    span {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: $muted;
+    }
+  }
+
+  &-tear {
+    height: 14px;
+    background: linear-gradient(-135deg, $paper 7px, transparent 0px),
+      linear-gradient(135deg, $paper 7px, transparent 0px);
+    background-size: 14px 14px;
+    background-repeat: repeat-x;
+  }
+}
+
+// Floating sign-out for the app itself
+.app-signout {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+
+  height: 46px;
+  padding: 0px 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background-color: $paper;
+  border: 1px solid $border;
+  border-radius: $radius;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+
+  font-family: $font-stack;
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+
+  svg {
+    color: $brand;
+  }
+
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    border-color: $brand;
+    box-shadow: 0 0 14px 2px rgba(59, 130, 246, 0.3);
+  }
+}
+
+// ---------------------------- Quality floor ----------------------------
+
+@media screen and (max-width: 520px) {
+  .ticket-stub {
+    padding: 26px 22px 18px 22px;
+
+    h2 {
+      font-size: 24px;
+    }
+  }
+
+  .ticket-body {
+    padding: 22px 22px 26px 22px;
+  }
+}

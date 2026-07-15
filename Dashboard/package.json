@@ -19,6 +19,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-date-pickers": "^7.12.0",
     "@remixicon/react": "^4.2.0",
+    "@supabase/supabase-js": "^2.110.5",
     "@tremor/react": "^3.17.4",
     "antd": "^5.20.0",
     "dayjs": "^1.11.12",
@@ -26,6 +27,7 @@
     "framer-motion": "^11.3.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.1",
     "scss": "^0.2.4",
     "styled-components": "^6.1.12"
   },

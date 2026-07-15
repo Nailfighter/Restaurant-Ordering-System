@@ -63,6 +63,27 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- ============================================================================
+-- Migration 2 (per_service_access): per-service access flags.
+-- Admins implicitly have full access; flags matter for regular operators.
+-- Note: this supersedes the `approved` column and the handle_new_user above —
+-- the live function now also seeds access flags (see below).
+-- ============================================================================
+
+-- alter table public.operator_profiles
+--   add column access_kiosk boolean not null default false,
+--   add column access_dashboard boolean not null default false,
+--   add column access_kitchen boolean not null default false;
+--
+-- update public.operator_profiles set access_kiosk = true where approved;
+-- update public.operator_profiles
+--   set access_kiosk = true, access_dashboard = true, access_kitchen = true
+--   where role = 'admin';
+--
+-- create or replace function public.handle_new_user() ... (see Supabase
+-- migration history `per_service_access` for the live version, which inserts
+-- the access_* columns and sets them all true for the ultimate admin email)
+
 -- Backfill profiles for any users that signed up before this migration
 insert into public.operator_profiles (id, email, display_name, role, approved)
 select

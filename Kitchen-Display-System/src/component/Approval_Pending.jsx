@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, MotionConfig } from "framer-motion";
 import { useAuth } from "../AuthContext";
 
-import "../styles/scss/Auth_Ticket.scss";
+import "../styles/Auth_Ticket.scss";
 
 const printOut = {
   initial: { clipPath: "inset(0% 0% 100% 0%)", y: -30 },
@@ -13,7 +13,7 @@ const printOut = {
   },
 };
 
-const ApprovalPending = () => {
+const ApprovalPending = ({ serviceLabel = "this service" }) => {
   const { profile, signOut, refreshProfile } = useAuth();
   const [checking, setChecking] = useState(false);
 
@@ -33,7 +33,7 @@ const ApprovalPending = () => {
           animate="animate"
         >
           <div className="ticket-stub">
-            <span className="ticket-stub-eyebrow">Order Kiosk</span>
+            <span className="ticket-stub-eyebrow">Staff Access</span>
             <h2>Hold Tight</h2>
           </div>
 
@@ -46,8 +46,8 @@ const ApprovalPending = () => {
               <strong>{profile?.display_name || profile?.email}</strong>
             </p>
             <p className="ticket-hint">
-              Your operator account is registered but not approved yet. The
-              admin needs to approve it before you can open the kiosk.
+              Your account doesn't have access to {serviceLabel} yet. The admin
+              can grant it from the kiosk's admin panel.
             </p>
 
             <motion.button
@@ -57,7 +57,7 @@ const ApprovalPending = () => {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
             >
-              {checking ? "Checking..." : "Check Approval"}
+              {checking ? "Checking..." : "Check Access"}
             </motion.button>
 
             <button className="ticket-signout" onClick={signOut}>

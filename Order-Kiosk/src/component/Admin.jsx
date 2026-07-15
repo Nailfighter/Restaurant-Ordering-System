@@ -19,6 +19,12 @@ const rowItem = {
   },
 };
 
+const SERVICES = [
+  { key: "access_kiosk", label: "Kiosk" },
+  { key: "access_dashboard", label: "Dashboard" },
+  { key: "access_kitchen", label: "Kitchen" },
+];
+
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString(undefined, {
     month: "short",
@@ -27,16 +33,16 @@ function formatDate(dateString) {
   });
 }
 
-const statusOf = (operator) => {
-  if (operator.role === "admin") return "Admin";
-  return operator.approved ? "Approved" : "Pending";
-};
+const hasNoAccess = (operator) =>
+  !operator.access_kiosk &&
+  !operator.access_dashboard &&
+  !operator.access_kitchen;
 
 const Admin = () => {
   const navigate = useNavigate();
   const { profile } = useAuth();
   const [operators, setOperators] = useState([]);
-  const [busyId, setBusyId] = useState(null);
+  const [busyKey, setBusyKey] = useState(null);
 
   const loadOperators = async () => {
     const { data } = await supabase
@@ -50,15 +56,18 @@ const Admin = () => {
     loadOperators();
   }, []);
 
-  const setApproval = async (id, approved) => {
-    setBusyId(id);
-    await supabase.from("operator_profiles").update({ approved }).eq("id", id);
+  const toggleAccess = async (operator, key) => {
+    setBusyKey(operator.id + key);
+    await supabase
+      .from("operator_profiles")
+      .update({ [key]: !operator[key] })
+      .eq("id", operator.id);
     await loadOperators();
-    setBusyId(null);
+    setBusyKey(null);
   };
 
-  const pendingCount = operators.filter(
-    (operator) => !operator.approved
+  const waitingCount = operators.filter(
+    (operator) => operator.role !== "admin" && hasNoAccess(operator)
   ).length;
 
   return (
@@ -101,9 +110,9 @@ const Admin = () => {
           <div className="admin-panel-header">
             <h1>Operators</h1>
             <span className="admin-pending-count">
-              {pendingCount === 0
-                ? "No approvals waiting"
-                : `${pendingCount} waiting for approval`}
+              {waitingCount === 0
+                ? "No one waiting for access"
+                : `${waitingCount} waiting for access`}
             </span>
           </div>
 
@@ -128,45 +137,37 @@ const Admin = () => {
                   {formatDate(operator.created_at)}
                 </span>
 
-                <span
-                  className={`admin-status admin-status-${statusOf(
-                    operator
-                  ).toLowerCase()}`}
-                >
-                  {statusOf(operator)}
-                </span>
-
-                {operator.role !== "admin" &&
-                  (operator.approved ? (
-                    <motion.button
-                      className="admin-action admin-action-revoke"
-                      disabled={busyId === operator.id}
-                      onClick={() => setApproval(operator.id, false)}
-                      whileHover={{ scale: 1.04 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Revoke Access
-                    </motion.button>
-                  ) : (
-                    <motion.button
-                      className="admin-action admin-action-approve"
-                      disabled={busyId === operator.id}
-                      onClick={() => setApproval(operator.id, true)}
-                      whileHover={{ scale: 1.04 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Approve
-                    </motion.button>
-                  ))}
-
-                {operator.role === "admin" && (
-                  <span className="admin-action-spacer">
-                    {operator.id === profile?.id ? "That's you" : ""}
+                {operator.role === "admin" ? (
+                  <span className="admin-status admin-status-admin">
+                    {operator.id === profile?.id
+                      ? "Admin · You"
+                      : "Admin · Full Access"}
                   </span>
+                ) : (
+                  <div className="admin-chips">
+                    {SERVICES.map((service) => (
+                      <button
+                        key={service.key}
+                        className={`admin-chip ${
+                          operator[service.key] ? "admin-chip-on" : ""
+                        }`}
+                        disabled={busyKey === operator.id + service.key}
+                        onClick={() => toggleAccess(operator, service.key)}
+                      >
+                        <span className="admin-chip-dot"></span>
+                        {service.label}
+                      </button>
+                    ))}
+                  </div>
                 )}
               </motion.div>
             ))}
           </motion.div>
+
+          <p className="admin-footnote">
+            Tap a service to grant or revoke access. Operators with no services
+            stay on the waiting screen.
+          </p>
         </motion.div>
       </div>
     </MotionConfig>

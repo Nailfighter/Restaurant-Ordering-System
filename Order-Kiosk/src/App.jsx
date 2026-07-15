@@ -76,8 +76,8 @@ function Kiosk() {
 }
 
 function App() {
-  const { session, loading, approved, profile } = useAuth();
-  const isAdmin = approved && profile?.role === "admin";
+  const { session, loading, access, isAdmin } = useAuth();
+  const approved = access.kiosk;
 
   if (loading) return null;
 
