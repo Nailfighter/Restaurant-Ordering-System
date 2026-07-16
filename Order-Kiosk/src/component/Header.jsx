@@ -126,6 +126,7 @@ const Header = () => {
               <div className="close">
                 <motion.button
                   onClick={handleClose}
+                  aria-label="Close order details"
                   variants={bounceButton}
                   initial="initial"
                   whileHover="whileHover"
@@ -228,6 +229,9 @@ const Header = () => {
         />
         <input
           className="search-input"
+          type="text"
+          inputMode="numeric"
+          aria-label="Search for order number"
           placeholder="Search for order number"
           value={inputValue}
           onChange={handleChange}

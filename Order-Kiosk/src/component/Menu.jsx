@@ -42,6 +42,7 @@ const Menu = () => {
           <motion.button
             key={tab}
             className={selectedTab === tab ? "tab-selected" : "tab-unselected"}
+            aria-pressed={selectedTab === tab}
             onClick={() => setSelectedTab(tab)}
             whileHover={{ scale: 1.1 }} 
             whileTap={{ scale: 0.9 }}
@@ -52,7 +53,7 @@ const Menu = () => {
         ))}
       </div>
       <motion.div
-        className="containner"
+        className="container"
         key={selectedTab} 
         initial={{ opacity: 0, x: -20 }} 
         animate={{ opacity: 1, x: 0 }} 

@@ -82,13 +82,28 @@ const OrderCard = ({ order, items }) => {
     return <></>;
   }
 
+  const headerClass = returnHeader(order.status);
+
+  // Presentation only: escalate the timer pill's look as an order ages.
+  const elapsedMinutes = parseInt(elapsedTime.split(":")[0], 10) || 0;
+  const timerUrgency =
+    order.status === "Completed"
+      ? ""
+      : elapsedMinutes >= 10
+      ? " is-late"
+      : elapsedMinutes >= 5
+      ? " is-warning"
+      : "";
+
   return (
     <div className="order">
-      <div className={returnHeader(order.status)}>
+      <div className={headerClass}>
         <div className="order-header-info">
           <h2># {formatOrderNumber(order.order_num)}</h2>
-          <div className="order-header-time">
-            <h6>{formatTime(createdTime.toLocaleTimeString())}</h6>
+          <div className="order-header-meta">
+            <div className="order-header-time">
+              <h6>{formatTime(createdTime.toLocaleTimeString())}</h6>
+            </div>
           </div>
         </div>
         {order.note && (
@@ -98,7 +113,7 @@ const OrderCard = ({ order, items }) => {
           </div>
         )}
         <div className="order-row">
-          <div className="order-timer">
+          <div className={`order-timer${timerUrgency}`}>
             {order.status != "Completed"
               ? elapsedTime
               : formatTime(updatedTime.toLocaleTimeString())}
@@ -111,13 +126,7 @@ const OrderCard = ({ order, items }) => {
           {items.map(
             (item, index) =>
               !orderNumNotGoingBack.includes(item.item_id) && (
-                <div
-                  className="order-body-item"
-                  key={index}
-                  style={{
-                    backgroundColor: index % 2 === 0 ? "#ebebeb" : "#ffffff",
-                  }}
-                >
+                <div className="order-body-item" key={index}>
                   <h3>{item.quantity}x</h3>
                   <h4>{Food_Name[item.item_id - 1]}</h4>
                 </div>

@@ -35,7 +35,7 @@ $radius: 15px;
 
   overflow-y: auto;
 
-  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-family: "TT-Hoves", system-ui, sans-serif;
 }
 
 .ticket {
@@ -71,7 +71,7 @@ $radius: 15px;
 
     h2 {
       margin: 0px;
-      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-family: "TT-Hoves", system-ui, sans-serif;
       font-size: 40px;
       font-weight: 700;
       color: #ffffff;
@@ -121,7 +121,7 @@ $radius: 15px;
       border-radius: 5px;
       cursor: pointer;
 
-      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-family: "TT-Hoves", system-ui, sans-serif;
       font-size: 18px;
       font-weight: 700;
       color: #e4e4e4;
@@ -135,6 +135,11 @@ $radius: 15px;
 
       &.active {
         color: $amber;
+      }
+
+      &:focus-visible {
+        outline: 3px solid $amber;
+        outline-offset: -3px;
       }
     }
 
@@ -176,7 +181,7 @@ $radius: 15px;
       border-bottom: 3px dashed #c9c9c9;
       outline: none;
 
-      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-family: "TT-Hoves", system-ui, sans-serif;
       font-size: 20px;
       font-weight: 600;
       color: $ink;
@@ -188,8 +193,10 @@ $radius: 15px;
         font-weight: 300;
       }
 
-      &:focus {
+      &:focus,
+      &:focus-visible {
         border-bottom-color: $amber;
+        outline: none; // the amber underline is the focus indicator here
       }
     }
   }
@@ -205,7 +212,7 @@ $radius: 15px;
     color: $ink;
 
     strong {
-      font-family: "TT-Hoves", "Jokerman", sans-serif;
+      font-family: "TT-Hoves", system-ui, sans-serif;
       font-weight: 800;
       font-size: 20px;
       color: #d99a4e;
@@ -242,7 +249,7 @@ $radius: 15px;
     border-radius: 10px;
     cursor: pointer;
 
-    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-family: "TT-Hoves", system-ui, sans-serif;
     font-size: 22px;
     font-weight: 700;
     color: #ffffff;
@@ -259,6 +266,11 @@ $radius: 15px;
       opacity: 0.6;
       cursor: wait;
     }
+
+    &:focus-visible {
+      outline: 3px solid $amber;
+      outline-offset: 3px;
+    }
   }
 
   &-signout {
@@ -266,7 +278,7 @@ $radius: 15px;
     border: none;
     cursor: pointer;
 
-    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-family: "TT-Hoves", system-ui, sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: $muted;
@@ -341,7 +353,7 @@ $radius: 15px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 
-  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-family: "TT-Hoves", system-ui, sans-serif;
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -361,15 +373,40 @@ $radius: 15px;
 // ---------------------------- Quality floor ----------------------------
 
 @media screen and (max-width: 520px) {
+  // Phones: the ticket uses (almost) the full width, keeps the paper margins
+  // slim, and stays reachable above the keyboard.
+  .ticket-screen {
+    padding-top: 5vh;
+    padding-bottom: 40px;
+  }
+
+  .ticket {
+    max-width: calc(100% - 32px);
+  }
+
   .ticket-stub {
     padding: 26px 22px 18px 22px;
 
     h2 {
-      font-size: 32px;
+      font-size: clamp(26px, 8vw, 32px);
     }
   }
 
   .ticket-body {
     padding: 22px 22px 26px 22px;
+  }
+
+  // Keep tab and submit targets comfortably tappable.
+  .ticket-tabs button {
+    min-height: 44px;
+  }
+
+  .ticket-signout {
+    min-height: 44px;
+  }
+
+  // Operator name / email on the approval ticket can be long.
+  .ticket-line strong {
+    overflow-wrap: anywhere;
   }
 }

@@ -36,13 +36,13 @@ export default function Insights() {
   }
 
   return (
-    <Card className="p-0 sm:mx-auto sm:max-w-lg">
-      <div className="flex items-center justify-between border-b border-tremor-border p-6 dark:border-dark-tremor-border">
+    <Card className="p-0">
+      <div className="flex items-center justify-between border-b border-tremor-border p-4 dark:border-dark-tremor-border sm:p-6">
         <p className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
           Insights
         </p>
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:max-w-3xl sm:grid-cols-2 p-6">
+      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:p-6">
         {usage.map((item) => (
           <Card
             key={item.id}
@@ -52,7 +52,7 @@ export default function Insights() {
               {item.title}
             </p>
             <p className="mt-3 flex items-end">
-              <span className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
+              <span className="text-tremor-metric font-semibold tracking-tight tabular-nums text-tremor-content-strong dark:text-dark-tremor-content-strong">
                 {item.info}
               </span>
               <span className="font-semibold text-tremor-content-subtle dark:text-dark-tremor-content-subtle">

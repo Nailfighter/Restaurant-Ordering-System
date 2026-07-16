@@ -9,10 +9,22 @@ export default {
     // Path to Tremor module
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class",
   theme: {
     transparent: "transparent",
     current: "currentColor",
     extend: {
+      fontFamily: {
+        sans: [
+          "Inter",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
+      },
       colors: {
         // light mode
         tremor: {

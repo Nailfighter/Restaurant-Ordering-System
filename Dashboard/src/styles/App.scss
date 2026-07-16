@@ -2,15 +2,47 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+// ---------------------------- Global canvas & type ----------------------------
+
 body {
   background-color: #172035;
   overflow-x: hidden;
+  color-scheme: dark;
+
+  // Inter is loaded in index.html and used by the auth ticket; apply it
+  // globally so the dashboard shares the same deliberate type voice.
+  font-family: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
+
+// Visible keyboard focus everywhere (sign-out, tabs, buttons, inputs).
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// Respect users who prefer reduced motion: collapse CSS transitions and
+// animations to near-zero (framer-motion already honors this via MotionConfig).
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ---------------------------- Page shell ----------------------------
 
 .default {
   display: flex;
   gap: 20px;
-  margin: 20px;
+  margin: 24px;
 
   .overall {
     width: 100%;
@@ -18,6 +50,66 @@ body {
     gap: 20px;
     flex-direction: column;
   }
+}
+
+// Page header: product name + context, in the ticket's uppercase-eyebrow voice.
+.dash-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  &-eyebrow {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #6b7280; // gray-500, same muted as the ticket
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #f9fafb; // gray-50 ink
+  }
+
+  &-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: #9ca3af; // gray-400
+
+    strong {
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      font-weight: 600;
+      color: #60a5fa; // blue-400, matches the ticket's operator line
+    }
+  }
+}
+
+// Section labels above each chart group.
+.section-label {
+  margin: 4px 0 -8px 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b7280;
 }
 
 .filter-plane {
@@ -38,30 +130,96 @@ body {
 
 .dashboard {
   flex: 1;
+  min-width: 0;
 
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  // clearance so the floating sign-out button never covers the last card
+  padding-bottom: 84px;
 }
+
+// ---------------------------- Card rows ----------------------------
 
 .containner {
   display: flex;
   gap: 20px;
 
   .card {
-    height: 110px;
+    min-height: 110px;
   }
 }
 
 .pie-charts {
   display: flex;
+  align-items: stretch;
   gap: 20px;
 
   width: 100%;
 }
 
-.insights{
+.insights {
+  flex: 1;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+// ---------------------------- Responsive ----------------------------
+
+@media screen and (max-width: 1024px) {
+  .pie-charts {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .default {
+    margin: 16px;
+    flex-direction: column;
+  }
+
+  .containner {
+    flex-direction: column;
+
+    .card {
+      min-height: 96px;
+    }
+  }
+
+  .dash-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+
+    h1 {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+  }
+
+  .dashboard {
+    padding-bottom: 92px;
+  }
+}
+
+// Phone sizes (~360-430px): tighter page gutter, wrapping header meta, and a
+// guarantee that nothing forces horizontal scroll.
+@media screen and (max-width: 480px) {
+  .default {
+    margin: 12px;
+  }
+
+  .dash-header {
+    &-meta {
+      flex-wrap: wrap;
+
+      strong {
+        max-width: 100%;
+      }
+    }
+  }
 }

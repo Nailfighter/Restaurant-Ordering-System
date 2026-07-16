@@ -49,9 +49,10 @@ const QuantitySelector = (props) => {
       <motion.button
         className="button-less"
         onClick={handleDecrease}
+        aria-label={`Remove one ${props.name}`}
         whileTap={{ scale: 0.8 }}
       >
-        <img src="Icon/Minus.png" alt="minus" />
+        <img src="Icon/Minus.png" alt="" aria-hidden="true" />
       </motion.button>
       <motion.span
         className="quantity-text"
@@ -68,9 +69,10 @@ const QuantitySelector = (props) => {
       <motion.button
         className="button-more"
         onClick={handleIncrease}
+        aria-label={`Add one ${props.name}`}
         whileTap={{ scale: 1.2 }}
       >
-        <img src="Icon/Plus.png" alt="plus" />
+        <img src="Icon/Plus.png" alt="" aria-hidden="true" />
       </motion.button>
     </div>
   );

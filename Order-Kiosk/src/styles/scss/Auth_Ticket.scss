@@ -305,6 +305,15 @@ $faded-ink: #ababab;
 // ---------------------------- Quality floor ----------------------------
 
 @media screen and (max-width: 520px) {
+  .ticket-screen {
+    padding-top: 4vh;
+    padding-bottom: 32px;
+  }
+
+  .ticket-screen .ticket {
+    max-width: calc(100% - 32px);
+  }
+
   .ticket-stub {
     padding: 26px 22px 18px 22px;
 

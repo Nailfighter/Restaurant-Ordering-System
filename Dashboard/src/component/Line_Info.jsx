@@ -8,17 +8,37 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// Presentational only: on narrow screens show just the first/last x-axis
+// labels so the hourly ticks don't overlap or force horizontal overflow.
+function useIsNarrowViewport() {
+  const [isNarrow, setIsNarrow] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 639px)").matches
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 639px)");
+    const onChange = (event) => setIsNarrow(event.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return isNarrow;
+}
+
 
 
 
 const valueFormatter = (number, type) =>
-  `${type === "Sales" ? "$" : ""}${Intl.NumberFormat("us")
+  `${type === "Sales" ? "$" : ""}${Intl.NumberFormat("en-US")
     .format(number)
     .toString()}`;
 
 export default function Line_Info({ type }) {
   const { selectedDate } = useContext(FilterContext);
   const [data, setData] = useState([]);
+  const isNarrow = useIsNarrowViewport();
 
   // Fetch data when selectedDate changes
   useEffect(() => {
@@ -47,7 +67,9 @@ export default function Line_Info({ type }) {
         categories={categories}
         colors={colors}
         valueFormatter={(number) => valueFormatter(number, type)}
-        className="mt-6 hidden h-48 sm:block"
+        className="mt-6 h-40 sm:h-48"
+        startEndOnly={isNarrow}
+        yAxisWidth={isNarrow ? 44 : 56}
         intervalType="time"
         showAnimation={true}
         animationDuration={3000}

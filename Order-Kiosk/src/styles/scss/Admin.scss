@@ -464,16 +464,95 @@
 }
 
 @media screen and (max-width: 520px) {
-  .admin-back span,
-  .admin-action-danger {
-    font-size: 15px;
+  .admin-screen {
+    gap: 14px;
+  }
+
+  // Top bar: two tidy half-width buttons instead of oversized pills
+  .admin-bar {
+    gap: 10px;
   }
 
   .admin-back,
   .admin-action-danger {
-    padding: 0px 16px;
+    flex: 1;
+    height: 48px;
+    padding: 0px 12px;
+    justify-content: center;
+    font-size: 15px;
+    border-radius: 12px;
   }
 
+  .admin-panel {
+    padding: 18px 16px;
+    gap: 16px;
+  }
+
+  .admin-panel-header {
+    flex-wrap: wrap;
+    gap: 4px 12px;
+
+    h1 {
+      font-size: 34px;
+    }
+  }
+
+  .admin-pending-count {
+    font-size: 15px;
+  }
+
+  .admin-row {
+    padding: 14px;
+    gap: 10px;
+
+    &-who h5 {
+      font-size: 19px;
+    }
+
+    &-email {
+      font-size: 13px;
+    }
+  }
+
+  // Chips fill the card as one even 3-across row
+  .admin-chips {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .admin-chip {
+    justify-content: center;
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+
+  // Action buttons split the card width evenly
+  .admin-row-actions {
+    width: 100%;
+    gap: 8px;
+
+    .admin-action {
+      flex: 1;
+      padding: 0px 10px;
+      height: 44px;
+      font-size: 14px;
+    }
+  }
+
+  .admin-footnote {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .danger-modal {
+    padding: 24px 20px;
+
+    h2 {
+      white-space: normal;
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {

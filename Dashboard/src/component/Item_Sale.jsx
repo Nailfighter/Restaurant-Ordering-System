@@ -12,7 +12,7 @@ function classNames(...classes) {
 }
 
 const currencyFormatter = (number) => {
-  return "$" + Intl.NumberFormat("us").format(number).toString();
+  return "$" + Intl.NumberFormat("en-US").format(number).toString();
 };
 
 export default function ItemSalePie() {
@@ -47,7 +47,7 @@ export default function ItemSalePie() {
           Total Sales by Each Item
         </h3>
         <DonutChart
-          className="mt-8"
+          className="mt-6 h-48 sm:mt-8 sm:h-52"
           data={data}
           category="amount"
           index="name"
@@ -63,8 +63,8 @@ export default function ItemSalePie() {
         </p>
         <List className="mt-2">
           {data.map((item) => (
-            <ListItem key={item.name} className="space-x-6">
-              <div className="flex items-center space-x-2.5 truncate">
+            <ListItem key={item.name} className="flex-wrap gap-x-6 gap-y-1">
+              <div className="flex min-w-0 items-center space-x-2.5 truncate">
                 <span
                   className={classNames(
                     item.color,
@@ -72,7 +72,7 @@ export default function ItemSalePie() {
                   )}
                   aria-hidden={true}
                 />
-                <span className="truncate dark:text-dark-tremor-content-emphasis">
+                <span className="truncate text-tremor-content-emphasis dark:text-dark-tremor-content-emphasis">
                   {item.name}
                 </span>
               </div>

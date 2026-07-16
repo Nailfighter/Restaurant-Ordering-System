@@ -33,6 +33,8 @@ const ConfirmationScreen = () => {
   return (
     <div
       className="overlay"
+      role="status"
+      aria-live="polite"
       style={{ display: showConfirmation ? "flex" : "none" }}
     >
       <motion.div

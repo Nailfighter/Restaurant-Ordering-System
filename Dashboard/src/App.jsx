@@ -18,13 +18,33 @@ import { useAuth } from "./AuthContext";
 import "./Fetch_Data";
 
 function Dashboard() {
+  const { profile } = useAuth();
+
   return (
     <FilterProvider>
       {/* <Credentials /> */}
       <div className="default">
         {/* <FilterPane /> */}
         <div className="dashboard">
+          <header className="dash-header">
+            <div>
+              <span className="dash-header-eyebrow">
+                Restaurant Ordering System
+              </span>
+              <h1>Analytics Dashboard</h1>
+            </div>
+            {(profile?.display_name || profile?.email) && (
+              <p className="dash-header-meta">
+                <span>Operator</span>
+                <strong>{profile?.display_name || profile?.email}</strong>
+              </p>
+            )}
+          </header>
+
+          <p className="section-label">Overview</p>
           <OverallStats />
+
+          <p className="section-label">Sales Breakdown</p>
           <div className="pie-charts">
             <ItemSalePie />
             <div className="insights">

@@ -43,13 +43,24 @@ const OrderReview = () => {
   const { cart, getTotal, clearCart } = useContext(CartContext);
   const [total, setTotal] = useState(0);
   const [note, setNote] = useState("");
+  // UI-only: mobile bottom-sheet open state (the bar/backdrop only render via CSS <=900px)
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const itemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   const { setShowConfirmation } = useContext(ConfirmationContext);
   const { session } = useAuth();
 
   const generateOrderItems = () => {
     if (cart.length === 0) {
-      return <span className="empty-cart">Cart is empty</span>;
+      return (
+        <div className="empty-cart">
+          <span>Cart is empty</span>
+          <span className="empty-cart-hint">
+            Tap + on an item to add it to the order
+          </span>
+        </div>
+      );
     }
 
     return cart.map((item, index) => {
@@ -76,12 +87,14 @@ const OrderReview = () => {
     addOrderToDB(cart, total, note, session?.user?.id);
     setNote("");
     clearCart();
+    setIsSheetOpen(false);
     handleScreen();
   };
 
   const handleCancel = () => {
     clearCart();
     setNote("");
+    setIsSheetOpen(false);
   };
 
   const handleScreen = () => {
@@ -107,30 +120,35 @@ const OrderReview = () => {
     }
   }, [width]);
 
-  const h1Ref = useRef(null);
-
-  useEffect(() => {
-    const adjustFontSize = () => {
-      const element = h1Ref.current;
-      let fontSize = 54;
-      element.style.fontSize = fontSize + "px";
-      element.style.whiteSpace = "nowrap"; // Prevent initial wrapping for measurement
-      while (element.scrollWidth > element.clientWidth && fontSize > 20) {
-        fontSize--;
-        element.style.fontSize = fontSize + "px";
-      }
-      element.style.whiteSpace = "";
-    };
-    adjustFontSize();
-    window.addEventListener("resize", adjustFontSize);
-    return () => {
-      window.removeEventListener("resize", adjustFontSize);
-    };
-  });
-
   return (
-    <div className="order" ref={orderRef}>
-      <h1 ref={h1Ref}>Current Order</h1>
+    <>
+      <button
+        className="cart-bar"
+        onClick={() => setIsSheetOpen((open) => !open)}
+        aria-expanded={isSheetOpen}
+        aria-controls="order-panel"
+      >
+        <span className="cart-bar-label">
+          {isSheetOpen ? "Close" : "View Order"}
+        </span>
+        <span className="cart-bar-count">
+          {itemCount} {itemCount === 1 ? "item" : "items"}
+        </span>
+        <span className="cart-bar-total">${total}</span>
+      </button>
+      {isSheetOpen && (
+        <div
+          className="cart-backdrop"
+          onClick={() => setIsSheetOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <div
+        className={`order${isSheetOpen ? " order--open" : ""}`}
+        id="order-panel"
+        ref={orderRef}
+      >
+      <h1>Current Order</h1>
       <div className="order-items">{generateOrderItems()}</div>
       <div className="footer">
         <div className="footer-top">
@@ -152,17 +170,19 @@ const OrderReview = () => {
           className="note"
           value={note}
           onChange={handleNote}
+          aria-label="Order note"
           placeholder="Add a note..."
         ></textarea>
         <div className="buttons">
           <motion.button
             className="buttons-cancel"
             onClick={handleCancel}
+            aria-label="Cancel order and clear cart"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <img src="Icon/Undo.png" alt="Cancel" />
+            <img src="Icon/Undo.png" alt="" aria-hidden="true" />
           </motion.button>
           <motion.button
             className="buttons-confirm"
@@ -175,7 +195,8 @@ const OrderReview = () => {
           </motion.button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

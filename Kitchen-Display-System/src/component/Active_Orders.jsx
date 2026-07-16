@@ -91,6 +91,7 @@ const ActiveOrders = () => {
       return (
         <div className="no-active-order">
           <h3>No Completed Orders</h3>
+          <p>Orders marked Done will show up here.</p>
         </div>
       );
     }
@@ -115,6 +116,7 @@ const ActiveOrders = () => {
     return (
       <div className="no-active-order">
         <h3>No Active Orders</h3>
+        <p>New orders from the kiosk appear here automatically.</p>
       </div>
     );
   }

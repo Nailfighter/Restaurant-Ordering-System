@@ -67,7 +67,7 @@ const OverallStats = () => {
                   {item.name}
                 </dt>
               </div>
-              <dd className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
+              <dd className="mt-2 text-tremor-metric font-semibold tracking-tight tabular-nums text-tremor-content-strong dark:text-dark-tremor-content-strong">
                 {item.stat}
               </dd>
             </Card>
@@ -77,7 +77,7 @@ const OverallStats = () => {
       </dl>
 
       {selectedDate != "All" && (
-        <div className="flex gap-5 justify-between">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <LineInfo type={categories[0]} />
           <LineInfo type={categories[1]} />
         </div>

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useContext } from "react";
+import { MotionConfig } from "framer-motion";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./Cart.jsx";
 import Header from "./component/Header.jsx";
@@ -61,16 +62,18 @@ function Kiosk() {
 
   return (
     <CartProvider>
-      <div className="default">
-        <div className="main">
-          <Header />
-          <h2>Categories</h2>
-          <Menu />
+      <MotionConfig reducedMotion="user">
+        <div className="default">
+          <div className="main">
+            <Header />
+            <h2>Categories</h2>
+            <Menu />
+          </div>
+          <div className="space" ref={spaceRef}></div>
+          <Order_Review />
+          <Confirmation_Screen />
         </div>
-        <div className="space" ref={spaceRef}></div>
-        <Order_Review />
-        <Confirmation_Screen />
-      </div>
+      </MotionConfig>
     </CartProvider>
   );
 }

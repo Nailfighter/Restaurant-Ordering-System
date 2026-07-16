@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-clock">
-        <img src="Icon/clock.png" />
+        <img src="Icon/clock.png" alt="" aria-hidden="true" />
         <span>{curTime}</span>
       </div>
       <div className="header-center">
@@ -40,13 +40,15 @@ const Header = () => {
           ></div>
           <div className="header-tabs-buttons">
             <button
-              style={{ color: activeTab == "Active" ? "#EBAB5E" : "#E4E4E4" }}
+              className={activeTab == "Active" ? "active" : ""}
+              aria-pressed={activeTab == "Active"}
               onClick={() => setActiveTab("Active")}
             >
               Active
             </button>
             <button
-              style={{ color: activeTab == "History" ? "#EBAB5E" : "#E4E4E4" }}
+              className={activeTab == "History" ? "active" : ""}
+              aria-pressed={activeTab == "History"}
               onClick={() => setActiveTab("History")}
             >
               History

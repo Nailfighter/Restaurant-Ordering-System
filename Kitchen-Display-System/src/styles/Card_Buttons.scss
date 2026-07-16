@@ -5,38 +5,64 @@
   height: auto;
 
   display: flex;
-  gap: 8px;
-  padding: 8px;
+  // If the card gets too narrow for two labels side by side,
+  // each button wraps to its own full-width row instead of squishing.
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
 
   button {
     width: auto;
     height: auto;
-    padding: 10px;
+    // >= 52px target for greasy-finger / gloved tablet use.
+    min-height: 52px;
+    min-width: 120px;
+    padding: 12px 14px;
 
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 
     border-radius: 10px;
-    border: none;
+    border: 2px solid transparent;
     cursor: pointer;
 
-    background: $button-grad;
-
+    font-family: "TT-Hoves", system-ui, sans-serif;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
 
+    transition: box-shadow 0.2s ease, transform 0.1s ease, filter 0.2s ease;
+
     img {
-      width: 21px;
-      height: 21px;
+      width: 24px;
+      height: 24px;
     }
 
     span {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
     }
+
+    &:hover {
+      box-shadow: 0 0 12px 2px rgba(235, 171, 94, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.97);
+      filter: brightness(1.25);
+    }
+
+    &:focus-visible {
+      outline: 3px solid #ebab5e;
+      outline-offset: 2px;
+    }
+  }
+
+  .order-button-primary,
+  .order-button-secondary {
+    background: $button-grad;
   }
 }

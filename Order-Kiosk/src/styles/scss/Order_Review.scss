@@ -20,21 +20,43 @@ $text-padding: 10px;
   display: flex;
   flex-direction: column;
 
+  // lets the heading size track the panel width (see h1 clamp below)
+  container-type: inline-size;
+
   h1 {
     margin: $order-padding;
     text-align: left;
+
+    // CSS replacement for the old JS font-shrink loop
+    font-size: 54px;
+    font-size: clamp(34px, 11.5cqw, 54px);
+    white-space: nowrap;
   }
 
   .empty-cart {
-    font-size: 48px;
-    color: #3b3e4c;
     margin: 0px;
-    font-weight: 700;
 
     justify-content: center;
     align-items: center;
     display: flex;
+    flex-direction: column;
+    gap: 12px;
     flex: 1;
+    text-align: center;
+
+    span {
+      font-size: 40px;
+      color: #4a4e5e;
+      font-weight: 700;
+    }
+
+    span.empty-cart-hint {
+      font-size: 17px;
+      font-weight: 500;
+      color: #6f7385;
+      letter-spacing: 0.3px;
+      max-width: 260px;
+    }
   }
 
   &-items {
@@ -103,14 +125,31 @@ $text-padding: 10px;
 
   .note {
     background-color: #363944;
+    border: none;
     border-radius: 10px;
     padding: $text-padding;
-    width: calc(100% - 2 * $text-padding);
+    width: 100%;
+    box-sizing: border-box;
     height: 50px;
+    min-height: 50px;
+    resize: none;
 
-    color: #b8b8b8;
+    font-family: inherit;
+    color: #e4e4e4;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
+    line-height: 1.4;
+
+    transition: background-color 0.2s ease;
+
+    &::placeholder {
+      color: #9a9eae;
+      font-weight: 500;
+    }
+
+    &:focus {
+      background-color: #3d4150;
+    }
   }
 
   .buttons {
@@ -129,19 +168,165 @@ $text-padding: 10px;
       flex: 1;
       background: $quantity-grad;
 
+      font-family: inherit;
       font-size: 24px;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       color: #ffffff;
+
+      transition: box-shadow 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 0 14px 2px rgba(249, 142, 71, 0.55);
+      }
     }
 
     &-cancel {
       background-color: #232429;
       width: 64px;
+
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #2e3038;
+      }
+
       img {
         margin-top: 4px;
         width: 27px;
         height: 27px;
       }
     }
+  }
+}
+
+// ---------------------------- Mobile / small screens ----------------------------
+
+// Desktop: the sticky cart bar and backdrop don't exist.
+.cart-bar,
+.cart-backdrop {
+  display: none;
+}
+
+// The panel stops being a fixed right-hand column and becomes a bottom sheet:
+// a sticky cart bar sits at the bottom of the screen, tapping it slides the
+// order panel up over a backdrop. WidthContext still writes an inline width
+// synced to the (now hidden) .space spacer, so `!important` wins over it here.
+@media screen and (max-width: 900px) {
+  // keep the last food cards tappable above the sticky bar
+  .main {
+    padding-bottom: 96px;
+  }
+
+  .cart-bar {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    padding: 0px 22px;
+
+    border: none;
+    border-radius: 16px;
+    background: $quantity-grad;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+
+    font-family: inherit;
+    color: #ffffff;
+
+    .cart-bar-label {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .cart-bar-count {
+      flex: 1;
+      text-align: right;
+      font-size: 15px;
+      font-weight: 500;
+      opacity: 0.92;
+    }
+
+    .cart-bar-total {
+      font-size: 20px;
+      font-weight: 900;
+    }
+  }
+
+  .cart-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .order {
+    position: fixed !important;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: auto;
+    z-index: 55;
+
+    width: auto !important;
+    max-width: none;
+    height: auto;
+    min-height: 0px;
+    max-height: 82vh;
+    margin: 0px;
+    // keep the footer buttons clear of the sticky bar (56px bar + 16px inset)
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+
+    border-radius: $box-radius $box-radius 0px 0px;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
+
+    transform: translateY(105%);
+    // visibility keeps the closed sheet out of the tab order; transitioning it
+    // lets the slide-down animation finish before the sheet is hidden
+    transition: transform 0.3s ease, visibility 0.3s;
+    visibility: hidden;
+
+    &.order--open {
+      transform: translateY(0%);
+      visibility: visible;
+    }
+  }
+
+  .order-items {
+    flex: none;
+    max-height: 34vh;
+    min-height: 120px;
+    overflow-y: auto;
+  }
+
+  .order .empty-cart {
+    padding: 20px 0px;
+
+    span {
+      font-size: 30px;
+    }
+
+    span.empty-cart-hint {
+      font-size: 16px;
+    }
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .footer .total span {
+    font-size: 36px;
+  }
+
+  .order h5 {
+    font-size: 36px;
   }
 }

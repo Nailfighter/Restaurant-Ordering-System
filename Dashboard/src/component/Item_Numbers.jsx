@@ -4,7 +4,7 @@ import { getOrdersByItemsByDay, getOrderByItems } from "../Fetch_Data";
 import { FilterContext } from "../FilterContext";
 
 const valueFormatter = (number) =>
-  `${Intl.NumberFormat("us").format(number).toString()}`;
+  `${Intl.NumberFormat("en-US").format(number).toString()}`;
 
 export default function ItemNumberBarChart() {
   const [data, setData] = useState([]);
@@ -30,7 +30,7 @@ export default function ItemNumberBarChart() {
   return (
     <div className="flex-1">
       <Card className="p-0">
-        <div className="flex items-center justify-between border-b border-tremor-border p-6 dark:border-dark-tremor-border">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-tremor-border p-4 dark:border-dark-tremor-border sm:p-6">
           <p className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
             Number of Items Bought
           </p>
@@ -38,7 +38,7 @@ export default function ItemNumberBarChart() {
             Quantity
           </p>
         </div>
-        <div className="p-6 ">
+        <div className="p-4 sm:p-6">
           <BarList
             color="indigo"
             data={data}

@@ -2,16 +2,21 @@
 
 .header {
   width: auto;
-  height: 78px;
+  height: auto;
   background-color: #131313;
   margin: 0px;
-  padding: 15px;
+  padding: 8px 15px;
 
   display: flex;
+  align-items: center;
+  gap: 15px;
 
   &-signout {
+    // stretch to the full height of the header row, matching the tab switcher
+    align-self: stretch;
     height: auto;
-    padding: 14px 24px;
+    min-height: 44px;
+    padding: 10px 18px;
 
     background-color: #292929;
     border: none;
@@ -23,20 +28,35 @@
     gap: 12px;
     align-items: center;
 
-    font-family: "TT-Hoves", "Jokerman", sans-serif;
-    font-size: 24px;
+    font-family: "TT-Hoves", system-ui, sans-serif;
+    font-size: 20px;
     font-weight: 600;
     color: #ffffff;
 
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
     svg {
       color: #ebab5e;
+    }
+
+    &:hover {
+      background-color: #333333;
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &:focus-visible {
+      outline: 3px solid #ebab5e;
+      outline-offset: 2px;
     }
   }
 
   &-clock {
     height: auto;
     width: auto;
-    padding: 14px;
+    padding: 10px 14px;
 
     background-color: #292929;
     border-radius: 15px;
@@ -46,14 +66,15 @@
     gap: 10px;
     align-items: center;
 
-    font-family: "TT-Hoves", "Jokerman", sans-serif;
-    font-size: 36px;
+    font-family: "TT-Hoves", system-ui, sans-serif;
+    font-size: 28px;
     font-weight: 600;
     color: #ebab5e;
+    font-variant-numeric: tabular-nums;
 
     img {
-      width: 50px;
-      height: 50px;
+      width: 36px;
+      height: 36px;
     }
   }
 
@@ -61,11 +82,13 @@
     flex: 4;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   &-tabs {
     position: relative;
     width: 383px;
+    max-width: 100%;
     padding: 5px;
     background-color: #292929;
     z-index: 1;
@@ -94,36 +117,87 @@
       button {
         flex: 1;
         height: 100%;
+        min-height: 48px;
+        padding: 12px 28px;
         background-color: rgba(107, 107, 107, 0);
 
-        font-family: "TT-Hoves", "Jokerman", sans-serif;
-        font-size: 36px;
+        font-family: "TT-Hoves", system-ui, sans-serif;
+        font-size: 28px;
         font-weight: 700;
         text-align: center;
 
-        color: #ffffff;
+        color: #e4e4e4;
         border: none;
         border-radius: 5px;
         cursor: pointer;
+
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: #ffffff;
+        }
+
+        &.active {
+          color: #ebab5e;
+        }
+
+        &:focus-visible {
+          outline: 3px solid #ebab5e;
+          outline-offset: -3px;
+        }
       }
     }
   }
 }
 
 @media screen and (max-width: 1080px) {
-
-  .header-clock{
+  .header-clock {
     display: none;
   }
 
-  .header-signout span{
+  .header-signout span {
     display: none;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .header
-  {
+  // Phones / small tablets: single row — tabs fill the width,
+  // sign-out sits at the end. The clock is dropped entirely.
+  .header {
+    height: auto;
     padding: 10px;
+    gap: 10px;
+  }
+
+  .header-clock {
+    display: none;
+  }
+
+  .header-signout {
+    // match the tab switcher's height instead of floating centered
+    align-self: stretch;
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  .header-center {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-tabs {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .header-tabs-buttons button {
+    font-size: 26px;
+    min-height: 44px;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .header-tabs-buttons button {
+    font-size: 22px;
   }
 }
