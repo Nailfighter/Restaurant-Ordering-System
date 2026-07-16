@@ -18,4 +18,7 @@ jobs:
 
       - name: Rebuild and restart containers
         working-directory: docker
-        run: docker compose --env-file ../.env up -d --build
+        run: |
+          docker compose --env-file ../.env down --remove-orphans || true
+          docker rm -f restaurant-server order-kiosk kitchen-display-system dashboard-ros 2>/dev/null || true
+          docker compose --env-file ../.env up -d --build
