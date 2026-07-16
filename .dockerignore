@@ -5,7 +5,6 @@
 .github
 .claude
 .vscode
-docker
 *.local
 *.log
 .env
