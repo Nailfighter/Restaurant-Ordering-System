@@ -6,10 +6,9 @@ import { useAuth } from "../AuthContext";
 const apiURL = import.meta.env.VITE_API_URL;
 
 function convertDate(dateString) {
+  if (!dateString) return new Date();
   const isoDateString = dateString.replace(" ", "T");
-  let date = new Date(isoDateString);
-  date.setHours(date.getHours() - 4);
-  return date;
+  return new Date(isoDateString);
 }
 
 function formatOrderNumber(orderNumber) {

@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import "../styles/scss/Order_Review.scss";
 
 const OrderItem = (props) => {
+  const { item } = props;
+
   return (
     <motion.div
       className="order-item"
@@ -18,8 +20,8 @@ const OrderItem = (props) => {
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
-        <h3 className="order-name">{props.name}</h3>
-        <span className="order-quantity">{props.quantity}x</span>
+        <h3 className="order-name">{item.name}</h3>
+        <span className="order-quantity">{item.quantity}x</span>
       </motion.div>
       <motion.h5
         className="order-price"
@@ -28,7 +30,7 @@ const OrderItem = (props) => {
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
-        ${props.price}
+        ${(item.price * item.quantity).toFixed(2)}
       </motion.h5>
     </motion.div>
   );

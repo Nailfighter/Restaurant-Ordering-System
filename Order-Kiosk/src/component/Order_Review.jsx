@@ -29,26 +29,32 @@ function generateOrderPayload(cart, total, note, createdBy) {
   });
 }
 
-function addOrderToDB(cart, total, note, createdBy) {
-  fetch(apiURL + "/api/kiosk/orders", {
+async function addOrderToDB(cart, total, note, createdBy) {
+  const response = await fetch(apiURL + "/api/kiosk/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: generateOrderPayload(cart, total, note, createdBy),
-  }).then((response) => response.json());
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to place order: ${response.statusText}`);
+  }
+  return await response.json();
 }
 
-const OrderReview = () => {
+const OrderReview = ({ isOffline }) => {
   const { cart, getTotal, clearCart } = useContext(CartContext);
   const [total, setTotal] = useState(0);
   const [note, setNote] = useState("");
   // UI-only: mobile bottom-sheet open state (the bar/backdrop only render via CSS <=900px)
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const itemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  const { setShowConfirmation } = useContext(ConfirmationContext);
+  const { triggerConfirmation } = useContext(ConfirmationContext);
   const { session } = useAuth();
 
   const generateOrderItems = () => {
@@ -63,13 +69,11 @@ const OrderReview = () => {
       );
     }
 
-    return cart.map((item, index) => {
+    return cart.map((item) => {
       return (
         <Order_Item
-          key={index}
-          quantity={item.quantity}
-          name={item.name}
-          price={item.price * item.quantity}
+          key={item.id}
+          item={item}
         />
       );
     });
@@ -79,32 +83,37 @@ const OrderReview = () => {
     setNote(event.target.value);
   };
 
-  const handleConfirm = () => {
-    if (cart.length === 0) {
-      alert("Cart is empty!");
+  const handleConfirm = async () => {
+    if (cart.length === 0 || isOffline || isSubmitting) {
       return;
     }
-    addOrderToDB(cart, total, note, session?.user?.id);
-    setNote("");
-    clearCart();
-    setIsSheetOpen(false);
-    handleScreen();
+    setIsSubmitting(true);
+    setSubmitError(null);
+    try {
+      const result = await addOrderToDB(cart, total, note, session?.user?.id);
+      const orderNum = result?.orderNum;
+
+      setNote("");
+      clearCart();
+      setIsSheetOpen(false);
+
+      if (orderNum) {
+        triggerConfirmation(orderNum);
+      } else {
+        triggerConfirmation(0);
+      }
+    } catch (error) {
+      console.error("Order placement failed:", error);
+      setSubmitError("Failed to place order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {
     clearCart();
     setNote("");
     setIsSheetOpen(false);
-  };
-
-  const handleScreen = () => {
-    setTimeout(() => {
-      setShowConfirmation(true);
-    }, 250);
-
-    setTimeout(() => {
-      setShowConfirmation(false);
-    }, 5000);
   };
 
   useEffect(() => {
@@ -166,10 +175,16 @@ const OrderReview = () => {
             </motion.h5>
           </div>
         </div>
+        {submitError && (
+          <div className="submit-error">
+            {submitError}
+          </div>
+        )}
         <textarea
           className="note"
           value={note}
           onChange={handleNote}
+          disabled={isSubmitting}
           aria-label="Order note"
           placeholder="Add a note..."
         ></textarea>
@@ -177,9 +192,10 @@ const OrderReview = () => {
           <motion.button
             className="buttons-cancel"
             onClick={handleCancel}
+            disabled={isSubmitting}
             aria-label="Cancel order and clear cart"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={!isSubmitting ? { scale: 1.1 } : {}}
+            whileTap={!isSubmitting ? { scale: 0.9 } : {}}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <img src="Icon/Undo.png" alt="" aria-hidden="true" />
@@ -187,11 +203,12 @@ const OrderReview = () => {
           <motion.button
             className="buttons-confirm"
             onClick={handleConfirm}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}
+            disabled={cart.length === 0 || isOffline || isSubmitting}
+            whileHover={cart.length > 0 && !isOffline && !isSubmitting ? { scale: 1.05 } : {}}
+            whileTap={cart.length > 0 && !isOffline && !isSubmitting ? { scale: 0.9 } : {}}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            Place Order
+            {isSubmitting ? "Placing..." : "Place Order"}
           </motion.button>
         </div>
       </div>

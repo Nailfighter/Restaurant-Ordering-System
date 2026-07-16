@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Tag from "./Tag.jsx";
-import QuantitySelector from "./Quantiy_Selector.jsx";
+import QuantitySelector from "./Quantity_Selector.jsx";
 import "../styles/scss/Food_Card.scss";
 
 const FoodCard = (props) => {

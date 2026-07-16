@@ -1,47 +1,39 @@
-import React, { useContext, useEffect, useState } from "react";
-import { CartContext } from "../Cart.jsx"; // Ensure this path is correct
+import React, { useContext, useState } from "react";
+import { CartContext } from "../Cart.jsx";
 import { motion } from "framer-motion";
 
-import "../styles/scss/Quantiy_Selector.scss";
+import "../styles/scss/Quantity_Selector.scss";
 
 const QuantitySelector = (props) => {
-  const [curQuantity, setQuantity] = useState(0);
-  const [prevQuantity, setPrevQuantity] = useState(0);
+  const { changeQuantity, getItemQuantity } = useContext(CartContext);
+  const curQuantity = getItemQuantity(props.id);
+
+  const [lastSeenQuantity, setLastSeenQuantity] = useState(0);
+  const [direction, setDirection] = useState("up");
+
+  if (curQuantity !== lastSeenQuantity) {
+    setDirection(curQuantity > lastSeenQuantity ? "up" : "down");
+    setLastSeenQuantity(curQuantity);
+  }
 
   const handleIncrease = () => {
-    setPrevQuantity(curQuantity);
-    setQuantity(curQuantity + 1);
-  };
-
-  const handleDecrease = () => {
-    if (curQuantity > 0) {
-      setPrevQuantity(curQuantity);
-      setQuantity(curQuantity - 1);
-    }
-  };
-
-  const { cart, addToCart, clearCart } = useContext(CartContext);
-
-  useEffect(() => {
-    const cartLength = cart.length;
-    if (cartLength === 0) {
-      setQuantity(0);
-    }
-  }, [clearCart]);
-
-  useEffect(() => {
-    handleAdd();
-  }, [curQuantity]);
-
-  const handleAdd = () => {
-    const itemWithQuantity = {
+    const item = {
       id: props.id,
       name: props.name,
       alias: props.alias,
       price: props.price,
-      quantity: curQuantity,
     };
-    addToCart(itemWithQuantity);
+    changeQuantity(item, 1);
+  };
+
+  const handleDecrease = () => {
+    const item = {
+      id: props.id,
+      name: props.name,
+      alias: props.alias,
+      price: props.price,
+    };
+    changeQuantity(item, -1);
   };
 
   return (
@@ -58,7 +50,7 @@ const QuantitySelector = (props) => {
         className="quantity-text"
         key={curQuantity}
         initial={{
-          y: curQuantity > prevQuantity ? 10 : -10,
+          y: direction === "up" ? 10 : -10,
           opacity: 0,
         }}
         animate={{ y: 0, opacity: 1 }}

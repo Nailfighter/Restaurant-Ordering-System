@@ -1,34 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { ConfirmationContext } from "../ConfirmationContext.jsx";
 
-const apiURL = import.meta.env.VITE_API_URL;
-
 function formatOrderNumber(orderNumber) {
+  if (orderNumber == null) return "000";
   return orderNumber.toString().padStart(3, "0");
 }
 
 const ConfirmationScreen = () => {
-  const [orderNumber, setOrderNumber] = useState(0);
-  const { showConfirmation } = useContext(ConfirmationContext);
-
-  useEffect(() => {
-    const fetchOrderNumber = async () => {
-      try {
-        const response = await fetch(apiURL + "/api/kiosk/orders/last");
-        if (response.ok) {
-          const data = await response.json();
-          setOrderNumber(data.order_num ?? 0);
-        } else {
-          console.error("Failed to fetch order number");
-        }
-      } catch (error) {
-        console.error("Error fetching order number:", error);
-      }
-    };
-
-    fetchOrderNumber();
-  }, [showConfirmation]);
+  const { showConfirmation, confirmedOrderNumber } = useContext(ConfirmationContext);
 
   return (
     <div
@@ -54,7 +34,7 @@ const ConfirmationScreen = () => {
         }} 
       >
         <h1>Your Order Number is</h1>
-        <h3>#{formatOrderNumber(orderNumber)}</h3>
+        <h3>#{formatOrderNumber(confirmedOrderNumber)}</h3>
       </motion.div>
     </div>
   );

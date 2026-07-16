@@ -1,6 +1,8 @@
 # Run from the repo root so the shared .env is picked up:
 #   docker compose --env-file .env -f docker/docker-compose.yml up --build
 
+name: Restaurant-Ordering-System
+
 services:
   server:
     container_name: restaurant-server
@@ -23,6 +25,8 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL}
         VITE_WSS_URL: ${VITE_WSS_URL}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
     restart: always
     networks:
       - traefik_net
@@ -35,17 +39,21 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL}
         VITE_WSS_URL: ${VITE_WSS_URL}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
     restart: always
     networks:
       - traefik_net
 
   dashboard:
-    container_name: dashboard
+    container_name: dashboard-ros
     build:
       context: ..
       dockerfile: docker/dashboard/Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
     restart: always
     networks:
       - traefik_net

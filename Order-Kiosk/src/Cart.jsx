@@ -5,27 +5,49 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const checkIfItemInCart = (item) => {
-    return cart.findIndex((cartItem) => cartItem.name === item.name);
+  const getItemQuantity = (id) => {
+    const item = cart.find((cartItem) => cartItem.id === id);
+    return item ? item.quantity : 0;
   };
 
-  const addToCart = (item) => {
+  const updateQuantity = (item, quantity) => {
     setCart((prevCart) => {
-      const itemIndex = checkIfItemInCart(item, prevCart);
-      if (itemIndex !== -1) {
-        if (item.quantity === 0) {
-          return removeFromCart(prevCart, itemIndex);
+      const existingIndex = prevCart.findIndex((cartItem) => cartItem.id === item.id);
+      if (existingIndex !== -1) {
+        if (quantity <= 0) {
+          const updated = [...prevCart];
+          updated.splice(existingIndex, 1);
+          return updated;
+        } else {
+          const updated = [...prevCart];
+          updated[existingIndex] = { ...updated[existingIndex], quantity };
+          return updated;
         }
-        const updatedCart = [...prevCart];
-        updatedCart[itemIndex].quantity = item.quantity;
-        return updatedCart;
+      } else {
+        if (quantity <= 0) return prevCart;
+        return [...prevCart, { ...item, quantity }];
       }
-      
-      if (item.quantity === 0) {
-        return prevCart;
-      }
+    });
+  };
 
-      return [...prevCart, item];
+  const changeQuantity = (item, delta) => {
+    setCart((prevCart) => {
+      const existingIndex = prevCart.findIndex((cartItem) => cartItem.id === item.id);
+      if (existingIndex !== -1) {
+        const newQty = prevCart[existingIndex].quantity + delta;
+        if (newQty <= 0) {
+          const updated = [...prevCart];
+          updated.splice(existingIndex, 1);
+          return updated;
+        } else {
+          const updated = [...prevCart];
+          updated[existingIndex] = { ...updated[existingIndex], quantity: newQty };
+          return updated;
+        }
+      } else {
+        if (delta <= 0) return prevCart;
+        return [...prevCart, { ...item, quantity: delta }];
+      }
     });
   };
 
@@ -33,18 +55,21 @@ export const CartProvider = ({ children }) => {
     return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
-  const removeFromCart = (cart, itemIndex) => {
-    const updatedCart = [...cart];
-    updatedCart.splice(itemIndex, 1);
-    return updatedCart;
-  };
-
   const clearCart = () => {
     setCart([]);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, getTotal, clearCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        getItemQuantity,
+        updateQuantity,
+        changeQuantity,
+        getTotal,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

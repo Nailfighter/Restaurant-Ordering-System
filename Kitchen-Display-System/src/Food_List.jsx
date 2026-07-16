@@ -1,11 +1,11 @@
 const Food_Name = [
   "Chicken Box",
-  "Panner Box",
+  "Paneer Box",
   "Chickpea Box",
   "Tandoori Chicken",
   "Extra Rice/Naan",
   "Chicken Combo",
-  "Panner Combo",
+  "Paneer Combo",
   "Chickpea Combo",
   "Tandoori Combo",
   "Samosa",

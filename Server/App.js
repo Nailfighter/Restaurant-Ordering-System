@@ -132,14 +132,13 @@ app.post("/api/kiosk/orders", async (req, res) => {
 
   res.status(201);
   const order = req.body;
-  await addOrder(order);
-
-  const orderNum = await getLastOrderNum();
+  const orderNum = await addOrder(order);
 
   broadcast({ type: "NEW_ORDER", orderNum, order });
 
   res.send({
     message: "Order created successfully!",
+    orderNum,
   });
 });
 

@@ -142,7 +142,7 @@ body {
 
 // ---------------------------- Card rows ----------------------------
 
-.containner {
+.stats-container {
   display: flex;
   gap: 20px;
 
@@ -182,7 +182,7 @@ body {
     flex-direction: column;
   }
 
-  .containner {
+  .stats-container {
     flex-direction: column;
 
     .card {

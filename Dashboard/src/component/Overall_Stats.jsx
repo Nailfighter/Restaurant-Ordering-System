@@ -58,7 +58,7 @@ const OverallStats = () => {
 
   return (
     <>
-      <dl className="containner">
+      <dl className="stats-container">
         {data.map((item, index) => (
           <div className="overall" key={index}>
             <Card className="card" decoration="top" decorationColor="indigo">

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useContext, useState } from "react";
 import { MotionConfig } from "framer-motion";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./Cart.jsx";
@@ -21,23 +21,25 @@ import "./styles/scss/App.scss";
 
 const apiURL = import.meta.env.VITE_API_URL;
 
-const checkConnectionToAPI = async () => {
-  try {
-    const response = await fetch(`${apiURL}/api/test`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log(`API connected (supabase: ${data.supabase})`);
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Internet or API connection failed");
-  }
-};
-
 function Kiosk() {
   const spaceRef = useRef(null);
   const { setWidth } = useWidth();
+  const [isOffline, setIsOffline] = useState(false);
+
+  const checkConnectionToAPI = async () => {
+    try {
+      const response = await fetch(`${apiURL}/api/test`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(`API connected (supabase: ${data.supabase})`);
+      setIsOffline(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setIsOffline(true);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,6 +65,12 @@ function Kiosk() {
   return (
     <CartProvider>
       <MotionConfig reducedMotion="user">
+        {isOffline && (
+          <div className="offline-banner" role="alert">
+            <img src="Icon/Delay.png" alt="" aria-hidden="true" />
+            <span>Offline — orders can't be placed</span>
+          </div>
+        )}
         <div className="default">
           <div className="main">
             <Header />
@@ -70,7 +78,7 @@ function Kiosk() {
             <Menu />
           </div>
           <div className="space" ref={spaceRef}></div>
-          <Order_Review />
+          <Order_Review isOffline={isOffline} />
           <Confirmation_Screen />
         </div>
       </MotionConfig>
