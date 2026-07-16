@@ -45,6 +45,18 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// Auto-wrap every route handler so a rejected promise (e.g. a Supabase
+// error) reaches Express's error handling instead of becoming an unhandled
+// rejection, which crashes the whole process on Node 18+.
+["get", "post", "put", "delete"].forEach((method) => {
+  const original = app[method].bind(app);
+  app[method] = (path, handler) => {
+    original(path, (req, res, next) => {
+      Promise.resolve(handler(req, res, next)).catch(next);
+    });
+  };
+});
+
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
@@ -178,21 +190,24 @@ app.get("/api/kitchen/delayed", async (req, res) => {
 
 app.put("/api/kitchen/preparing/order/:num", async (req, res) => {
   const { num } = req.params;
-  await setPreparingOrder(num);
+  const { updatedBy } = req.body;
+  await setPreparingOrder(num, updatedBy);
   broadcast({ type: "ORDER_STATUS_CHANGE" });
   res.send({ message: "Order status updated!" });
 });
 
 app.put("/api/kitchen/completed/order/:num", async (req, res) => {
   const { num } = req.params;
-  await setCompletedOrder(num);
+  const { updatedBy } = req.body;
+  await setCompletedOrder(num, updatedBy);
   broadcast({ type: "ORDER_STATUS_CHANGE" });
   res.send({ message: "Order status updated!" });
 });
 
 app.put("/api/kitchen/delayed/order/:num", async (req, res) => {
   const { num } = req.params;
-  await setDelayedOrder(num);
+  const { updatedBy } = req.body;
+  await setDelayedOrder(num, updatedBy);
   broadcast({ type: "ORDER_STATUS_CHANGE" });
   res.send({ message: "Order status updated!" });
 });
@@ -283,4 +298,12 @@ app.get("/api/dashboard/orders/date/:num", async (req, res) => {
 app.get("/api/test", async (req, res) => {
   const isConnected = await testConnection();
   res.send({ status: "active", supabase: isConnected ? "connected" : "disconnected" });
+});
+
+// Catches errors forwarded by the auto-wrapped routes above (e.g. a
+// Supabase/Postgres error) so a bad request returns 500 instead of taking
+// the whole server down.
+app.use((err, req, res, next) => {
+  console.error("Request failed:", err.message || err);
+  res.status(500).send({ message: "Something went wrong on the server." });
 });

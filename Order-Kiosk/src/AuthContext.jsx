@@ -59,7 +59,8 @@ export const AuthProvider = ({ children }) => {
   const refreshProfile = () =>
     session ? fetchProfile(session.user.id) : Promise.resolve(null);
 
-  const isAdmin = profile?.role === "admin";
+  const isAdmin = profile?.role === "admin" || profile?.role === "super_admin";
+  const isSuperAdmin = profile?.role === "super_admin";
 
   const access = {
     kiosk: isAdmin || Boolean(profile?.access_kiosk),
@@ -73,6 +74,7 @@ export const AuthProvider = ({ children }) => {
         session,
         profile,
         isAdmin,
+        isSuperAdmin,
         access,
         loading,
         signIn,

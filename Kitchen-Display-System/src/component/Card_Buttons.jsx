@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/Card_Buttons.scss";
+import { useAuth } from "../AuthContext";
 
 const cardTemplate = {
   Preparing: {
@@ -24,6 +25,7 @@ const apiURL = import.meta.env.VITE_API_URL;
 
 const CardButtons = ({ orderNum, status }) => {
   const template = cardTemplate[status];
+  const { session } = useAuth();
 
   const handleAction = (newStatus) => {
     fetch(`${apiURL}/api/kitchen/${newStatus}/order/${orderNum}`, {
@@ -31,7 +33,7 @@ const CardButtons = ({ orderNum, status }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify({ status: newStatus, updatedBy: session?.user?.id }),
     });
   };
 

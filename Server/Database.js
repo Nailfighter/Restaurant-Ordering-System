@@ -48,11 +48,17 @@ async function executeWithRetry(operation, maxRetries = 3) {
 }
 
 async function insertOrder(order) {
-  const { status = "Pending", totalPrice, note = null } = order;
+  const { status = "Pending", totalPrice, note = null, createdBy = null } = order;
 
   const { data, error } = await supabase
     .from("orders")
-    .insert({ status, total_price: totalPrice, note })
+    .insert({
+      status,
+      total_price: totalPrice,
+      note,
+      created_by: createdBy,
+      updated_by: createdBy,
+    })
     .select("order_num")
     .single();
 
@@ -106,6 +112,18 @@ async function getOrderByNum(num) {
     .select("*")
     .eq("order_num", num);
   if (error) throw error;
+
+  if (data && data.length > 0) {
+    const { data: opData } = await supabase.rpc("get_order_operator_info", {
+      p_order_num: Number(num),
+    });
+    const info = opData && opData[0];
+    if (info) {
+      data[0].created_by_name = info.created_by_name || info.created_by_email || null;
+      data[0].updated_by_name = info.updated_by_name || info.updated_by_email || null;
+    }
+  }
+
   return data;
 }
 
@@ -165,27 +183,27 @@ async function getDelayedOrders() {
   return data;
 }
 
-async function setPreparingOrder(orderNum) {
-  const { error } = await supabase
-    .from("orders")
-    .update({ status: "Preparing" })
-    .eq("order_num", orderNum);
+async function setPreparingOrder(orderNum, updatedBy = null) {
+  const update = { status: "Preparing" };
+  if (updatedBy) update.updated_by = updatedBy;
+
+  const { error } = await supabase.from("orders").update(update).eq("order_num", orderNum);
   if (error) throw error;
 }
 
-async function setCompletedOrder(orderNum) {
-  const { error } = await supabase
-    .from("orders")
-    .update({ status: "Completed" })
-    .eq("order_num", orderNum);
+async function setCompletedOrder(orderNum, updatedBy = null) {
+  const update = { status: "Completed" };
+  if (updatedBy) update.updated_by = updatedBy;
+
+  const { error } = await supabase.from("orders").update(update).eq("order_num", orderNum);
   if (error) throw error;
 }
 
-async function setDelayedOrder(orderNum) {
-  const { error } = await supabase
-    .from("orders")
-    .update({ status: "Delayed" })
-    .eq("order_num", orderNum);
+async function setDelayedOrder(orderNum, updatedBy = null) {
+  const update = { status: "Delayed" };
+  if (updatedBy) update.updated_by = updatedBy;
+
+  const { error } = await supabase.from("orders").update(update).eq("order_num", orderNum);
   if (error) throw error;
 }
 

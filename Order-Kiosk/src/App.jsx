@@ -27,7 +27,7 @@ const checkConnectionToAPI = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data.message);
+    console.log(`API connected (supabase: ${data.supabase})`);
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Internet or API connection failed");

@@ -3,6 +3,7 @@ import { motion, MotionConfig } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../AuthContext";
+import DangerZone from "./Danger_Zone";
 
 import "../styles/scss/Admin.scss";
 
@@ -21,8 +22,8 @@ const rowItem = {
 
 const SERVICES = [
   { key: "access_kiosk", label: "Kiosk" },
-  { key: "access_dashboard", label: "Dashboard" },
   { key: "access_kitchen", label: "Kitchen" },
+  { key: "access_dashboard", label: "Dashboard" },
 ];
 
 function formatDate(dateString) {
@@ -40,7 +41,7 @@ const hasNoAccess = (operator) =>
 
 const Admin = () => {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { isSuperAdmin } = useAuth();
   const [operators, setOperators] = useState([]);
   const [busyKey, setBusyKey] = useState(null);
 
@@ -57,7 +58,7 @@ const Admin = () => {
   }, []);
 
   const toggleAccess = async (operator, key) => {
-    setBusyKey(operator.id + key);
+    setBusyKey(`${operator.id}:${key}`);
     await supabase
       .from("operator_profiles")
       .update({ [key]: !operator[key] })
@@ -66,8 +67,26 @@ const Admin = () => {
     setBusyKey(null);
   };
 
+  const promote = async (operator) => {
+    setBusyKey(`${operator.id}:promote`);
+    await supabase.rpc("promote_to_admin", { target_id: operator.id });
+    await loadOperators();
+    setBusyKey(null);
+  };
+
+  const runDestructive = async (operator, action) => {
+    const key = `${operator.id}:${action}`;
+    setBusyKey(key);
+
+    const rpcName = action === "demote" ? "demote_admin" : "remove_operator";
+    await supabase.rpc(rpcName, { target_id: operator.id });
+
+    await loadOperators();
+    setBusyKey(null);
+  };
+
   const waitingCount = operators.filter(
-    (operator) => operator.role !== "admin" && hasNoAccess(operator)
+    (operator) => operator.role === "operator" && hasNoAccess(operator)
   ).length;
 
   return (
@@ -95,6 +114,8 @@ const Admin = () => {
             </svg>
             <span>Back to Kiosk</span>
           </motion.button>
+
+          <DangerZone />
         </div>
 
         <motion.div
@@ -122,51 +143,105 @@ const Admin = () => {
             initial="initial"
             animate="animate"
           >
-            {operators.map((operator) => (
-              <motion.div
-                className="admin-row"
-                key={operator.id}
-                variants={rowItem}
-              >
-                <div className="admin-row-who">
-                  <h5>{operator.display_name || operator.email}</h5>
-                  <span className="admin-row-email">{operator.email}</span>
-                </div>
+            {operators.map((operator) => {
+              const demoteKey = `${operator.id}:demote`;
+              const deleteKey = `${operator.id}:delete`;
 
-                <span className="admin-row-date">
-                  {formatDate(operator.created_at)}
-                </span>
-
-                {operator.role === "admin" ? (
-                  <span className="admin-status admin-status-admin">
-                    {operator.id === profile?.id
-                      ? "Admin · You"
-                      : "Admin · Full Access"}
-                  </span>
-                ) : (
-                  <div className="admin-chips">
-                    {SERVICES.map((service) => (
-                      <button
-                        key={service.key}
-                        className={`admin-chip ${
-                          operator[service.key] ? "admin-chip-on" : ""
-                        }`}
-                        disabled={busyKey === operator.id + service.key}
-                        onClick={() => toggleAccess(operator, service.key)}
-                      >
-                        <span className="admin-chip-dot"></span>
-                        {service.label}
-                      </button>
-                    ))}
+              return (
+                <motion.div
+                  className="admin-row"
+                  key={operator.id}
+                  variants={rowItem}
+                >
+                  <div className="admin-row-who">
+                    <h5>{operator.display_name || operator.email}</h5>
+                    <span className="admin-row-email">{operator.email}</span>
                   </div>
-                )}
-              </motion.div>
-            ))}
+
+                  <span className="admin-row-date">
+                    {formatDate(operator.created_at)}
+                  </span>
+
+                  {operator.role === "super_admin" && (
+                    <span className="admin-status admin-status-admin">
+                      Super Admin
+                    </span>
+                  )}
+
+                  {operator.role === "admin" && (
+                    <>
+                      <span className="admin-status admin-status-admin">
+                        Admin
+                      </span>
+                      {isSuperAdmin && (
+                        <div className="admin-row-actions">
+                          <button
+                            className="admin-action admin-action-revoke"
+                            disabled={busyKey === demoteKey}
+                            onClick={() => runDestructive(operator, "demote")}
+                          >
+                            Remove Admin
+                          </button>
+                          <button
+                            className="admin-action admin-action-delete"
+                            disabled={busyKey === deleteKey}
+                            onClick={() => runDestructive(operator, "delete")}
+                          >
+                            Delete Account
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {operator.role === "operator" && (
+                    <>
+                      <div className="admin-chips">
+                        {SERVICES.map((service) => (
+                          <button
+                            key={service.key}
+                            className={`admin-chip ${
+                              operator[service.key] ? "admin-chip-on" : ""
+                            }`}
+                            disabled={
+                              busyKey === `${operator.id}:${service.key}`
+                            }
+                            onClick={() => toggleAccess(operator, service.key)}
+                          >
+                            <span className="admin-chip-dot"></span>
+                            {service.label}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="admin-row-actions">
+                        <button
+                          className="admin-action admin-action-approve"
+                          disabled={busyKey === `${operator.id}:promote`}
+                          onClick={() => promote(operator)}
+                        >
+                          Make Admin
+                        </button>
+                        {isSuperAdmin && (
+                          <button
+                            className="admin-action admin-action-delete"
+                            disabled={busyKey === deleteKey}
+                            onClick={() => runDestructive(operator, "delete")}
+                          >
+                            Delete Account
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           <p className="admin-footnote">
-            Tap a service to grant or revoke access. Operators with no services
-            stay on the waiting screen.
+            Tap a service to grant or revoke access. Any admin can promote an
+            operator; only the super admin can remove admin access or delete
+            an account.
           </p>
         </motion.div>
       </div>

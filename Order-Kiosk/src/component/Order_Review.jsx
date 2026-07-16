@@ -4,12 +4,13 @@ import { CartContext } from "../Cart.jsx";
 import Order_Item from "./Order_Item.jsx";
 import { ConfirmationContext } from "../ConfirmationContext.jsx";
 import { useWidth } from "../WidthContext";
+import { useAuth } from "../AuthContext";
 
 import "../styles/scss/Order_Review.scss";
 
 const apiURL = import.meta.env.VITE_API_URL;
 
-function generateOrderPayload(cart, total, note) {
+function generateOrderPayload(cart, total, note, createdBy) {
   const orderItems = cart.map((item) => {
     return {
       itemID: item.id,
@@ -23,17 +24,18 @@ function generateOrderPayload(cart, total, note) {
     status: "Preparing",
     totalPrice: total,
     note: note,
+    createdBy: createdBy,
     cart: orderItems,
   });
 }
 
-function addOrderToDB(cart, total, note) {
+function addOrderToDB(cart, total, note, createdBy) {
   fetch(apiURL + "/api/kiosk/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: generateOrderPayload(cart, total, note),
+    body: generateOrderPayload(cart, total, note, createdBy),
   }).then((response) => response.json());
 }
 
@@ -43,6 +45,7 @@ const OrderReview = () => {
   const [note, setNote] = useState("");
 
   const { setShowConfirmation } = useContext(ConfirmationContext);
+  const { session } = useAuth();
 
   const generateOrderItems = () => {
     if (cart.length === 0) {
@@ -70,7 +73,7 @@ const OrderReview = () => {
       alert("Cart is empty!");
       return;
     }
-    addOrderToDB(cart, total, note);
+    addOrderToDB(cart, total, note, session?.user?.id);
     setNote("");
     clearCart();
     handleScreen();

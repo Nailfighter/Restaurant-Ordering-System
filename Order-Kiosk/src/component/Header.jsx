@@ -115,13 +115,7 @@ const Header = () => {
     <div className="header">
       <AnimatePresence>
         {showOrder && (
-          <motion.div
-            className="order-overlay"
-            initial={{ opacity: 1, y: -100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.3 }}
-          >
+          <div className="order-overlay">
             <motion.div
               className="order-info"
               variants={bounce}
@@ -140,6 +134,7 @@ const Header = () => {
                   <img src="Icon/cross.png" alt="Close" />
                 </motion.button>
               </div>
+              <div className="order-info-scroll">
               {fetchedOrder && fetchedOrder.orderInfo.length > 0 ? (
                 <>
                   <h1>
@@ -188,6 +183,18 @@ const Header = () => {
                     Order Status:
                     <span>{fetchedOrder.orderInfo[0]?.status || "N/A"}</span>
                   </h3>
+                  {fetchedOrder.orderInfo[0]?.created_by_name && (
+                    <h3>
+                      Created By:
+                      <span>{fetchedOrder.orderInfo[0].created_by_name}</span>
+                    </h3>
+                  )}
+                  {fetchedOrder.orderInfo[0]?.updated_by_name && (
+                    <h3>
+                      Last Updated By:
+                      <span>{fetchedOrder.orderInfo[0].updated_by_name}</span>
+                    </h3>
+                  )}
                 </>
               ) : (
                 <div className="not-found">
@@ -198,8 +205,9 @@ const Header = () => {
                   </h3>
                 </div>
               )}
+              </div>
             </motion.div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
       <motion.div

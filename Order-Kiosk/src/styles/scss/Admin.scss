@@ -15,6 +15,7 @@
   width: 100%;
   max-width: 920px;
   display: flex;
+  justify-content: space-between;
 }
 
 .admin-back {
@@ -91,11 +92,12 @@
   border-radius: 10px;
 
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
+  gap: 12px 20px;
 
   &-who {
-    flex: 1;
+    flex: 1 1 200px;
     min-width: 0px;
 
     display: flex;
@@ -247,6 +249,21 @@
       color: #ff4141;
     }
   }
+
+  &-delete {
+    background-color: #ff4141;
+
+    transition: box-shadow 0.2s ease;
+    &:hover {
+      box-shadow: 0 0 12px 3px rgba(255, 65, 65, 0.5);
+    }
+  }
+}
+
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .admin-action-spacer {
@@ -254,6 +271,209 @@
   font-weight: 600;
   color: #6f6f6f;
   white-space: nowrap;
+}
+
+// ---------------------------- Danger Zone ----------------------------
+
+.admin-action-danger {
+  height: 60px;
+  padding: 0px 26px;
+  flex-shrink: 0;
+
+  background-color: #ff4141;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  white-space: nowrap;
+
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 0 15px 3px rgba(255, 65, 65, 0.5);
+  }
+}
+
+.danger-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+
+  background: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.danger-modal {
+  width: 420px;
+  max-width: 100%;
+  padding: 34px;
+  box-sizing: border-box;
+
+  background-color: #1c1d21;
+  border: 2px solid rgba(255, 65, 65, 0.35);
+  border-radius: $box-radius;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  h2 {
+    text-align: left;
+    color: #ff4141;
+    font-size: 26px;
+    white-space: nowrap;
+  }
+
+  &-text {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #b8b8b8;
+
+    strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+  }
+
+  &-input {
+    width: 100%;
+    height: 56px;
+    box-sizing: border-box;
+    padding: 0px 18px;
+
+    background-color: #25262b;
+    border: 2px solid #363944;
+    border-radius: 10px;
+    outline: none;
+
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+
+    transition: border-color 0.2s ease;
+
+    &::placeholder {
+      color: #565861;
+      font-weight: 500;
+    }
+
+    &:focus {
+      border-color: #ff4141;
+    }
+  }
+
+  &-code {
+    text-align: center;
+    letter-spacing: 8px;
+    font-size: 24px;
+
+    &::-ms-reveal,
+    &::-ms-clear {
+      display: none;
+    }
+  }
+
+  &-error {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff4141;
+  }
+
+  &-resend {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6f6f6f;
+    text-decoration: underline;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    &:not(:disabled):hover {
+      color: #ebab5e;
+    }
+  }
+
+  &-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  &-cancel {
+    flex: 1;
+    height: 52px;
+
+    background-color: #25262b;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #b8b8b8;
+  }
+
+  &-continue {
+    flex: 2;
+    height: 52px;
+
+    background: $quantity-grad;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+    font-family: "TT-Hoves", "Jokerman", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &-danger {
+    background: none;
+    background-color: #ff4141;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .admin-back span,
+  .admin-action-danger {
+    font-size: 15px;
+  }
+
+  .admin-back,
+  .admin-action-danger {
+    padding: 0px 16px;
+  }
+
 }
 
 @media screen and (max-width: 768px) {
