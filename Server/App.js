@@ -1,5 +1,4 @@
 const {
-  cleanUp,
   testConnection,
 
   addOrder,
@@ -101,15 +100,6 @@ const getDateByNum = (num) => {
 
   return date;
 };
-
-//region API ROUTES: /api/clean-up
-
-app.delete("/api/clean", async (req, res) => {
-  await cleanUp();
-  res.send({ message: "Database cleaned up!" });
-});
-
-//endregion
 
 //#region API ROUTES: /api/kiosk/orders
 

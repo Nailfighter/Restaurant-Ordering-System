@@ -123,7 +123,7 @@ const AuthTicket = ({ eyebrow = "Order Kiosk", actionLabel = "Sign In" }) => {
                     <span>Name</span>
                     <input
                       type="text"
-                      placeholder="Operator name"
+                      placeholder=""
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       autoComplete="name"
@@ -136,7 +136,7 @@ const AuthTicket = ({ eyebrow = "Order Kiosk", actionLabel = "Sign In" }) => {
                 <span>Username</span>
                 <input
                   type="text"
-                  placeholder="nailfighter"
+                  placeholder=""
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
@@ -148,7 +148,7 @@ const AuthTicket = ({ eyebrow = "Order Kiosk", actionLabel = "Sign In" }) => {
                 <span>Password</span>
                 <input
                   type="password"
-                  placeholder="At least 6 characters"
+                  placeholder=""
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete={

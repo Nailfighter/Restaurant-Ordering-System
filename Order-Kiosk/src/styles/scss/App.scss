@@ -105,12 +105,16 @@ h6 {
 
 // Visible keyboard focus everywhere outline: none used to leave gaps
 button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
 a:focus-visible,
 [tabindex]:focus-visible {
   outline: 3px solid #f98e47;
   outline-offset: 2px;
+}
+
+// No focus outline on text fields — tapping to type shouldn't highlight.
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
 }
 
 // Respect users who prefer reduced motion (kiosk screens included)

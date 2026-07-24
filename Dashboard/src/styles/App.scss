@@ -24,6 +24,12 @@ body {
   border-radius: 4px;
 }
 
+// No focus outline on text fields — tapping to type shouldn't highlight.
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
 // Respect users who prefer reduced motion: collapse CSS transitions and
 // animations to near-zero (framer-motion already honors this via MotionConfig).
 @media (prefers-reduced-motion: reduce) {

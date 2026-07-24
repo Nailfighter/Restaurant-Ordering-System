@@ -2,13 +2,15 @@
 -- Run this top-to-bottom on a fresh Supabase project to recreate the database
 -- used by Server/Database.js.
 --
--- RLS is enabled on both tables (see Schema/operator_approval.sql migration
--- 10, enable_rls_orders) with policies matching what Server/Database.js
--- actually does: select/insert/update via the anon key (Express is a
--- middleman with no per-operator session, so RLS can't discriminate by
--- identity here). Row deletion is intentionally not covered by any policy —
--- it only happens via the PIN-gated admin_delete_all_data() RPC's TRUNCATE,
--- which bypasses RLS.
+-- orders/order_items have RLS enabled with NO policies for anon/authenticated,
+-- and those roles are granted no table privileges at all. Server/Database.js
+-- is the only writer, and it must connect with the service_role key (which
+-- bypasses RLS) — Express has no per-operator session, so RLS can't
+-- discriminate by identity, and the anon key is public (shipped in every
+-- frontend bundle), so it must not be able to touch these tables directly.
+-- Row deletion is intentionally not covered by any policy either way — it
+-- only happens via the PIN-gated admin_delete_all_data() RPC's TRUNCATE,
+-- which bypasses RLS via SECURITY DEFINER.
 
 -- ============================================================
 -- Tables
@@ -166,30 +168,34 @@ LANGUAGE sql STABLE AS $$
   ORDER BY oc.order_date, hr.h;
 $$;
 
--- SECURITY DEFINER: TRUNCATE requires table-owner privileges, which the
--- restricted anon/authenticated roles don't have.
-CREATE OR REPLACE FUNCTION clean_up_orders()
-RETURNS VOID LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
-  TRUNCATE TABLE order_items, orders RESTART IDENTITY CASCADE;
-$$;
+-- Note: there used to be a clean_up_orders() SECURITY DEFINER RPC here with
+-- no caller check at all, reachable by anon. It was dead code (no frontend
+-- called it) and has been removed — admin_delete_all_data() above is the
+-- only supported way to wipe the tables, and it's PIN + is_admin()-gated.
 
 -- ============================================================
 -- Grants
 -- ============================================================
--- Table grants define the ceiling of what a role could do; RLS policies
--- (Schema/operator_approval.sql, migration 10) narrow that down to what the
--- app actually needs. DELETE is granted here for completeness but has no
--- corresponding policy, so RLS blocks it outright via the anon/authenticated
--- roles — direct row deletion isn't possible even though the grant exists.
+-- orders/order_items are only ever written to by Server/Database.js, which
+-- must connect using the service_role key — anon/authenticated get no
+-- write privileges at all. Order Kiosk's Danger_Zone.jsx reads row counts
+-- directly from the browser (with the anon key) before the PIN-gated
+-- delete-all-data confirmation, so anon/authenticated do keep read access;
+-- order contents aren't sensitive (the kitchen display and dashboard already
+-- show all orders to anyone with access to those apps).
 
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO anon, authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON orders, order_items TO anon, authenticated;
-GRANT USAGE, SELECT ON SEQUENCE orders_order_num_seq TO anon, authenticated;
-GRANT USAGE, SELECT ON SEQUENCE order_items_id_seq TO anon, authenticated;
+GRANT SELECT ON orders, order_items TO anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON orders, order_items TO service_role;
+GRANT USAGE, SELECT ON SEQUENCE orders_order_num_seq TO service_role;
+GRANT USAGE, SELECT ON SEQUENCE order_items_id_seq TO service_role;
 
 -- ============================================================
 -- Row Level Security
 -- ============================================================
+-- Read-only for anon/authenticated (matches the SELECT-only grants above);
+-- no INSERT/UPDATE/DELETE policies for those roles, since they have no such
+-- grants either. service_role bypasses RLS entirely.
 
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
@@ -197,14 +203,5 @@ ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "orders_select" ON orders
   FOR SELECT TO anon, authenticated USING (true);
 
-CREATE POLICY "orders_insert" ON orders
-  FOR INSERT TO anon, authenticated WITH CHECK (true);
-
-CREATE POLICY "orders_update" ON orders
-  FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
-
 CREATE POLICY "order_items_select" ON order_items
   FOR SELECT TO anon, authenticated USING (true);
-
-CREATE POLICY "order_items_insert" ON order_items
-  FOR INSERT TO anon, authenticated WITH CHECK (true);

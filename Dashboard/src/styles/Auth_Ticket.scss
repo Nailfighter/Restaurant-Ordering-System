@@ -215,8 +215,10 @@ $font-stack: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
         font-weight: 400;
       }
 
+      // Override @tailwindcss/forms' default blue focus ring/border-color.
       &:focus {
-        border-bottom-color: $brand;
+        border-color: $border;
+        box-shadow: none;
       }
     }
   }

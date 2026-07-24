@@ -81,12 +81,6 @@ async function insertOrderItems(orderNum, cart) {
 
 //#endregion
 
-// Clean up the database
-async function cleanUp() {
-  const { error } = await supabase.rpc("clean_up_orders");
-  if (error) throw error;
-}
-
 //#region  API FUNCTIONS: /api/kiosk/orders
 async function getLastOrderNum() {
   const { data, error } = await supabase
@@ -286,7 +280,6 @@ async function test() {
 }
 
 module.exports = {
-  cleanUp,
   testConnection,
   executeWithRetry,
 

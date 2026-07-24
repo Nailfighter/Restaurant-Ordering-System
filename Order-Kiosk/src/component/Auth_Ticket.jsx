@@ -174,7 +174,7 @@ const AuthTicket = () => {
                         <span>Name</span>
                         <input
                           type="text"
-                          placeholder="Operator name"
+                          placeholder=""
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           autoComplete="name"
@@ -187,7 +187,7 @@ const AuthTicket = () => {
                     <span>Username</span>
                     <input
                       type="text"
-                      placeholder="nailfighter"
+                      placeholder=""
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       autoComplete="username"
@@ -199,7 +199,7 @@ const AuthTicket = () => {
                     <span>Password</span>
                     <input
                       type="password"
-                      placeholder="At least 6 characters"
+                      placeholder=""
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete={

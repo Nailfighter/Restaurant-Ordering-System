@@ -530,3 +530,75 @@ as $$
 $$;
 
 grant execute on function public.get_order_operator_info(integer) to anon, authenticated;
+
+-- ============================================================================
+-- Migration 10 (harden_orders_rls_and_rpc_grants): orders/order_items RLS was
+-- USING/WITH CHECK (true) for anon+authenticated because Server/Database.js
+-- used the anon key with no per-operator session, so RLS couldn't discriminate
+-- by identity. But the anon key is public (shipped in every frontend bundle),
+-- so this let anyone bypass Express and write/update arbitrary orders directly
+-- via PostgREST. Fix: Server/Database.js now connects with the service_role
+-- key (bypasses RLS), and anon/authenticated lose all table privileges on
+-- orders/order_items. Also drops clean_up_orders(), a SECURITY DEFINER RPC
+-- with no caller check at all (dead code — no frontend called it;
+-- admin_delete_all_data() is the supported, PIN + is_admin()-gated path), and
+-- restricts get_order_operator_info()/same_role() execute grants to the
+-- roles that actually need them.
+-- ============================================================================
+
+drop function if exists public.clean_up_orders();
+
+revoke execute on function public.get_order_operator_info(integer) from anon, authenticated;
+grant execute on function public.get_order_operator_info(integer) to service_role;
+
+revoke execute on function public.same_role(uuid, text) from anon;
+
+revoke select, insert, update, delete on public.orders, public.order_items from anon, authenticated;
+grant select, insert, update, delete on public.orders, public.order_items to service_role;
+
+revoke usage, select on sequence public.orders_order_num_seq from anon, authenticated;
+revoke usage, select on sequence public.order_items_id_seq from anon, authenticated;
+grant usage, select on sequence public.orders_order_num_seq to service_role;
+grant usage, select on sequence public.order_items_id_seq to service_role;
+
+drop policy if exists "orders_select" on public.orders;
+drop policy if exists "orders_insert" on public.orders;
+drop policy if exists "orders_update" on public.orders;
+drop policy if exists "order_items_select" on public.order_items;
+drop policy if exists "order_items_insert" on public.order_items;
+
+-- ============================================================================
+-- Migration 11 (fix_public_execute_grant_on_rpcs): the EXECUTE revokes in
+-- migration 10 only revoked from anon/authenticated directly, but
+-- get_order_operator_info()/same_role() still had EXECUTE granted to the
+-- implicit PUBLIC role (Postgres' default for newly created functions),
+-- which every role — including anon/authenticated — inherits regardless of
+-- direct grants. Revoke from PUBLIC explicitly and re-grant only to the
+-- roles that actually need it.
+-- ============================================================================
+
+revoke execute on function public.get_order_operator_info(integer) from public;
+grant execute on function public.get_order_operator_info(integer) to service_role;
+
+revoke execute on function public.same_role(uuid, text) from public;
+grant execute on function public.same_role(uuid, text) to authenticated, service_role;
+
+-- ============================================================================
+-- Migration 12 (restore_anon_select_on_orders): migration 10 revoked SELECT
+-- along with INSERT/UPDATE/DELETE, but Order-Kiosk's Danger_Zone.jsx reads
+-- row counts directly from the browser (anon key) before the PIN-gated
+-- delete-all-data confirmation, and that broke silently (counts showed 0).
+-- Order/order_item contents aren't sensitive — the kitchen display and
+-- dashboard already show all orders to anyone with access to those apps —
+-- so restore read-only access while keeping write access revoked, which is
+-- what actually mattered (anyone with the public anon key could otherwise
+-- forge/edit orders directly via PostgREST).
+-- ============================================================================
+
+grant select on public.orders, public.order_items to anon, authenticated;
+
+create policy "orders_select" on public.orders
+  for select to anon, authenticated using (true);
+
+create policy "order_items_select" on public.order_items
+  for select to anon, authenticated using (true);

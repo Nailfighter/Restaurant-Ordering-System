@@ -108,7 +108,10 @@ The project follows a architecture with four main components:
    ```env
    # Server
    SUPABASE_URL=https://your-project-ref.supabase.co
-   SUPABASE_KEY=your-anon-or-service-role-key
+   # Must be the service_role key (Project Settings > API), not anon.
+   # The server is the only writer to orders/order_items; RLS denies
+   # anon/authenticated on those tables, so the anon key can't write.
+   SUPABASE_KEY=your-service-role-key
    PORT=3000
 
    # Frontends

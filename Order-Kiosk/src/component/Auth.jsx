@@ -311,7 +311,7 @@ const Auth = () => {
                       >
                         <input
                           type="text"
-                          placeholder="Your name"
+                          placeholder=""
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           autoComplete="name"
@@ -323,7 +323,7 @@ const Auth = () => {
                   <motion.div className="auth-field" variants={formItem}>
                     <input
                       type="text"
-                      placeholder="Username"
+                      placeholder=""
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       autoComplete="username"
@@ -334,7 +334,7 @@ const Auth = () => {
                   <motion.div className="auth-field" variants={formItem}>
                     <input
                       type="password"
-                      placeholder="Password"
+                      placeholder=""
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete={
