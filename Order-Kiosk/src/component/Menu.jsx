@@ -5,11 +5,11 @@ import Food_List from "../Food_List.jsx";
 import "../styles/scss/App.scss";
 
 const tabs = {
-  All: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   Combo: [1, 2, 3],
-  "A La Carte": [4, 5],
-  Drinks: [6, 7, 8],
-  Extras: [9],
+  "Combo + Lassi": [4, 5, 6, 7],
+  "A La Carte": [8, 9],
+  Drinks: [10, 11, 12],
+  Extras: [13],
 };
 
 function filterFoodList(tab) {
@@ -19,6 +19,7 @@ function filterFoodList(tab) {
       key={index}
       id={item.id}
       image={item.image}
+      image2={item.image2}
       name={item.name}
       alias={item.alias}
       price={item.price}
@@ -29,7 +30,7 @@ function filterFoodList(tab) {
 }
 
 const Menu = () => {
-  const [selectedTab, setSelectedTab] = useState("All");
+  const [selectedTab, setSelectedTab] = useState("Combo");
 
   return (
     <div className="food-content">

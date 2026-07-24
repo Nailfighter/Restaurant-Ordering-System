@@ -16,7 +16,10 @@ const FoodCard = (props) => {
       transition={{ duration: 0.3 }}
     >
       <div className="card-header">
-        <img src={props.image} alt={props.name} />
+        <div className={`card-images${props.image2 ? " split" : ""}`}>
+          <img src={props.image} alt={props.name} />
+          {props.image2 && <img src={props.image2} alt="Mango Lassi" />}
+        </div>
         <h6>{props.name}</h6>
         <div className="tags">
           <Tag tags={props.tags} />
