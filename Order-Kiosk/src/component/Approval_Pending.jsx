@@ -43,7 +43,7 @@ const ApprovalPending = () => {
             <p className="ticket-line">
               <span>Operator</span>
               <span className="ticket-line-dots"></span>
-              <strong>{profile?.display_name || profile?.email}</strong>
+              <strong>{profile?.display_name || profile?.username}</strong>
             </p>
             <p className="ticket-hint">
               Your operator account is registered but not approved yet. The

@@ -154,8 +154,8 @@ const Admin = () => {
                   variants={rowItem}
                 >
                   <div className="admin-row-who">
-                    <h5>{operator.display_name || operator.email}</h5>
-                    <span className="admin-row-email">{operator.email}</span>
+                    <h5>{operator.display_name || operator.username}</h5>
+                    <span className="admin-row-email">{operator.username}</span>
                   </div>
 
                   <span className="admin-row-date">

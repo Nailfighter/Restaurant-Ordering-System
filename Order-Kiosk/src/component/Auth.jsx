@@ -158,7 +158,7 @@ const Auth = () => {
 
   const [mode, setMode] = useState("signin");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -181,10 +181,10 @@ const Auth = () => {
     setBusy(true);
     try {
       if (mode === "signin") {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(username, password);
         if (error) setError(error.message);
       } else {
-        const { data, error } = await signUp(email, password, name.trim());
+        const { data, error } = await signUp(username, password, name.trim());
         if (error) {
           setError(error.message);
         } else if (data?.user && !data.session) {
@@ -241,14 +241,14 @@ const Auth = () => {
                   alt=""
                   variants={ticketDrop}
                 />
-                <motion.h2 variants={formItem}>Check Your Email</motion.h2>
+                <motion.h2 variants={formItem}>Account Created</motion.h2>
                 <motion.p variants={formItem}>
-                  We sent a confirmation link to
-                  <span> {email}</span>
+                  Registered as
+                  <span> {username}</span>
                 </motion.p>
                 <motion.p className="auth-confirm-hint" variants={formItem}>
-                  Tap the button in the email to activate your account, then
-                  come back and sign in.
+                  Ask an admin to approve your account, then come back and
+                  sign in.
                 </motion.p>
                 <motion.button
                   className="auth-submit"
@@ -322,11 +322,11 @@ const Auth = () => {
 
                   <motion.div className="auth-field" variants={formItem}>
                     <input
-                      type="email"
-                      placeholder="Email address"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoComplete="email"
+                      type="text"
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      autoComplete="username"
                       required
                     />
                   </motion.div>

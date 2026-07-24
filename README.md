@@ -99,7 +99,7 @@ The project follows a architecture with four main components:
 
 2. **Create the database schema**
 
-   Run [`schema.sql`](schema.sql) against your Supabase project (via the SQL editor in the dashboard, or the Supabase MCP/CLI). It creates the `orders`/`order_items` tables, the dashboard RPC functions, and the grants the app needs.
+   Run [`Schema/schema.sql`](Schema/schema.sql) against your Supabase project (via the SQL editor in the dashboard, or the Supabase MCP/CLI). It creates the `orders`/`order_items` tables, the dashboard RPC functions, RLS policies, and the grants the app needs. Then run [`Schema/operator_approval.sql`](Schema/operator_approval.sql) to set up operator accounts, roles, and the username-based login.
 
 3. **Set up environment variables**
 
@@ -199,7 +199,9 @@ Restaurant-Ordering-System/
 │   ├── Database.js          # Supabase client & queries
 │   └── package.json
 ├── docker/                  # Docker Compose + per-service Dockerfiles/nginx configs
-├── schema.sql                # Supabase/Postgres schema (tables, RPC functions, grants)
+├── Schema/                  # Supabase/Postgres SQL (schema, RLS, operator accounts/auth)
+│   ├── schema.sql            # Tables, RPC functions, grants, RLS policies
+│   └── operator_approval.sql # Operator roles, approval flow, username login
 ├── .env                      # Shared environment variables for all apps (gitignored)
 └── Design/                  # Design assets and mockups
 ```

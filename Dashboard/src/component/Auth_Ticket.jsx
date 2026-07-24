@@ -39,7 +39,7 @@ const AuthTicket = ({ eyebrow = "Order Kiosk", actionLabel = "Sign In" }) => {
 
   const [mode, setMode] = useState("signin");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -61,10 +61,10 @@ const AuthTicket = ({ eyebrow = "Order Kiosk", actionLabel = "Sign In" }) => {
     setBusy(true);
     try {
       if (mode === "signin") {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(username, password);
         if (error) setError(error.message);
       } else {
-        const { error } = await signUp(email, password, name.trim());
+        const { error } = await signUp(username, password, name.trim());
         if (error) setError(error.message);
       }
     } finally {
@@ -133,13 +133,13 @@ const AuthTicket = ({ eyebrow = "Order Kiosk", actionLabel = "Sign In" }) => {
               </AnimatePresence>
 
               <label className="ticket-field">
-                <span>Email</span>
+                <span>Username</span>
                 <input
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
+                  type="text"
+                  placeholder="nailfighter"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
                   required
                 />
               </label>

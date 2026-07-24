@@ -2,11 +2,13 @@
 -- Run this top-to-bottom on a fresh Supabase project to recreate the database
 -- used by Server/Database.js.
 --
--- RLS is intentionally left disabled below (matches the original MySQL setup,
--- which had no auth layer). Once auth is added, enable RLS on both tables and
--- replace the "open access" note with real policies:
---   ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
---   ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+-- RLS is enabled on both tables (see Schema/operator_approval.sql migration
+-- 10, enable_rls_orders) with policies matching what Server/Database.js
+-- actually does: select/insert/update via the anon key (Express is a
+-- middleman with no per-operator session, so RLS can't discriminate by
+-- identity here). Row deletion is intentionally not covered by any policy —
+-- it only happens via the PIN-gated admin_delete_all_data() RPC's TRUNCATE,
+-- which bypasses RLS.
 
 -- ============================================================
 -- Tables
@@ -174,11 +176,35 @@ $$;
 -- ============================================================
 -- Grants
 -- ============================================================
--- Open access for the anon/authenticated roles, since the app has no auth
--- layer yet and talks to Supabase via the publishable/anon key. Tighten this
--- (and re-enable RLS) once auth is added.
+-- Table grants define the ceiling of what a role could do; RLS policies
+-- (Schema/operator_approval.sql, migration 10) narrow that down to what the
+-- app actually needs. DELETE is granted here for completeness but has no
+-- corresponding policy, so RLS blocks it outright via the anon/authenticated
+-- roles — direct row deletion isn't possible even though the grant exists.
 
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON orders, order_items TO anon, authenticated;
 GRANT USAGE, SELECT ON SEQUENCE orders_order_num_seq TO anon, authenticated;
 GRANT USAGE, SELECT ON SEQUENCE order_items_id_seq TO anon, authenticated;
+
+-- ============================================================
+-- Row Level Security
+-- ============================================================
+
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "orders_select" ON orders
+  FOR SELECT TO anon, authenticated USING (true);
+
+CREATE POLICY "orders_insert" ON orders
+  FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+CREATE POLICY "orders_update" ON orders
+  FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "order_items_select" ON order_items
+  FOR SELECT TO anon, authenticated USING (true);
+
+CREATE POLICY "order_items_insert" ON order_items
+  FOR INSERT TO anon, authenticated WITH CHECK (true);

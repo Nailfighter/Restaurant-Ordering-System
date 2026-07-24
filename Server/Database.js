@@ -119,8 +119,8 @@ async function getOrderByNum(num) {
     });
     const info = opData && opData[0];
     if (info) {
-      data[0].created_by_name = info.created_by_name || info.created_by_email || null;
-      data[0].updated_by_name = info.updated_by_name || info.updated_by_email || null;
+      data[0].created_by_name = info.created_by_name || info.created_by_username || null;
+      data[0].updated_by_name = info.updated_by_name || info.updated_by_username || null;
     }
   }
 

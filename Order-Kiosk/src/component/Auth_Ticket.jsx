@@ -39,7 +39,7 @@ const AuthTicket = () => {
 
   const [mode, setMode] = useState("signin");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -62,10 +62,10 @@ const AuthTicket = () => {
     setBusy(true);
     try {
       if (mode === "signin") {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(username, password);
         if (error) setError(error.message);
       } else {
-        const { data, error } = await signUp(email, password, name.trim());
+        const { data, error } = await signUp(username, password, name.trim());
         if (error) {
           setError(error.message);
         } else if (data?.user && !data.session) {
@@ -92,20 +92,20 @@ const AuthTicket = () => {
             >
               <div className="ticket-stub">
                 <span className="ticket-stub-eyebrow">Almost there</span>
-                <h2>Check Your Email</h2>
+                <h2>Account Created</h2>
               </div>
 
               <div className="ticket-perforation"></div>
 
               <div className="ticket-body">
                 <p className="ticket-line">
-                  <span>Sent to</span>
+                  <span>Username</span>
                   <span className="ticket-line-dots"></span>
-                  <strong>{email}</strong>
+                  <strong>{username}</strong>
                 </p>
                 <p className="ticket-hint">
-                  Open the link in the email to activate the operator account,
-                  then come back and sign in.
+                  Ask an admin to approve the operator account, then come back
+                  and sign in.
                 </p>
 
                 <button
@@ -184,13 +184,13 @@ const AuthTicket = () => {
                   </AnimatePresence>
 
                   <label className="ticket-field">
-                    <span>Email</span>
+                    <span>Username</span>
                     <input
-                      type="email"
-                      placeholder="you@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoComplete="email"
+                      type="text"
+                      placeholder="nailfighter"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      autoComplete="username"
                       required
                     />
                   </label>

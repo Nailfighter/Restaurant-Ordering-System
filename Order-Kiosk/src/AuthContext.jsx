@@ -42,15 +42,27 @@ export const AuthProvider = ({ children }) => {
     fetchProfile(session.user.id).finally(() => setLoading(false));
   }, [session?.user?.id]);
 
-  const signIn = (email, password) =>
-    supabase.auth.signInWithPassword({ email, password });
+  const USERNAME_EMAIL_DOMAIN = "operators.local";
+  const usernameToEmail = (username) =>
+    `${username.trim().toLowerCase()}@${USERNAME_EMAIL_DOMAIN}`;
 
-  const signUp = (email, password, name) =>
+  const signIn = async (username, password) => {
+    const { data: email, error: lookupError } = await supabase.rpc(
+      "get_email_by_username",
+      { p_username: username.trim() }
+    );
+    if (lookupError || !email) {
+      return { error: { message: "Invalid username or password" } };
+    }
+    return supabase.auth.signInWithPassword({ email, password });
+  };
+
+  const signUp = (username, password, name) =>
     supabase.auth.signUp({
-      email,
+      email: usernameToEmail(username),
       password,
       options: {
-        data: { display_name: name },
+        data: { display_name: name, username: username.trim().toLowerCase() },
       },
     });
 

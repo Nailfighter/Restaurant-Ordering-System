@@ -437,3 +437,96 @@ as $$
 $$;
 
 grant execute on function public.get_order_operator_info(integer) to anon, authenticated;
+
+-- ============================================================================
+-- Migration 8 (username_login): switch login/signup identity from email to
+-- username. Operators sign up with a username (a synthetic email is
+-- generated client-side since Supabase Auth requires one); login resolves
+-- username -> email via a security-definer RPC before calling
+-- signInWithPassword. The ultimate admin's username is 'nailfighter'.
+-- ============================================================================
+
+alter table public.operator_profiles
+  add column username text;
+
+update public.operator_profiles
+  set username = 'nailfighter'
+  where email = 'nailfighter000@gmail.com';
+
+alter table public.operator_profiles
+  alter column username set not null,
+  add constraint operator_profiles_username_key unique (username);
+
+create or replace function public.get_email_by_username(p_username text)
+returns text
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select email from public.operator_profiles
+  where lower(username) = lower(p_username)
+  limit 1;
+$$;
+
+grant execute on function public.get_email_by_username(text) to anon, authenticated;
+
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  new_username text := new.raw_user_meta_data ->> 'username';
+  is_ultimate_admin boolean := new.email = 'nailfighter000@gmail.com'
+    or new_username = 'nailfighter';
+begin
+  insert into public.operator_profiles
+    (id, email, username, display_name, role, approved, access_kiosk, access_dashboard, access_kitchen)
+  values (
+    new.id,
+    new.email,
+    new_username,
+    coalesce(new.raw_user_meta_data ->> 'display_name', ''),
+    case when is_ultimate_admin then 'super_admin' else 'operator' end,
+    is_ultimate_admin,
+    is_ultimate_admin,
+    is_ultimate_admin,
+    is_ultimate_admin
+  );
+  return new;
+end;
+$$;
+
+-- ============================================================================
+-- Migration 9 (order_operator_info_username): get_order_operator_info()
+-- fell back to the operator's email when display_name was blank. Email is
+-- now a synthetic, meaningless address (see username_login migration above),
+-- so switch the fallback to username.
+-- ============================================================================
+
+drop function if exists public.get_order_operator_info(integer);
+
+create function public.get_order_operator_info(p_order_num integer)
+returns table(
+  created_by_name text,
+  created_by_username text,
+  updated_by_name text,
+  updated_by_username text
+)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select
+    creator.display_name, creator.username,
+    updater.display_name, updater.username
+  from public.orders o
+  left join public.operator_profiles creator on creator.id = o.created_by
+  left join public.operator_profiles updater on updater.id = o.updated_by
+  where o.order_num = p_order_num;
+$$;
+
+grant execute on function public.get_order_operator_info(integer) to anon, authenticated;

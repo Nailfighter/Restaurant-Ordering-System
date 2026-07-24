@@ -33,10 +33,10 @@ function Dashboard() {
               </span>
               <h1>Analytics Dashboard</h1>
             </div>
-            {(profile?.display_name || profile?.email) && (
+            {(profile?.display_name || profile?.username) && (
               <p className="dash-header-meta">
                 <span>Operator</span>
-                <strong>{profile?.display_name || profile?.email}</strong>
+                <strong>{profile?.display_name || profile?.username}</strong>
               </p>
             )}
           </header>

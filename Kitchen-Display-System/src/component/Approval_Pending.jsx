@@ -43,7 +43,7 @@ const ApprovalPending = ({ serviceLabel = "this service" }) => {
             <p className="ticket-line">
               <span>Operator</span>
               <span className="ticket-line-dots"></span>
-              <strong>{profile?.display_name || profile?.email}</strong>
+              <strong>{profile?.display_name || profile?.username}</strong>
             </p>
             <p className="ticket-hint">
               Your account doesn't have access to {serviceLabel} yet. The admin
