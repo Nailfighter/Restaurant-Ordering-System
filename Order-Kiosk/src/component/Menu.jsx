@@ -5,19 +5,15 @@ import Food_List from "../Food_List.jsx";
 import "../styles/scss/App.scss";
 
 const tabs = {
-  All: [1, 15],
-  Box: [1, 5],
-  Combo: [6, 9],
-  Entree: [10, 10],
-  Drinks: [11, 13],
+  All: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  Combo: [1, 2, 3],
+  "A La Carte": [4, 5],
+  Drinks: [6, 7, 8],
+  Extras: [9],
 };
 
-function isBetween(num, min, max) {
-  return num >= min && num <= max;
-}
-
 function filterFoodList(tab) {
-  const [start, end] = tabs[tab];
+  const ids = tabs[tab];
   return Food_List.map((item, index) => (
     <Food_Card
       key={index}
@@ -27,7 +23,7 @@ function filterFoodList(tab) {
       alias={item.alias}
       price={item.price}
       tags={item.tags}
-      show={isBetween(item.id, start, end) ? "flex" : "none"}
+      show={ids.includes(item.id) ? "flex" : "none"}
     />
   ));
 }
