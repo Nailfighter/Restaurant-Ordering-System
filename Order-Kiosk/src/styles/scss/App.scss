@@ -210,6 +210,166 @@ textarea:focus-visible {
   }
 }
 
+// Venmo / Zelle QR buttons: same footprint as .signout-button, brand-colored
+.payment-button {
+  height: 60px;
+  padding: 0px 22px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+
+  &--venmo {
+    background: #008cff;
+  }
+
+  &--zelle {
+    background: #6d1ed4;
+  }
+}
+
+// Dark backdrop + blur behind the QR modal
+.payment-overlay {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.payment-modal {
+  position: relative;
+  width: 480px;
+  max-width: 100%;
+  max-height: 100%;
+
+  background: #282a33;
+  border-radius: 25px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  .close {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    z-index: 2;
+
+    button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      background: #ff4141;
+      cursor: pointer;
+    }
+
+    img {
+      margin-top: 5px;
+      width: 55%;
+      height: 45%;
+    }
+  }
+
+  &-header {
+    padding: 42px 34px 26px;
+    text-align: center;
+    color: #ffffff;
+    // header carries the gradient fill, so it (not the card) clips to the rounded top corners
+    border-radius: 25px 25px 0px 0px;
+
+    h1 {
+      font-size: 28px;
+      margin-top: 16px;
+    }
+
+    p {
+      margin: 8px 0 0;
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  &-badge {
+    width: 64px;
+    height: 64px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    color: #ffffff;
+
+    &-icon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &--venmo {
+    .payment-modal-header {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 140, 255, 0.35) 0%,
+        rgba(0, 140, 255, 0) 100%
+      );
+    }
+
+    .payment-modal-badge {
+      background: linear-gradient(135deg, #3d95ce 0%, #008cff 100%);
+    }
+  }
+
+  &--zelle {
+    .payment-modal-header {
+      background: linear-gradient(
+        180deg,
+        rgba(109, 30, 212, 0.35) 0%,
+        rgba(109, 30, 212, 0) 100%
+      );
+    }
+
+    .payment-modal-badge {
+      background: linear-gradient(135deg, #a41ee8 0%, #6d1ed4 100%);
+    }
+  }
+}
+
+.payment-qr-card {
+  margin: 0px 36px 36px;
+  padding: 28px;
+  // fixed square so the padding reads identical on every side, whatever the
+  // source jpeg's exact pixel dimensions are
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-qr-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .search-box {
   flex: 1;
   max-width: 560px;
@@ -483,7 +643,8 @@ textarea:focus-visible {
     min-width: 0;
   }
 
-  .signout-button {
+  .signout-button,
+  .payment-button {
     flex: 1;
     justify-content: center;
     height: 52px;
