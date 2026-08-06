@@ -67,16 +67,6 @@ textarea:focus-visible {
   padding-bottom: 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
-  &-eyebrow {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: #6b7280; // gray-500, same muted as the ticket
-  }
-
   h1 {
     margin: 0;
     font-size: 1.5rem;
@@ -86,25 +76,15 @@ textarea:focus-visible {
     color: #f9fafb; // gray-50 ink
   }
 
-  &-meta {
+  &-controls {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-width: 0;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 
-    font-size: 13px;
-    font-weight: 500;
-    color: #9ca3af; // gray-400
-
-    strong {
-      max-width: 220px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-
-      font-weight: 600;
-      color: #60a5fa; // blue-400, matches the ticket's operator line
-    }
+  &-day-filter {
+    width: 168px;
   }
 }
 
@@ -116,11 +96,6 @@ textarea:focus-visible {
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: #6b7280;
-}
-
-.filter-plane {
-  height: auto;
-  width: 320px;
 }
 
 .time-filter {
@@ -141,9 +116,6 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 20px;
-
-  // clearance so the floating sign-out button never covers the last card
-  padding-bottom: 84px;
 }
 
 // ---------------------------- Card rows ----------------------------
@@ -205,10 +177,13 @@ textarea:focus-visible {
       font-size: 1.25rem;
       line-height: 1.75rem;
     }
-  }
 
-  .dashboard {
-    padding-bottom: 92px;
+    &-controls {
+      // full width once stacked under the title, so sign-out can still
+      // pin to the right edge instead of sitting flush against the filter
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 }
 
@@ -217,15 +192,5 @@ textarea:focus-visible {
 @media screen and (max-width: 480px) {
   .default {
     margin: 12px;
-  }
-
-  .dash-header {
-    &-meta {
-      flex-wrap: wrap;
-
-      strong {
-        max-width: 100%;
-      }
-    }
   }
 }

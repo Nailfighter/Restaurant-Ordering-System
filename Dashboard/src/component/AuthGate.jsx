@@ -15,14 +15,14 @@ export const SignOutFab = () => {
   const { signOut } = useAuth();
   return (
     <motion.button
-      className="app-signout"
+      className="dash-header-signout"
       onClick={signOut}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
       <svg
-        width="18"
-        height="18"
+        width="16"
+        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

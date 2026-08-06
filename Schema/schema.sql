@@ -75,7 +75,8 @@ $$;
 
 CREATE OR REPLACE FUNCTION get_num_of_orders_by_date(p_date DATE)
 RETURNS BIGINT LANGUAGE sql STABLE AS $$
-  SELECT COUNT(*) FROM orders WHERE created_time::date = p_date;
+  SELECT COUNT(*) FROM orders
+  WHERE (created_time AT TIME ZONE 'America/New_York')::date = p_date;
 $$;
 
 CREATE OR REPLACE FUNCTION get_total_sales_by_item()
@@ -93,7 +94,7 @@ LANGUAGE sql STABLE AS $$
          ROUND((s.amount / t.total_amount) * 100, 2)::text || '%' AS "amountShare",
          ROUND((s.quantity / t.total_quantity) * 100, 2) AS "quantityShare"
   FROM item_shares s, totals t
-  ORDER BY s.item_id;
+  ORDER BY s.amount DESC;
 $$;
 
 CREATE OR REPLACE FUNCTION get_sales_by_item_by_day(p_date DATE)
@@ -113,7 +114,8 @@ LANGUAGE sql STABLE AS $$
   SELECT s.item_id, s.name, s.amount, s.quantity,
          ROUND((s.amount / t.total_amount) * 100, 2)::text || '%' AS "amountShare",
          ROUND((s.quantity / t.total_quantity) * 100, 2) AS "quantityShare"
-  FROM item_shares s, totals t;
+  FROM item_shares s, totals t
+  ORDER BY s.amount DESC;
 $$;
 
 CREATE OR REPLACE FUNCTION get_orders_by_items()

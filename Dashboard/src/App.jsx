@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import FilterPane from "./component/Filter_Pane";
+import DayFilter from "./component/Day_Filter";
 import OverallStats from "./component/Overall_Stats";
 import ItemSalePie from "./component/Item_Sale";
 import ItemNumberPie from "./component/Item_Numbers";
@@ -18,27 +18,19 @@ import { useAuth } from "./AuthContext";
 import "./Fetch_Data";
 
 function Dashboard() {
-  const { profile } = useAuth();
-
   return (
     <FilterProvider>
       {/* <Credentials /> */}
       <div className="default">
-        {/* <FilterPane /> */}
         <div className="dashboard">
           <header className="dash-header">
             <div>
-              <span className="dash-header-eyebrow">
-                Restaurant Ordering System
-              </span>
               <h1>Analytics Dashboard</h1>
             </div>
-            {(profile?.display_name || profile?.username) && (
-              <p className="dash-header-meta">
-                <span>Operator</span>
-                <strong>{profile?.display_name || profile?.username}</strong>
-              </p>
-            )}
+            <div className="dash-header-controls">
+              <DayFilter />
+              <SignOutFab />
+            </div>
           </header>
 
           <p className="section-label">Overview</p>
@@ -54,7 +46,6 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <SignOutFab />
     </FilterProvider>
   );
 }

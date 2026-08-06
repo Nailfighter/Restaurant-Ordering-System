@@ -33,6 +33,15 @@ const {
 } = require("./Database");
 
 const { checkValidOrder } = require("./Payload_Validation");
+const { getDateByNum } = require("./EventDays");
+
+// Formats a Date as YYYY-MM-DD in the restaurant's local timezone (en-CA
+// gives that format directly), so day filters agree with the AT TIME ZONE
+// 'America/New_York' conversions used by the dashboard's SQL functions.
+const toEasternDateString = (date) =>
+  new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(
+    date
+  );
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -79,27 +88,6 @@ const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-
-const getDateByNum = (num) => {
-  let date = null;
-
-  switch (num) {
-    case "1":
-      date = "2025-08-06";
-      break;
-    case "2":
-      date = "2025-08-07";
-      break;
-    case "3":
-      date = "2025-08-08";
-      break;
-    default:
-      date = "2025-08-06";
-      break;
-  }
-
-  return date;
-};
 
 //#region API ROUTES: /api/kiosk/orders
 
@@ -279,7 +267,7 @@ app.get("/api/dashboard/orders/date/:num", async (req, res) => {
   const date = getDateByNum(num);
   const orders = await getAllOrders();
   const filteredOrders = orders.filter(
-    (order) => new Date(order.created_time).toISOString().split("T")[0] === date
+    (order) => toEasternDateString(new Date(order.created_time)) === date
   );
   res.send(filteredOrders);
 });
