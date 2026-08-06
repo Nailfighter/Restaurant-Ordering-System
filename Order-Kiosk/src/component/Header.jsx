@@ -57,13 +57,19 @@ const ZelleLogo = (props) => (
   </svg>
 );
 
+const PaypalLogo = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.196-.05.4-.083.605-.99 5.09-4.328 6.85-8.607 6.85H9.586c-.524 0-.968.382-1.05.9L7.076 21.337ZM17.28 6.13a3.86 3.86 0 0 0-.09-.365c-.5.24-1.056.42-1.65.545-.98.2-2.1.293-3.335.293h-2.28l-1.02 6.48h1.79c3.06 0 5.39-1.14 6.09-4.47.045-.22.09-.44.12-.66.11-.71.09-1.28-.11-1.71a1.2 1.2 0 0 0-.44-.53l.926-.083Z" />
+  </svg>
+);
+
 const Header = () => {
   const { signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [showOrder, setShowOrder] = useState(false);
   const [fetchedOrder, setFetchedOrder] = useState(null);
-  const [paymentQR, setPaymentQR] = useState(null); // "venmo" | "zelle" | null
+  const [paymentQR, setPaymentQR] = useState(null); // "venmo" | "zelle" | "paypal" | null
 
   const handleBlur = () => {
     setInputValue("");
@@ -155,11 +161,19 @@ const Header = () => {
                 <span className="payment-modal-badge">
                   {paymentQR === "venmo" ? (
                     <VenmoLogo className="payment-modal-badge-icon" />
-                  ) : (
+                  ) : paymentQR === "zelle" ? (
                     <ZelleLogo className="payment-modal-badge-icon" />
+                  ) : (
+                    <PaypalLogo className="payment-modal-badge-icon" />
                   )}
                 </span>
-                <h1>{paymentQR === "venmo" ? "Venmo" : "Zelle"}</h1>
+                <h1>
+                  {paymentQR === "venmo"
+                    ? "Venmo"
+                    : paymentQR === "zelle"
+                    ? "Zelle"
+                    : "PayPal"}
+                </h1>
                 <p>Scan with your phone's camera to pay</p>
               </div>
               <div className="payment-qr-card">
@@ -168,9 +182,17 @@ const Header = () => {
                   src={
                     paymentQR === "venmo"
                       ? "Image/Venmo_QR.jpeg"
-                      : "Image/Zelle_QR.jpeg"
+                      : paymentQR === "zelle"
+                      ? "Image/Zelle_QR.jpeg"
+                      : "Image/Paypal_QR.jpeg"
                   }
-                  alt={paymentQR === "venmo" ? "Venmo QR code" : "Zelle QR code"}
+                  alt={
+                    paymentQR === "venmo"
+                      ? "Venmo QR code"
+                      : paymentQR === "zelle"
+                      ? "Zelle QR code"
+                      : "PayPal QR code"
+                  }
                 />
               </div>
             </motion.div>
@@ -326,6 +348,18 @@ const Header = () => {
         whileTap={{ scale: 0.95 }}
       >
         <span>Zelle</span>
+      </motion.button>
+      <motion.button
+        className="payment-button payment-button--paypal"
+        onClick={() => setPaymentQR("paypal")}
+        variants={searchBoxAnimation}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span>PayPal</span>
       </motion.button>
       {isAdmin && (
         <motion.button

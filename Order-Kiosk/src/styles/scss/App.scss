@@ -237,6 +237,10 @@ textarea:focus-visible {
   &--zelle {
     background: #6d1ed4;
   }
+
+  &--paypal {
+    background: #003087;
+  }
 }
 
 // Dark backdrop + blur behind the QR modal
@@ -342,6 +346,20 @@ textarea:focus-visible {
 
     .payment-modal-badge {
       background: linear-gradient(135deg, #a41ee8 0%, #6d1ed4 100%);
+    }
+  }
+
+  &--paypal {
+    .payment-modal-header {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 48, 135, 0.35) 0%,
+        rgba(0, 48, 135, 0) 100%
+      );
+    }
+
+    .payment-modal-badge {
+      background: linear-gradient(135deg, #0070ba 0%, #003087 100%);
     }
   }
 }
