@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Food_Card from "./Food_Card.jsx";
 import Food_List from "../Food_List.jsx";
 import "../styles/scss/App.scss";
 
 const tabs = {
-  Combo: [1, 2, 3],
-  "Combo + Lassi": [4, 5, 6, 7],
+  Base: [1, 2, 3],
+  Combo: [4, 5, 6, 7],
   "A La Carte": [8, 9],
   Drinks: [10, 11, 12],
   Extras: [13],
@@ -30,24 +30,61 @@ function filterFoodList(tab) {
 }
 
 const Menu = () => {
-  const [selectedTab, setSelectedTab] = useState("Combo");
+  const [selectedTab, setSelectedTab] = useState("Base");
+  const tabsRef = useRef(null);
+  const [tabsWidth, setTabsWidth] = useState(null);
+
+  useEffect(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+
+    const updateWidth = () => setTabsWidth(el.offsetWidth);
+    updateWidth();
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="food-content">
-      <div className="tabs">
-        {Object.keys(tabs).map((tab) => (
-          <motion.button
-            key={tab}
-            className={selectedTab === tab ? "tab-selected" : "tab-unselected"}
-            aria-pressed={selectedTab === tab}
-            onClick={() => setSelectedTab(tab)}
-            whileHover={{ scale: 1.1 }} 
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+      <div className="tabs-wrap">
+        <div className="tabs" ref={tabsRef}>
+          {Object.keys(tabs).map((tab) => (
+            <motion.button
+              key={tab}
+              className={selectedTab === tab ? "tab-selected" : "tab-unselected"}
+              aria-pressed={selectedTab === tab}
+              onClick={() => setSelectedTab(tab)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            >
+              {tab}
+            </motion.button>
+          ))}
+        </div>
+        <div
+          className="callout-row"
+          style={tabsWidth ? { width: tabsWidth } : undefined}
+        >
+          <motion.div
+            className="menu-callout"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            {tab}
-          </motion.button>
-        ))}
+            Base comes with rice and naan
+          </motion.div>
+          <motion.div
+            className="menu-callout"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            Combo comes with base & mango lassi
+          </motion.div>
+        </div>
       </div>
       <motion.div
         className="container"

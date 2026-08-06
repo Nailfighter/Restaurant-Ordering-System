@@ -6,13 +6,65 @@
   gap: $content-gap + 10px;
 }
 
+// align-items: flex-start keeps .tabs at its natural content width instead
+// of stretching to fill the column, so its measured offsetWidth (used to
+// pin .callout-row below) reflects only the tab pills, not empty space.
+.tabs-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+  gap: 16px;
+}
+
 .tabs {
   height: auto;
-  width: 100%;
 
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+}
+
+// Always-visible, unmissable callouts so customers know what each tab
+// includes. Width is pinned in JS to match the tabs row above it exactly.
+.callout-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 100%;
+}
+
+.menu-callout {
+  flex: 1;
+  min-width: 220px;
+  height: 50px;
+  padding: 12px 30px 10px 30px;
+  border-radius: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  background: linear-gradient(90deg, #ff7a1f 0%, #ff9d4d 100%);
+  border: 2px solid #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+
+  font-family: "TT-Hoves", "Jokerman", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  text-align: center;
+}
+
+@media screen and (max-width: 700px) {
+  .menu-callout {
+    white-space: normal;
+    height: auto;
+    padding: 10px 22px;
+    font-size: 17px;
+  }
 }
 
 @mixin tab-styles {
@@ -46,7 +98,16 @@
 
 // Category tabs become a single horizontally-scrollable strip on small screens
 @media screen and (max-width: 700px) {
+  // Drop the content-hugging so the scroll strip can still bleed edge-to-edge
+  // instead of being capped to its unscrolled content width. .tabs' measured
+  // offsetWidth (used to size .callout-row) then naturally becomes full-width.
+  .tabs-wrap {
+    align-items: stretch;
+    width: 100%;
+  }
+
   .tabs {
+    width: 100%;
     flex-wrap: nowrap;
     gap: 12px;
 
